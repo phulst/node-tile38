@@ -40,6 +40,19 @@ client.get('fleet', 'truck1').then( (data) => {
 });
 ```
 
+# Running tests
+
+WARNING: THIS MAY WIPE OUT YOUR DATA!
+The testsuite currently depends on having a local instance of Tile38 running on the (default) port 9851.
+If you have critical data in your local database, do not run the tests! Otherwise, simply run:
+
+```
+npm test
+```
+
+to run the test suite. 
+
+
 # Missing something? 
 
 For bugs or feature requests, please open an issue. 
