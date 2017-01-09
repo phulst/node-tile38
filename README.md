@@ -42,8 +42,6 @@ var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
 Any values are returned through promises. 
 
 ```
-// to return data in other formats, pass a third parameter 'POINT', 'BOUNDS', or 'HASH' 
-// or use the convenience methods getPoint, getBounds or getHash instead. 
 client.get('fleet', 'truck1').then( (data) => {
   console.log(data); // prints coordinates in geoJSON format 
 
@@ -56,6 +54,8 @@ client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then((data) => 
   console.log(`truck2 is at ${data.point.lat},${data.point.lon}`);
   console.dir(data.fields);
 });
+// There's also a getPoint(id,key) method that can be used as a shortcut instead of getPoint(id,key,{type:'POINT'})
+// as well as getBounds and getHash methods. 
 ```
 
 Many commands may not return values but you can still return promises if you need to wait until 
