@@ -56,8 +56,8 @@ class Tile38 {
                                 if (returnProp == 1) {
                                     // 1 has a special meaning. Return the entire response minus
                                     // 'ok' and 'elapsed' properties
-                                    //res.delete(ok);
-                                    //res.delete(elapsed);
+                                    delete res.ok;
+                                    delete res.elapsed;
                                     resolve(res);
                                 } else {
                                     resolve(res[returnProp]);
