@@ -153,13 +153,21 @@ class Tile38 {
      *   - onlyIfNotExists: true // only set if id does not exist yet
      *   - type: 'string'        // to set string values (otherwise interpreted as geohash)
      * Examples:
-     * set('fleet', 'truck1', [33.5123, -112.2693])
-     * set('fleet', 'truck1', [33.5123, -112.2693, 120.0])
-     * set('props', 'house1', [33.7840, -112.1520, 33.7848, -112.1512])
-     * set('props', 'area1', '9tbnwg')   // assumes HASH by default if only one extra parameter
-     * set('props', 'area2', 'my string value', {}, {'type':'string'}) # or force to String type
-     * set('cities', 'tempe', geoJsonObject)
      *
+     * // set a simple lat/lng coordinate
+     * set('fleet', 'truck1', [33.5123, -112.2693])
+     * // set with additional fields
+     * set('fleet', 'truck1', [33.5123, -112.2693], { field1: 10, field2: 20});
+     * // set lat/lon/alt coordinates, and expire in 120 secs
+     * set('fleet', 'truck1', [33.5123, -112.2693, 120.0], {}, {expire: 120})
+     * // set bounds
+     * set('props', 'house1', [33.7840, -112.1520, 33.7848, -112.1512])
+     * // set an ID by geohash
+     * set('props', 'area1', '9tbnwg')   // assumes HASH by default if only one extra parameter
+     * // set a String value
+     * set('props', 'area2', 'my string value', {}, {type: 'string'}) # or force to String type
+     * // set with geoJson object
+     * set('cities', 'tempe', geoJsonObject)
      *
      */
     set(key, id, obj, fields = {}, opts = {}) {
@@ -179,6 +187,7 @@ class Tile38 {
             cmd.push('XX');
         }
         if (Array.isArray(obj)) {
+            // if obj is an array, it must be either POINT or BOUNDS
             if (obj.length < 4) {
                 cmd.push('POINT');
                 cmd = cmd.concat(obj);
@@ -189,6 +198,7 @@ class Tile38 {
                 throw Error("incorrect number of values");
             }
         } else if (typeof obj == 'string') {
+            // if obj is a string, it must be String or geohash
             if (opts['type'] == 'string') {
                 cmd.push('STRING');
                 cmd.push(`"${obj}"`);
