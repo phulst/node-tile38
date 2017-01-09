@@ -17,14 +17,25 @@ npm install tile38
 # Overview
 
 This library is functional, but not all commands have been implemented yet. 
-In most cases, commands follow the command documentation on the Tile38 website. 
-
+In most cases, commands follow the command documentation on the Tile38 website.
+ 
 ```
-client = new Tile38();
+var Tile38 = require('tile38'); 
+var client = new Tile38();
 // save a location
 client.set('fleet', 'truck1', [33.5123, -112.2693]);
 
-// retrieve it back
-client.get('fleet', 'truck1');
 ```
 
+Any values are returned through promises. 
+
+```
+// to return data in other formats, pass a third parameter 'POINT', 'BOUNDS', or 'HASH' 
+// or use the convenience methods getPoint, getBounds or getHash instead. 
+client.get('fleet', 'truck1').then( (data) => {
+  console.log(data); // prints coordinates in geoJSON format 
+
+}).catch( (err) =>
+  console.log(err); // id not found  
+});
+```
