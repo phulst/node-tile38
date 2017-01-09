@@ -213,6 +213,11 @@ class Tile38 {
         return this.sendCommand('DEL', 'ok', [key, id]);
     }
 
+    // Removes objects that match a specified pattern.
+    pdel(key, pattern) {
+        return this.sendCommand('PDEL', 'ok', [key, pattern]);
+    }
+
     //
     /*
      * Get the object of an id. The default output format is a GeoJSON object.
