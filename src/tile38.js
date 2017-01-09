@@ -117,7 +117,7 @@ class Tile38 {
 
     // Get a timeout on an id
     ttl(key, id) {
-        return this.sendCommand('TTL', null, key, id);
+        return this.sendCommand('TTL', 'ttl', key, id);
     }
 
     persist(key, id) {
