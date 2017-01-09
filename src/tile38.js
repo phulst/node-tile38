@@ -219,6 +219,22 @@ class Tile38 {
         return c;
     }
 
+    // shortcut for GET method with output POINT
+    getPoint(key, id) {
+        return this.get(key, id, 'POINT');
+    }
+
+    // shortcut for GET method with output BOUNDS
+    getBounds(key, id) {
+        return this.get(key, id, 'BOUNDS');
+    }
+
+    // shortcut for GET method with output HASH
+    getHash(key, id, precision) {
+        return this.get(key, id, 'HASH', precision);
+    }
+
+
     // Remove all objects from specified key.
     drop(key) {
          return this.sendCommand('DROP', 'ok', key);
@@ -231,4 +247,4 @@ class Tile38 {
 
 }
 
-module.exports = Tile38;
+module.exports = Tile38
