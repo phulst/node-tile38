@@ -221,23 +221,32 @@ class Tile38 {
     //
     /*
      * Get the object of an id. The default output format is a GeoJSON object.
-     * Ways to call this method:
-     *   get('fleet', 'truck1')            // returns geojson point
-     *   get('fleet', 'truck1', 'POINT')   // same as above
-     *   get('fleet', 'truck1', 'BOUNDS')  // return bounds
-     *   get('fleet', 'truck1', 'HASH', 6) // return geohash
+     *
+     *   The options hash supports 3 properties:
+     *   type: (POINT, BOUNDS, HASH, OBJECT)  the type in which to return the ID. Defaults to OBJECT
+     *   withfields:  boolean to indicate whether or not fields should be returned. Defaults to false
+     *   precision:   only applicable if type = 'HASH'. Sets precision to use for returned Hash value.
+     *
+     * examples:
+     *   get('fleet', 'truck1')                    // returns geojson point
+     *   get('fleet', 'truck1', {withfields: true} // include FIELDS
+     *   get('fleet', 'truck1', {type: 'POINT'})   // same as above
+     *   get('fleet', 'truck1', {type: 'BOUNDS'})  // return bounds
+     *   get('fleet', 'truck1', {type: 'HASH', precision: 6} // return geohash
      */
-    get(key, id, type, precision) {
-        // TODO: make WITHFIELDS option configurable
-        let c;
-        if (type && precision) {
-            c = this.sendCommand('GET', 1, [key, id, 'WITHFIELDS', type, precision]);
-        } else if (type) {
-            c = this.sendCommand('GET', 1, [key, id, 'WITHFIELDS', type]);
-        } else {
-            c = this.sendCommand('GET', 1, [key, id, 'WITHFIELDS']);
+    get(key, id, { withfields = false, type= null, precision = null } = {}) {
+
+        let params = [key, id];
+        if (withfields) params.push('WITHFIELDS');
+
+        if (type == 'HASH') {
+            // geohash requested, add precision if set
+            params.push('HASH');
+            if (precision != null) params.push(precision);
+        } else if (type != null) {
+            params.push(type)
         }
-        return c;
+        return this.sendCommand('GET', 1, params);
     }
 
     // shortcut for GET method with output POINT
