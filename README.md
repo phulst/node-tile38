@@ -8,7 +8,7 @@ This library can be used to access the Tile38 server from Node.js apps.
 * [Tile38 website](http://tile38.com/)
 * [Tile38 Github](https://github.com/tidwall/tile38)
 
-# installation
+# Installation
 
 ```
 npm install tile38
@@ -39,3 +39,7 @@ client.get('fleet', 'truck1').then( (data) => {
   console.log(err); // id not found  
 });
 ```
+
+# Missing something? 
+
+For bugs or feature requests, please open an issue. 
