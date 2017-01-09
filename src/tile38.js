@@ -250,20 +250,22 @@ class Tile38 {
     }
 
     // shortcut for GET method with output POINT
-    getPoint(key, id) {
-        return this.get(key, id, 'POINT');
+    getPoint(key, id, opts = {}) {
+        opts.type = 'POINT';
+        return this.get(key, id, opts);
     }
 
     // shortcut for GET method with output BOUNDS
-    getBounds(key, id) {
-        return this.get(key, id, 'BOUNDS');
+    getBounds(key, id, opts = {}) {
+        opts.type = 'BOUNDS';
+        return this.get(key, id, opts);
     }
 
     // shortcut for GET method with output HASH
-    getHash(key, id, precision) {
-        return this.get(key, id, ['HASH', precision]);
+    getHash(key, id, opts = {}) {
+        opts.type = 'HASH';
+        return this.get(key, id, arguments[2]);
     }
-
 
     // Remove all objects from specified key.
     drop(key) {

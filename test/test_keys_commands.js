@@ -89,8 +89,23 @@ describe('key commands', function() {
             });
         });
 
+        it("should fetch as point using getPoint method", (done) => {
+            tile38.getPoint('fleet', 'truck1').then((res) => {
+                res.point.lat.should.equal(33.5123);
+                res.point.lon.should.equal(-112.2693);
+                done();
+            });
+        });
+
         it("should fetch as bounds", (done) => {
             tile38.get('fleet', 'truck1', {type: 'BOUNDS'}).then((res) => {
+                res.bounds.sw.should.exist;
+                res.bounds.ne.should.exist;
+                done();
+            });
+        });
+        it("should fetch as bounds using getBounds method", (done) => {
+            tile38.getBounds('fleet', 'truck1').then((res) => {
                 res.bounds.sw.should.exist;
                 res.bounds.ne.should.exist;
                 done();
@@ -101,6 +116,13 @@ describe('key commands', function() {
             tile38.get('fleet', 'truck1', {type: 'HASH', precision: 6}).then((res) => {
                 res.hash.should.exist;
                 res.hash.length.should.equal(6);
+                done();
+            });
+        })
+        it("should fetch as hash using getHash method", (done) => {
+            tile38.getHash('fleet', 'truck1', {precision: 8}).then((res) => {
+                res.hash.should.exist;
+                res.hash.length.should.equal(8);
                 done();
             });
         })
