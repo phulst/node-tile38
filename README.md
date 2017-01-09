@@ -17,7 +17,7 @@ npm install tile38
 # Overview
 
 This library is functional, but not all commands have been implemented yet. 
-In most cases, commands follow the command documentation on the Tile38 website.
+In most cases, commands follow the [command documentation](http://tile38.com/commands/) on the Tile38 website.
  
 ```
 var Tile38 = require('tile38'); 
@@ -26,6 +26,14 @@ var client = new Tile38();
 client.set('fleet', 'truck1', [33.5123, -112.2693]);
 
 ```
+
+You can pass any non-default connection settings into the Tile38 constructor, and you can also turn on 
+optional debug logging as illustrated below. 
+
+```
+var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
+```
+
 
 Any values are returned through promises. 
 

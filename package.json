@@ -9,6 +9,7 @@
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.4.7",
     "redis": "^2.6.3"
   },
   "devDependencies": {
