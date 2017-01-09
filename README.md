@@ -5,6 +5,7 @@ This library can be used to access the Tile38 server from Node.js apps.
 
 
 # Links
+* [Project git repo](https://github.com/phulst/node-tile38)
 * [Tile38 website](http://tile38.com/)
 * [Tile38 Github](https://github.com/tidwall/tile38)
 
