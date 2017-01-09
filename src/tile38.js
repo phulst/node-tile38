@@ -189,7 +189,6 @@ class Tile38 {
             // must be a Geojson object
             cmd.push(JSON.stringify(obj));
         }
-        console.dir(cmd);
         return this.sendCommand('SET', 'ok', ...cmd);
     }
 
