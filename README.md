@@ -54,8 +54,8 @@ client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then((data) => 
   console.log(`truck2 is at ${data.point.lat},${data.point.lon}`);
   console.dir(data.fields);
 });
-// There's also a getPoint(id,key) method that can be used as a shortcut instead of getPoint(id,key,{type:'POINT'})
-// as well as getBounds and getHash methods. 
+// There's also a getPoint(id,key) method that can be used as a shortcut instead of get(id,key,{type:'POINT'})
+// as well as similar getBounds and getHash methods. 
 ```
 
 Many commands may not return values but you can still return promises if you need to wait until 
