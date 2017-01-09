@@ -1,6 +1,7 @@
 "use strict"
 const Tile38 = require('../src/tile38');
 require('chai').should();
+const expect = require('chai').expect;
 
 
 var assert = require('assert');
@@ -8,7 +9,7 @@ describe('key commands', function() {
     let tile38;
 
     beforeEach(function(done) {
-        tile38 = new Tile38({debug: true});
+        tile38 = new Tile38({debug: true, port: 9850});
 
         tile38.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
             tile38.set('fleet', 'truck2', [33.5011, -112.2710]).then(() => {
@@ -74,14 +75,14 @@ describe('key commands', function() {
         });
 
         it("should fetch with geojson type", (done) => {
-            tile38.get('fleet', 'truck1', 'OBJECT').then((res) => {
+            tile38.get('fleet', 'truck1', {type: 'OBJECT'}).then((res) => {
                 res.object.type.should.equal('Point');
                 done();
             });
         });
 
         it("should fetch as point", (done) => {
-            tile38.get('fleet', 'truck1', 'POINT').then((res) => {
+            tile38.get('fleet', 'truck1', {type: 'POINT'}).then((res) => {
                 res.point.lat.should.equal(33.5123);
                 res.point.lon.should.equal(-112.2693);
                 done();
@@ -89,7 +90,7 @@ describe('key commands', function() {
         });
 
         it("should fetch as bounds", (done) => {
-            tile38.get('fleet', 'truck1', 'BOUNDS').then((res) => {
+            tile38.get('fleet', 'truck1', {type: 'BOUNDS'}).then((res) => {
                 res.bounds.sw.should.exist;
                 res.bounds.ne.should.exist;
                 done();
@@ -97,7 +98,7 @@ describe('key commands', function() {
         });
 
         it("should fetch as hash", (done) => {
-            tile38.get('fleet', 'truck1', 'HASH', 6).then((res) => {
+            tile38.get('fleet', 'truck1', {type: 'HASH', precision: 6}).then((res) => {
                 res.hash.should.exist;
                 res.hash.length.should.equal(6);
                 done();
@@ -123,12 +124,22 @@ describe('key commands', function() {
     });
 
     describe('fields', function() {
-        it("should set a field on an id", (done) => {
+        it("should not return fields by default", (done) => {
             tile38.fset('fleet', 'truck2', 'value', 20).then((res) => {
                 res.should.be.true;
-                // fetch it back to verify the field is set
+                // fetch it back to verify that we do not receive this field
                 tile38.get('fleet', 'truck2').then((res) => {
-                    res.fields.value.should.equal(20);
+                    expect(res.fields).to.be.undefined;
+                    done();
+                });
+            })
+        });
+        it("should set a field on an id", (done) => {
+            tile38.fset('fleet', 'truck2', 'value', 30).then((res) => {
+                res.should.be.true;
+                // fetch it back to verify the field is set
+                tile38.get('fleet', 'truck2', {withfields: true}).then((res) => {
+                    res.fields.value.should.equal(30);
                     done();
                 });
             })

@@ -8,7 +8,7 @@ describe('tile38', function() {
     let tile38;
 
     beforeEach(function() {
-        tile38 = new Tile38();
+        tile38 = new Tile38({port: 9850});
     });
 
     describe('ping', function() {
