@@ -30,18 +30,15 @@ describe('key commands', function() {
     });
 
     describe('expiration', function() {
-        let randExpiration = Math.floor(Math.random() * 100);
+        let randExpiration = Math.floor(Math.random() * 100) + 10;
 
         it("should set expiration on an id", (done) => {
             tile38.expire('fleet', 'truck2', randExpiration).then((res) => {
                 // this will always return ok, even if the key/id doesn't exist
                 res.should.be.true;
-                // now test that the TTL is set correctly
-
+                // read back the TTL, which will already be lower than the value we set
                 tile38.ttl('fleet', 'truck2').then((res) => {
-                    console.log('ttl is');
-                    //TODO: TTL does not return anything
-                    console.log(res);
+                    res.should.be.above(randExpiration - 2);
                     done();
                 });
             });
