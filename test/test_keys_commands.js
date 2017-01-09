@@ -8,7 +8,7 @@ describe('key commands', function() {
     let tile38;
 
     beforeEach(function(done) {
-        tile38 = new Tile38();
+        tile38 = new Tile38({debug: true});
 
         tile38.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
             tile38.set('fleet', 'truck2', [33.5011, -112.2710]).then(() => {
@@ -68,38 +68,38 @@ describe('key commands', function() {
     describe('get', function() {
         it("should fetch with default type", (done) => {
             tile38.get('fleet', 'truck1').then((res) => {
-                res.type.should.equal('Point');
+                res.object.type.should.equal('Point');
                 done();
             });
         });
 
         it("should fetch with geojson type", (done) => {
             tile38.get('fleet', 'truck1', 'OBJECT').then((res) => {
-                res.type.should.equal('Point');
+                res.object.type.should.equal('Point');
                 done();
             });
         });
 
         it("should fetch as point", (done) => {
             tile38.get('fleet', 'truck1', 'POINT').then((res) => {
-                res.lat.should.equal(33.5123);
-                res.lon.should.equal(-112.2693);
+                res.point.lat.should.equal(33.5123);
+                res.point.lon.should.equal(-112.2693);
                 done();
             });
         });
 
         it("should fetch as bounds", (done) => {
             tile38.get('fleet', 'truck1', 'BOUNDS').then((res) => {
-                res.sw.should.exist;
-                res.ne.should.exist;
+                res.bounds.sw.should.exist;
+                res.bounds.ne.should.exist;
                 done();
             });
         });
 
         it("should fetch as hash", (done) => {
             tile38.get('fleet', 'truck1', 'HASH', 6).then((res) => {
-                res.length.should.equal(6);
-                res.should.exist;
+                res.hash.should.exist;
+                res.hash.length.should.equal(6);
                 done();
             });
         })
@@ -116,6 +116,19 @@ describe('key commands', function() {
                 }).catch((err) => {
                     // since the key should no longer exist, we expect an error here
                     err.should.equal('id not found');
+                    done();
+                });
+            })
+        });
+    });
+
+    describe('fields', function() {
+        it("should set a field on an id", (done) => {
+            tile38.fset('fleet', 'truck2', 'value', 20).then((res) => {
+                res.should.be.true;
+                // fetch it back to verify the field is set
+                tile38.get('fleet', 'truck2').then((res) => {
+                    res.fields.value.should.equal(20);
                     done();
                 });
             })
@@ -153,6 +166,5 @@ describe('key commands', function() {
                 done();
             });
         });
-
     });
 });

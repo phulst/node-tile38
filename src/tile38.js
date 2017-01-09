@@ -7,14 +7,11 @@ const Promise = require('bluebird');
 
 class Tile38 {
 
-    constructor() {
-        this.client = redis.createClient({
-            port:   9851,
-            host:   'localhost'
-        });
+    constructor({ port = 9851, host = 'localhost', debug = false } = {}) {
+        this.client = redis.createClient({ port, host });
         // put the OUTPUT in json mode
         this.sendCommand('OUTPUT', null, 'json');
-        this.debug = false;
+        this.debug = debug;
     }
 
     /*
@@ -22,7 +19,13 @@ class Tile38 {
      * If returnProp is set, it will assume that the response is a JSON string, then parse and return
      * the given property from that string.
      */
-    sendCommand(cmd, returnProp, ...args) {
+    sendCommand(cmd, returnProp, args) {
+        // make args an array if it's not already one
+        if (!args) {
+            args = []
+        } else if (!Array.isArray(args)) {
+            args = [args];
+        }
         return new Promise((resolve, reject) => {
             if (this.debug) {
                 console.log(`sending command "${cmd} ${args.join(' ')}"`);
@@ -50,7 +53,15 @@ class Tile38 {
                                     reject(`unexpected response: ${result}`);
                                 }
                             } else {
-                                resolve(res[returnProp]);
+                                if (returnProp == 1) {
+                                    // 1 has a special meaning. Return the entire response minus
+                                    // 'ok' and 'elapsed' properties
+                                    //res.delete(ok);
+                                    //res.delete(elapsed);
+                                    resolve(res);
+                                } else {
+                                    resolve(res[returnProp]);
+                                }
                             }
                         }
                     } catch (error) {
@@ -86,7 +97,7 @@ class Tile38 {
     // sets a configuration value in the database. Will return true if successful.
     // Note that the value does not get persisted until configRewrite is called.
     configSet(prop, value) {
-        return this.sendCommand('CONFIG SET', 'ok', prop, value);
+        return this.sendCommand('CONFIG SET', 'ok', [prop, value]);
     }
 
     // persists changes made by configSet command. Will return true if successful
@@ -112,16 +123,16 @@ class Tile38 {
 
     // Set a timeout on an id.
     expire(key, id, seconds) {
-        return this.sendCommand('EXPIRE', 'ok', key, id, seconds);
+        return this.sendCommand('EXPIRE', 'ok', [key, id, seconds]);
     }
 
     // Get a timeout on an id
     ttl(key, id) {
-        return this.sendCommand('TTL', 'ttl', key, id);
+        return this.sendCommand('TTL', 'ttl', [key, id]);
     }
 
     persist(key, id) {
-        return this.sendCommand('PERSIST', 'ok', key, id);
+        return this.sendCommand('PERSIST', 'ok', [key, id]);
     }
 
     // Returns all keys matching pattern.
@@ -189,12 +200,17 @@ class Tile38 {
             // must be a Geojson object
             cmd.push(JSON.stringify(obj));
         }
-        return this.sendCommand('SET', 'ok', ...cmd);
+        return this.sendCommand('SET', 'ok', cmd);
+    }
+
+    // Set the value for a single field of an id.
+    fset(key, id, field, value) {
+        return this.sendCommand('FSET', 'ok', [key, id, field, value]);
     }
 
     // Delete an id from a key
     del(key, id) {
-        return this.sendCommand('DEL', 'ok', key, id);
+        return this.sendCommand('DEL', 'ok', [key, id]);
     }
 
     //
@@ -207,13 +223,14 @@ class Tile38 {
      *   get('fleet', 'truck1', 'HASH', 6) // return geohash
      */
     get(key, id, type, precision) {
+        // TODO: make WITHFIELDS option configurable
         let c;
         if (type && precision) {
-            c = this.sendCommand('GET', 'hash', key, id, type, precision);
+            c = this.sendCommand('GET', 1, [key, id, 'WITHFIELDS', type, precision]);
         } else if (type) {
-            c = this.sendCommand('GET', type.toLowerCase(), key, id, type);
+            c = this.sendCommand('GET', 1, [key, id, 'WITHFIELDS', type]);
         } else {
-            c = this.sendCommand('GET', 'object', key, id);
+            c = this.sendCommand('GET', 1, [key, id, 'WITHFIELDS']);
         }
         return c;
     }
@@ -230,7 +247,7 @@ class Tile38 {
 
     // shortcut for GET method with output HASH
     getHash(key, id, precision) {
-        return this.get(key, id, 'HASH', precision);
+        return this.get(key, id, ['HASH', precision]);
     }
 
 
@@ -241,7 +258,7 @@ class Tile38 {
 
     // Return stats for one or more keys.
     stats(...keys) {
-         return this.sendCommand('STATS', 'stats', ...keys);
+         return this.sendCommand('STATS', 'stats', keys);
     }
 
 }
