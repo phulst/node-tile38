@@ -112,8 +112,7 @@ class Tile38 {
 
     // turns on or off readonly mode. (Pass true value to turn on)
     readOnly(val) {
-        let v = val ? 'yes' : 'no'
-        return this.sendCommand('READONLY', 'ok', v);
+        return this.sendCommand('READONLY', 'ok', (val ? 'yes' : 'no'));
     }
 
     // Returns the minimum bounding rectangle for all objects in a key.
