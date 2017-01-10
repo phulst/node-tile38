@@ -86,7 +86,18 @@ If you have nothing critical in your local db, you can run the tests with:
 npm test
 ```
 
+# Project roadmap
 
-# Missing something? 
+Below is a complete list of the commands that have not been implemented yet, and that are currently still in 
+development. 
+
+- The search commands (INTERSECTS, NEARBY, SCAN, SEARCH and WITHIN) (currently in development, target Jan. 15th)
+- Webhooks (HOOKS, SETHOOK, DELHOOK, PDELHOOK)
+- the AUTH command, connection to password protected servers
+- Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
+
+
+
+# Missing something? Did it break?
 
 For bugs or feature requests, please open an issue.  
