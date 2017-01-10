@@ -59,7 +59,7 @@ client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then((data) => 
 // as well as similar getBounds and getHash methods. 
 ```
 
-Many commands may not return values but you can still return promises if you need to wait until 
+Many commands may not return values, but they still return promises, allowing you to wait until 
 your changes have been persisted. 
 
 ```
