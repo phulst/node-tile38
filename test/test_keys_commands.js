@@ -9,7 +9,7 @@ describe('key commands', function() {
     let tile38;
 
     beforeEach(function(done) {
-        tile38 = new Tile38({debug: true, port: 9850});
+        tile38 = new Tile38({debug: false, port: 9850});
 
         tile38.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
             tile38.set('fleet', 'truck2', [33.5011, -112.2710]).then(() => {
@@ -64,7 +64,22 @@ describe('key commands', function() {
                 done();
             });
         });
+
+        it("should drop all elements for a key", (done) => {
+            tile38.set('somekey', 'truck1', [33.5123, -112.2693]).then(() => {
+                tile38.set('somekey', 'truck2', [34.5011, -113.2710]).then(() => {
+                    tile38.drop('somekey').then((res) => {
+                        tile38.scan('somekey').then((obj) => {
+                            obj.objects.length.should.equal(0);
+                            done();
+                        })
+                    });
+                });
+            });
+        });
     });
+
+
 
     describe('get', function() {
         it("should fetch with default type", (done) => {
@@ -197,6 +212,42 @@ describe('key commands', function() {
             tile38.set('fleet', 'somewhere', 'my string value', {}, {'type':'string'}).then((res) => {
                 res.should.be.true;
                 done();
+            });
+        });
+    });
+
+    describe('json set/get', function() {
+        // set a json value
+        beforeEach(function(done) {
+            tile38.jset('user', '100', 'attr.name', 'peter').then((res) => {
+                tile38.jset('user', '100', 'attr.age', 10).then((res) => {
+                    done();
+                });
+            });
+        });
+
+        it("should get the entire json", (done) => {
+            tile38.jget('user', '100').then((res) => {
+                expect(res).to.equal('{"attr":{"age":10,"name":"peter"}}');
+                done();
+            });
+        });
+
+        it("should get a specific json property", (done) => {
+            tile38.jget('user', '100', 'attr.name').then((res) => {
+                expect(res).to.equal('peter');
+                done();
+            });
+        });
+
+        it("should delete a json property", (done) => {
+            tile38.jdel('user', '100', 'attr.age').then((res) => {
+                res.should.be.true;
+                // now, we should only have the name property left
+                tile38.jget('user', '100').then((res) => {
+                    expect(res).to.equal('{"attr":{"name":"peter"}}');
+                    done();
+                });
             });
         });
     });

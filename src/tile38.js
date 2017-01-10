@@ -287,6 +287,28 @@ class Tile38 {
          return this.sendCommand('STATS', 'stats', keys);
     }
 
+    // Set a value in a JSON document
+    jset(key, id, jKey, jVal) {
+        return this.sendCommand('JSET', 'ok', [key, id, jKey, jVal]);
+    }
+
+    // Get a value from a json document
+    jget(key, id, ...other) {
+        let params = [key, id]
+        params = params.concat(other)
+        return this.sendCommand('JGET', 'value', params);
+    }
+
+    // Delete a json value
+    jdel(key, id, jKey) {
+        return this.sendCommand('JDEL', 'ok', [key, id, jKey]);
+    }
+
+    // incrementally iterates though a key
+    // TODO: implement all SCAN options. This currently only scans for all objects in the key.
+    scan(key) {
+        return this.sendCommand('SCAN', 1, key);
+    }
 }
 
 module.exports = Tile38
