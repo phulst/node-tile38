@@ -336,8 +336,6 @@ class Tile38 {
     scan(key, opts) {
         let cmd = processOpts(opts, ['cursor', 'limit', 'match', 'order', 'where', 'nofields', 'select']);
         cmd.unshift(key);
-        console.log("command: ");
-        console.dir(cmd);
         return this.sendCommand('SCAN', 1, cmd);
     }
 
