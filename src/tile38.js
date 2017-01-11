@@ -303,11 +303,154 @@ class Tile38 {
         return this.sendCommand('JDEL', 'ok', [key, id, jKey]);
     }
 
-    // incrementally iterates though a key
-    // TODO: implement all SCAN options. This currently only scans for all objects in the key.
-    scan(key) {
-        return this.sendCommand('SCAN', 1, key);
+    // searches a collection for objects that intersect a specified bounding area.
+    // TODO: handle FENCE and streaming response
+    intersects(key, opts) {
+        let cmd = _processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
+        'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
+        cmd.unshift(key);
+        return this.sendCommand('INTERSECTS', 1, cmd);
+    }
+
+    // WITHIN searches a collection for objects that are fully contained inside of a specified bounding area.
+    // TODO: handle FENCE and streaming response
+    within(key, opts) {
+        let cmd = processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
+        'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
+        cmd.unshift(key);
+        return this.sendCommand('WITHIN', 1, cmd);
+    }
+
+    // The NEARBY command searches a collection for objects that intersect a specified radius.
+    // TODO: add support for DISTANCE
+    // TODO: handle FENCE and streaming response
+    nearby(key, opts) {
+        let cmd = processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
+        'fence', 'detect', 'commands', 'select', 'point', 'roam']);
+        cmd.unshift(key);
+        return this.sendCommand('NEARBY', 1, cmd);
+    }
+
+    // SCAN incrementally iterates though a key.
+    scan(key, opts) {
+        let cmd = processOpts(opts, ['cursor', 'limit', 'match', 'order', 'where', 'nofields', 'select']);
+        cmd.unshift(key);
+        console.log("command: ");
+        console.dir(cmd);
+        return this.sendCommand('SCAN', 1, cmd);
+    }
+
+    // SEARCH iterates though a key’s string values.
+    search(key, opts) {
+        let cmd = processOpts(opts, ['cursor', 'limit', 'match', 'order', 'where', 'nofields', 'select']);
+        cmd.unshift(key);
+        return this.sendCommand('SEARCH', 1, cmd);
     }
 }
 
-module.exports = Tile38
+// processes all options that may be used by any of the search commands
+let processOpts = function(opts, names) {
+    let cmd = [];
+    if (opts === undefined)
+        return cmd; // no options
+
+    for (let name in names) {
+        console.log('processing option: ' + name);
+
+        if (!opts[name])
+            continue; // an option with this name was not passed in.
+
+        switch(name) {
+            case 'cursor':
+                cmd.push('CURSOR');
+                cmd.push(opts.cursor);
+                break;
+            case 'limit':
+                cmd.push('LIMIT');
+                cmd.push(opts.limit);
+                break;
+            case 'sparse':
+                cmd.push('SPARSE');
+                cmd.push(opts.sparse);
+                break;
+            case 'match':
+                cmd.push('MATCH');
+                cmd.push(opts.match);
+                break;
+            case 'where':
+                let w = opts.where;
+                cmd.push('WHERE');
+                for (let k in Object.keys(w)) {
+                    cmd.push(k);
+                    cmd.push(w[k][0]);
+                    cmd.push(w[k][1]);
+                }
+                break;
+            case 'nofields':
+                if (opts.nofields == true)
+                    cmd.push('NOFIELDS');
+                break;
+            case 'fence':
+                if (opts.fence == true)
+                    cmd.push('FENCE');
+                break;
+            case 'detect':
+                cmd.push('DETECT');
+                cmd.push(opts.detect);
+                break;
+            case 'commands':
+                cmd.push('COMMANDS');
+                cmd.push(opts.commands); // should be comma separated list
+                break;
+            case 'select': // COUNT, IDS, OBJECTS, POINTS, BOUNDS, HASHES
+                cmd.push(ops.select.toUpperCase());
+                break;
+            case 'get': // passed like this:  'get: [key,id]'
+                cmd.push('GET');
+                cmd.push(opts.get[0]);
+                cmd.push(opts.get[1]);
+                break;
+            case 'bounds':  // bounds: [minlat, minlon, maxlat, maxlon]
+                cmd.push('BOUNDS');
+                cmd.push(opts.bounds[0]);
+                cmd.push(opts.bounds[1]);
+                cmd.push(opts.bounds[2]);
+                cmd.push(opts.bounds[3]);
+                break;
+            case 'object': // geojson object
+                cmd.push('OBJECT');
+                cmd.push(JSON.serialize(opts.object));
+                break;
+            case 'tile':
+                cmd.push('TILE');
+                cmd.push(opts.tile[0]);
+                cmd.push(opts.tile[1]);
+                cmd.push(opts.tile[2]);
+                break;
+            case 'quadkey':
+                cmd.push('QUADKEY');
+                cmd.push(opts.quadkey);
+                break;
+            case 'hash':
+                cmd.push('HASH');
+                cmd.push(opts.hash);
+                break;
+            case 'point': // point: [lat, lon, meters]
+                cmd.push('POINT');
+                cmd = cmd.concat(opts.point);
+                break;
+            case 'roam': // roam: [key, pattern, meters]
+                cmd.push('ROAM');
+                cmd = cmd.concat(opts.roam);
+                break;
+            case 'order':
+                cmd.push(opts.order.toUpperCase());
+                break;
+            default:
+                console.log("unsupported property: " + name);
+        }
+    }
+    return cmd;
+}
+
+module.exports = Tile38;
