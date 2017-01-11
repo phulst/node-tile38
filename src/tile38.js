@@ -247,7 +247,8 @@ class Tile38 {
 
         let params = [key, id];
         if (withfields) params.push('WITHFIELDS');
-
+        // TODO: check if startswith HASH and remove separate 'precision' property
+        // it could just be passed as 'HASH 6'
         if (type == 'HASH') {
             // geohash requested, add precision if set
             params.push('HASH');
