@@ -123,12 +123,9 @@ client.getHash('fleet', 'truck1', { precision: 6});   // equivalent of above
 client.get('fleet', 'truck1', { withfields: true }); 
 ```
 
-### set commands
+### set command
 
-some examples: 
-
-```
-client.set('fleet', 'truck', { 
+TODO
 
 # Running tests
 
