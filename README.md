@@ -69,7 +69,66 @@ client.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
 
 ```
 
+# Command examples
 
+The command documentation for Tile38 server is followed as closely as possible. Command names become function names, 
+mandatory properties become arguments, and optional properties become either optional arguments or are passed in 
+through an options object. 
+
+For example, the command 
+
+```
+JGET key id path
+```
+
+is called as follows: 
+
+```
+client.jget(key, id, path)
+```
+
+## keys commands
+
+Some examples of keys commands: 
+
+```
+client.bounds('fleet');
+client.del('feet', 'truck2');
+client.drop('fleet');
+client.expire('fleet','truck',10);
+client.fset('fleet', 'truck1', 'speed', 16);
+client.stats('fleet1', 'fleet2');
+...etc
+```
+
+### get command
+The get command accepts an optional object that can be use to set the request data type: 
+
+
+```
+// return truck1 location as a geoJSON object
+client.get('fleet', 'truck1');
+client.get('fleet', 'truck1', { type: 'OBJECT' });   // does the same
+// return as POINT (2 element array with lat/lon coordinates)
+client.get('fleet', 'truck1', { type: 'POINT' });
+client.getPoint('fleet', 'truck1');   // does the same as above
+// return bounding rectangle
+client.get('fleet', 'truck1', { type: 'BOUNDS' });
+client.getBounds('fleet', 'truck1');   // does the same as above
+// return a geohash with precision 6 (must be between 1 and 22)
+client.get('fleet', 'truck1', { type: 'HASH 6' });
+client.getHash('fleet', 'truck1', { precision: 6});   // does the same as above
+
+// if you want the 'get' function to return fields as well, use the 'withfields' property
+client.get('fleet', 'truck1', { withfields: true });   // does the same as above
+```
+
+### set commands
+
+some examples: 
+
+```
+client.set('fleet', 'truck', { 
 
 # Running tests
 
@@ -91,7 +150,9 @@ npm test
 Below is a complete list of the commands that have not been implemented yet, and that are currently still in 
 development. 
 
-- The search commands (INTERSECTS, NEARBY, SCAN, SEARCH and WITHIN) (currently in development, target Jan. 15th)
+- The search commands (INTERSECTS, NEARBY, SCAN, SEARCH and WITHIN) have been implemented but the FENCE option 
+(which is supposed to keep open a continuous stream) has not been implemented yet. This is in progress, and will 
+also need to add some more code examples for these commands in the readme. 
 - Webhooks (HOOKS, SETHOOK, DELHOOK, PDELHOOK)
 - the AUTH command, connection to password protected servers
 - Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
