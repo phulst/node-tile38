@@ -9,7 +9,7 @@ describe('key commands', function() {
     let tile38;
 
     beforeEach(function(done) {
-        tile38 = new Tile38({debug: false, port: 9850});
+        tile38 = new Tile38({debug: true, port: 9850});
 
         tile38.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
             tile38.set('fleet', 'truck2', [33.5011, -112.2710]).then(() => {
@@ -212,15 +212,33 @@ describe('key commands', function() {
             });
         });
         it("should set object with geohash", (done) => {
-            tile38.set('props', 'area1', '9tbnwg').then((res) => {
+            let hashVal = '9tbnwg';
+            tile38.set('props', 'area1', hashVal).then((res) => {
                 res.should.be.true;
-                done();
+                tile38.getHash('props', 'area1').then((res) => {
+                    res.hash.should.equal(hashVal);
+                    done();
+                });
             });
         });
         it("should set object with string", (done) => {
-            tile38.set('fleet', 'somewhere', 'my string value', {}, {'type':'string'}).then((res) => {
+            let strVal = 'my string value';
+            tile38.set('fleet', 'somewhere', strVal, {}, {'type':'string'}).then((res) => {
                 res.should.be.true;
-                done();
+                tile38.get('fleet', 'somewhere').then((res) => {
+                    res.object.should.equal(strVal);
+                    done();
+                });
+            });
+        });
+        it("should set object with setString", (done) => {
+            let strVal = 'my string value';
+            tile38.setString('fleet', 'somestring', strVal, {}).then((res) => {
+                res.should.be.true;
+                tile38.get('fleet', 'somestring').then((res) => {
+                    res.object.should.equal(strVal);
+                    done();
+                });
             });
         });
     });

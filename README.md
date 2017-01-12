@@ -95,14 +95,14 @@ Some examples of keys commands:
 client.bounds('fleet');
 client.del('feet', 'truck2');
 client.drop('fleet');
-client.expire('fleet','truck',10);
+client.expire('fleet','truck', 10);
 client.fset('fleet', 'truck1', 'speed', 16);
 client.stats('fleet1', 'fleet2');
 ...etc
 ```
 
 ### get command
-The get command accepts an optional object that can be use to set the request data type: 
+The get command accepts an optional object that can be use to set the response data type: 
 
 
 ```
@@ -117,7 +117,8 @@ client.get('fleet', 'truck1', { type: 'BOUNDS' });
 client.getBounds('fleet', 'truck1');   // equivalent of above
 // return a geohash with precision 6 (must be between 1 and 22)
 client.get('fleet', 'truck1', { type: 'HASH 6' });
-client.getHash('fleet', 'truck1', { precision: 6});   // equivalent of above
+client.getHash('fleet', 'truck1');   // equivalent of above
+client.getHash('fleet', 'truck1', { precision: 8});   // if you need different precision from default (6)
 
 // if you want the 'get' function to return fields as well, use the 'withfields' property
 client.get('fleet', 'truck1', { withfields: true }); 
