@@ -231,28 +231,31 @@ class Tile38 {
     /*
      * Get the object of an id. The default output format is a GeoJSON object.
      *
-     *   The options hash supports 3 properties:
+     *   The options hash supports 2 properties:
      *   type: (POINT, BOUNDS, HASH, OBJECT)  the type in which to return the ID. Defaults to OBJECT
      *   withfields:  boolean to indicate whether or not fields should be returned. Defaults to false
-     *   precision:   only applicable if type = 'HASH'. Sets precision to use for returned Hash value.
      *
      * examples:
      *   get('fleet', 'truck1')                    // returns geojson point
      *   get('fleet', 'truck1', {withfields: true} // include FIELDS
      *   get('fleet', 'truck1', {type: 'POINT'})   // same as above
      *   get('fleet', 'truck1', {type: 'BOUNDS'})  // return bounds
-     *   get('fleet', 'truck1', {type: 'HASH', precision: 6} // return geohash
+     *   get('fleet', 'truck1', {type: 'HASH 6'}) // return geohash with precision 6
      */
-    get(key, id, { withfields = false, type= null, precision = null } = {}) {
+    get(key, id, { withfields = false, type= null} = {}) {
 
         let params = [key, id];
         if (withfields) params.push('WITHFIELDS');
         // TODO: check if startswith HASH and remove separate 'precision' property
         // it could just be passed as 'HASH 6'
-        if (type == 'HASH') {
+        if (type != null && type.startsWith('HASH')) {
             // geohash requested, add precision if set
             params.push('HASH');
-            if (precision != null) params.push(precision);
+            let s = type.split(' ');
+            if (s.length > 1 && parseInt(s[1]) > 0)
+                params.push(s[1]);
+            else
+                throw new Error('missing precision. Please set like this: "HASH 6"');
         } else if (type != null) {
             params.push(type)
         }
@@ -273,8 +276,10 @@ class Tile38 {
 
     // shortcut for GET method with output HASH
     getHash(key, id, opts = {}) {
-        opts.type = 'HASH';
-        return this.get(key, id, arguments[2]);
+        if (opts.precision == undefined)
+            throw new Error('Missing precision property in the options object') ;
+        opts.type = `HASH ${opts.precision}`;
+        return this.get(key, id, opts);
     }
 
     // Remove all objects from specified key.

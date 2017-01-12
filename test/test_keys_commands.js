@@ -9,7 +9,7 @@ describe('key commands', function() {
     let tile38;
 
     beforeEach(function(done) {
-        tile38 = new Tile38({debug: true, port: 9850});
+        tile38 = new Tile38({debug: false, port: 9850});
 
         tile38.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
             tile38.set('fleet', 'truck2', [33.5011, -112.2710]).then(() => {
@@ -128,11 +128,20 @@ describe('key commands', function() {
         });
 
         it("should fetch as hash", (done) => {
-            tile38.get('fleet', 'truck1', {type: 'HASH', precision: 6}).then((res) => {
+            tile38.get('fleet', 'truck1', {type: 'HASH 6'}).then((res) => {
                 res.hash.should.exist;
                 res.hash.length.should.equal(6);
                 done();
             });
+        })
+        it("missing precision should throw an error", (done) => {
+            try {
+                tile38.get('fleet', 'truck1', {type: 'HASH'}).then((res) => {
+                });
+            } catch (err) {
+                expect(err.message).to.equal('missing precision. Please set like this: "HASH 6"');
+                done();
+            }
         })
         it("should fetch as hash using getHash method", (done) => {
             tile38.getHash('fleet', 'truck1', {precision: 8}).then((res) => {
