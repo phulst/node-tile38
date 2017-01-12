@@ -5,6 +5,8 @@ const Promise = require('bluebird');
 
 // const Command = Redis.Command;
 
+const DEFAULT_HASH_PRECISION = 6;
+
 class Tile38 {
 
     constructor({ port = 9851, host = 'localhost', debug = false } = {}) {
@@ -200,7 +202,7 @@ class Tile38 {
             // if obj is a string, it must be String or geohash
             if (opts['type'] == 'string') {
                 cmd.push('STRING');
-                cmd.push(`"${obj}"`);
+                cmd.push(obj);
             } else {
                 cmd.push('HASH');
                 cmd.push(obj);
@@ -211,6 +213,13 @@ class Tile38 {
         }
         return this.sendCommand('SET', 'ok', cmd);
     }
+
+    // convenience method for set() with options.type = 'string'
+    setString(key, id, obj, fields = {}, opts = {}) {
+        opts.type = 'string';
+        return this.set(key, id, obj, fields, opts);
+    }
+
 
     // Set the value for a single field of an id.
     fset(key, id, field, value) {
@@ -276,9 +285,8 @@ class Tile38 {
 
     // shortcut for GET method with output HASH
     getHash(key, id, opts = {}) {
-        if (opts.precision == undefined)
-            throw new Error('Missing precision property in the options object') ;
-        opts.type = `HASH ${opts.precision}`;
+        let precision = opts.precision || DEFAULT_HASH_PRECISION;
+        opts.type = `HASH ${precision}`;
         return this.get(key, id, opts);
     }
 
