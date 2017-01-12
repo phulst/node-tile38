@@ -353,9 +353,7 @@ let processOpts = function(opts, names) {
     if (opts === undefined)
         return cmd; // no options
 
-    for (let name in names) {
-        console.log('processing option: ' + name);
-
+    for (let name of names) {
         if (!opts[name])
             continue; // an option with this name was not passed in.
 
