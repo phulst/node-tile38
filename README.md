@@ -73,7 +73,7 @@ client.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
 
 The command documentation for Tile38 server is followed as closely as possible. Command names become function names, 
 mandatory properties become arguments, and optional properties become either optional arguments or are passed in 
-through an options object. 
+through an options object argument. 
 
 For example, the command 
 
@@ -108,19 +108,19 @@ The get command accepts an optional object that can be use to set the request da
 ```
 // return truck1 location as a geoJSON object
 client.get('fleet', 'truck1');
-client.get('fleet', 'truck1', { type: 'OBJECT' });   // does the same
+client.get('fleet', 'truck1', { type: 'OBJECT' });   // equivalent
 // return as POINT (2 element array with lat/lon coordinates)
 client.get('fleet', 'truck1', { type: 'POINT' });
-client.getPoint('fleet', 'truck1');   // does the same as above
+client.getPoint('fleet', 'truck1');   // equivalent of above
 // return bounding rectangle
 client.get('fleet', 'truck1', { type: 'BOUNDS' });
-client.getBounds('fleet', 'truck1');   // does the same as above
+client.getBounds('fleet', 'truck1');   // equivalent of above
 // return a geohash with precision 6 (must be between 1 and 22)
 client.get('fleet', 'truck1', { type: 'HASH 6' });
-client.getHash('fleet', 'truck1', { precision: 6});   // does the same as above
+client.getHash('fleet', 'truck1', { precision: 6});   // equivalent of above
 
 // if you want the 'get' function to return fields as well, use the 'withfields' property
-client.get('fleet', 'truck1', { withfields: true });   // does the same as above
+client.get('fleet', 'truck1', { withfields: true }); 
 ```
 
 ### set commands
