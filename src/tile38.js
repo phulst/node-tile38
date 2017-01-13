@@ -1,4 +1,3 @@
-
 // const Redis = require('ioredis');
 const redis = require('redis');
 const Promise = require('bluebird');
@@ -9,8 +8,8 @@ const DEFAULT_HASH_PRECISION = 6;
 
 class Tile38 {
 
-    constructor({ port = 9851, host = 'localhost', debug = false } = {}) {
-        this.client = redis.createClient({ port, host });
+    constructor({port = 9851, host = 'localhost', debug = false} = {}) {
+        this.client = redis.createClient({port, host});
         // put the OUTPUT in json mode
         this.sendCommand('OUTPUT', null, 'json');
         this.debug = debug;
@@ -251,7 +250,7 @@ class Tile38 {
      *   get('fleet', 'truck1', {type: 'BOUNDS'})  // return bounds
      *   get('fleet', 'truck1', {type: 'HASH 6'}) // return geohash with precision 6
      */
-    get(key, id, { withfields = false, type= null} = {}) {
+    get(key, id, {withfields = false, type= null} = {}) {
 
         let params = [key, id];
         if (withfields) params.push('WITHFIELDS');
@@ -292,12 +291,12 @@ class Tile38 {
 
     // Remove all objects from specified key.
     drop(key) {
-         return this.sendCommand('DROP', 'ok', key);
+        return this.sendCommand('DROP', 'ok', key);
     }
 
     // Return stats for one or more keys.
     stats(...keys) {
-         return this.sendCommand('STATS', 'stats', keys);
+        return this.sendCommand('STATS', 'stats', keys);
     }
 
     // Set a value in a JSON document
@@ -321,7 +320,7 @@ class Tile38 {
     // TODO: handle FENCE and streaming response
     intersects(key, opts) {
         let cmd = _processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
-        'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
+            'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
         cmd.unshift(key);
         return this.sendCommand('INTERSECTS', 1, cmd);
     }
@@ -330,7 +329,7 @@ class Tile38 {
     // TODO: handle FENCE and streaming response
     within(key, opts) {
         let cmd = processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
-        'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
+            'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
         cmd.unshift(key);
         return this.sendCommand('WITHIN', 1, cmd);
     }
@@ -340,7 +339,7 @@ class Tile38 {
     // TODO: handle FENCE and streaming response
     nearby(key, opts) {
         let cmd = processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
-        'fence', 'detect', 'commands', 'select', 'point', 'roam']);
+            'fence', 'detect', 'commands', 'select', 'point', 'roam']);
         cmd.unshift(key);
         return this.sendCommand('NEARBY', 1, cmd);
     }
@@ -358,10 +357,67 @@ class Tile38 {
         cmd.unshift(key);
         return this.sendCommand('SEARCH', 1, cmd);
     }
+
+    // Returns all hooks matching pattern.
+    hooks(pattern) {
+        return this.sendCommand('HOOKS', null, pattern);
+    }
+
+    /*
+     * name:       webhook name
+     * endpoint:   endpoint url for http/grpc/redis etc
+     * meta:       object with key/value pairs for meta data
+     * searchType: nearby/within/intersects
+     * key:        the key to monitor
+     * opts:       object for additional options:
+     *   command:    del/drop/set
+     *   detect:     inside/outside/enter/exit/cross
+     *   get:        [key, id]   - to fetch an existing object from given key collection
+     *   bounds:     [minlat, minlon, maxlat, maxlon]  - bounds coordinates
+     *   object:     geojson object
+     *   tile:       [x,y,z] - tile coordinates
+     *   quadkey:    quadkey coordinates
+     *   hash:       geohash coordinate
+     *   radius:     radius/distance to apply
+     *
+     * command and detect may both exist but only one of the following get/bounds/object/tile/quadkey/hash
+     * may be specified at a time.
+     */
+    setHook(name, endpoint, meta, searchType, key, opts) {
+        let cmd = [name, endpoint];
+        if (meta) {
+            cmd.push('META');
+            for (let m of Object.keys(meta)) {
+                cmd.push(m);
+                cmd.push(meta[m]);
+            }
+        }
+        cmd.push(searchType.toUpperCase());
+        cmd.push(key);
+        cmd.push('FENCE');
+        cmd = cmd.concat(processOpts(opts,['detect', 'commands', 'get', 'point', 'bounds', 'object',
+            'tile', 'quadkey', 'hash', 'radius']));
+        return this.sendCommand('SETHOOK', 'ok', cmd);
+    }
+
+    // Returns all hooks matching pattern
+    hooks(pattern) {
+        return this.sendCommand('HOOKS', 'hooks', pattern);
+    }
+
+    // Remove a specified hook
+    delhook(name) {
+        return this.sendCommand('DELHOOK', 'ok', name);
+    }
+
+    // Removes all hooks that match the specified pattern
+    pdelhook(pattern) {
+        return this.sendCommand('PDELHOOK', 'ok', pattern);
+    }
 }
 
 // processes all options that may be used by any of the search commands
-let processOpts = function(opts, names) {
+let processOpts = function (opts, names) {
     let cmd = [];
     if (opts === undefined)
         return cmd; // no options
@@ -370,7 +426,7 @@ let processOpts = function(opts, names) {
         if (!opts[name])
             continue; // an option with this name was not passed in.
 
-        switch(name) {
+        switch (name) {
             case 'cursor':
                 cmd.push('CURSOR');
                 cmd.push(opts.cursor);
@@ -415,6 +471,34 @@ let processOpts = function(opts, names) {
             case 'select': // COUNT, IDS, OBJECTS, POINTS, BOUNDS, HASHES
                 cmd.push(ops.select.toUpperCase());
                 break;
+            case 'roam': // roam: [key, pattern, meters]
+                cmd.push('ROAM');
+                cmd = cmd.concat(opts.roam);
+                break;
+            case 'order':
+                cmd.push(opts.order.toUpperCase());
+                break;
+            default:
+                console.log("unsupported property: " + name);
+        }
+    }
+    return cmd.concat(areaOpts(opts, names));
+}
+
+// processes all area options for within/intersects and sethook commands, then
+// constructs an array with commands.
+let areaOpts = function(opts, names) {
+    let cmd = [];
+    // iterate over all keys in the opts object and process any known options
+    for (let name of names) {
+        if (!opts[name])
+            continue; // an option with this name was not passed in.
+
+        switch(name) {
+            case 'point': // point: [lat, lon, meters]
+                cmd.push('POINT');
+                cmd = cmd.concat(opts.point);
+                break;
             case 'get': // passed like this:  'get: [key,id]'
                 cmd.push('GET');
                 cmd.push(opts.get[0]);
@@ -445,19 +529,10 @@ let processOpts = function(opts, names) {
                 cmd.push('HASH');
                 cmd.push(opts.hash);
                 break;
-            case 'point': // point: [lat, lon, meters]
-                cmd.push('POINT');
-                cmd = cmd.concat(opts.point);
+            case 'radius':
+                // radius, used ie with POINT or geohash
+                cmd.push(opts.radius);
                 break;
-            case 'roam': // roam: [key, pattern, meters]
-                cmd.push('ROAM');
-                cmd = cmd.concat(opts.roam);
-                break;
-            case 'order':
-                cmd.push(opts.order.toUpperCase());
-                break;
-            default:
-                console.log("unsupported property: " + name);
         }
     }
     return cmd;

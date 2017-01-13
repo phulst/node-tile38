@@ -151,10 +151,12 @@ development.
 - The search commands (INTERSECTS, NEARBY, SCAN, SEARCH and WITHIN) have been implemented but the FENCE option 
 (which is supposed to keep open a continuous stream) has not been implemented yet. This is in progress, and will 
 also need to add some more code examples for these commands in the readme. 
-- Webhooks (HOOKS, SETHOOK, DELHOOK, PDELHOOK)
 - the AUTH command, connection to password protected servers
 - Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
 
+Testing TODO:
+- search commands need test coverage
+- webhooks needs test coverage
 
 
 # Missing something? Did it break?
