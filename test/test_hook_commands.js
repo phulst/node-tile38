@@ -19,7 +19,7 @@ describe('hook commands', function() {
 
     describe('sethook', function() {
         it("should do a nearby search with point", (done) => {
-            let meta = { field: 'val1'};
+            let meta = { field: 'val1', field2: 'val2'};
             let opts = {
                 point:      [33.637276, -84.434006],
                 radius:     500

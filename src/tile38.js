@@ -386,8 +386,8 @@ class Tile38 {
     setHook(name, endpoint, meta, searchType, key, opts) {
         let cmd = [name, endpoint];
         if (meta) {
-            cmd.push('META');
             for (let m of Object.keys(meta)) {
+                cmd.push('META');
                 cmd.push(m);
                 cmd.push(meta[m]);
             }
