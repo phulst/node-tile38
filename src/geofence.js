@@ -16,18 +16,33 @@ class Geofence {
     commands() {
         let cmd = [];
         if (this.options.detect) {
-
-            this.assertArrayWithValues(this.options.detect, 'options.detect', ['inside','outside','enter','exit','cross']);
             cmd.push('DETECT');
             cmd.push(this.options.detect.join(','));
         }
 
         if (this.options.commands) {
-            this.assertArrayWithValues(this.options.commands, 'options.commands', ['del','set','drop']);
             cmd.push('COMMANDS');
             cmd.push(this.options.commands.join(','));
         }
+
+        if (this.options.get) {
+            cmd.push('GET');
+            val = this.options.get;
+            cmd.push(val.key);
+            cmd.push(val.id);
+        }
+
+
         return cmd;
+    }
+
+    validateOptions(opts) {
+        if (this.options.detect) {
+            this.assertArrayWithValues(this.options.detect, 'options.detect', ['inside','outside','enter','exit','cross']);
+        }
+        if (this.options.commands) {
+            this.assertArrayWithValues(this.options.commands, 'options.commands', ['del','set','drop']);
+        }
     }
 
     assertArrayWithValues(arr, name, expectedValues) {
