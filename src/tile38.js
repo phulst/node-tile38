@@ -208,6 +208,7 @@ class Tile38 {
             }
         } else {
             // must be a Geojson object
+            cmd.push('OBJECT');
             cmd.push(JSON.stringify(obj));
         }
         return this.sendCommand('SET', 'ok', cmd);
