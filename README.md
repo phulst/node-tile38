@@ -20,6 +20,11 @@ npm install tile38
 This library is functional, but not all commands have been implemented yet. 
 In most cases, commands follow the [command documentation](http://tile38.com/commands/) on the Tile38 website.
 
+## Revision history: 
+
+
+
+
 ## Connection 
  
 ```

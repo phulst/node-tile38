@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 const Tile38 = require('../src/tile38');
 require('chai').should();
 const expect = require('chai').expect;
@@ -18,7 +18,7 @@ describe('hook commands', function() {
     });
 
     describe('sethook', function() {
-        it("should do a nearby search with point", (done) => {
+        it("should do a nearby search with point", done => {
             let meta = { field: 'val1', field2: 'val2'};
             let opts = {
                 point:      [33.637276, -84.434006],
