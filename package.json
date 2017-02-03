@@ -1,6 +1,6 @@
 {
   "name": "tile38",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Node library for accessing Tile38 service",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,9 @@
     "redis": "^2.6.3"
   },
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
