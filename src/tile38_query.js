@@ -216,7 +216,7 @@ class Tile38Query {
             cmd.push('QUADKEY');
             cmd.push(o.quadKey);
         }
-        if (o.commands) {
+        if (o.hash) {
             cmd.push('HASH');
             cmd.push(o.hash);
         }
@@ -224,11 +224,47 @@ class Tile38Query {
         return cmd;
     }
 
+    /**
+     * will execute the query and return a Promise to the result.
+     * To use the live fence with streaming results, use fence() instead.
+     */
+    execute() {
+        let command = this.commandArr().join(' ');
+        return new Promise((resolve, reject) => {
+            // TODO: don't just return the command string, call Tile38 and return response
+            resolve(command);
+        });
+    }
+
+    /**
+     * returns streaming results for a live geofence. This function does not return a promise,
+     * but repeatedly calls the specified callback method whenever new results are received. 
+     */
+    executeFence(callback) {
+        //TODO
+    }
+
     /*
      * factory method to create a new Tile38Query object for an INTERSECTS search
      */
     static intersects(key) {
         return new Tile38Query('INTERSECTS', key);
+    }
+
+    static search(key) {
+        return new Tile38Query('SEARCH', key);
+    }
+
+    static nearby(key) {
+        return new Tile38Query('NEARBY', key);
+    }
+    
+    static scan(key) {
+        return new Tile38Query('SCAN', key);
+    }
+
+    static within(key) {
+        return new Tile38Query('WITHIN', key);
     }
 }
 

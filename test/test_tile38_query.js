@@ -204,7 +204,34 @@ describe('tile38 search query', function() {
             done();
         });
     });
-
-    // TODO: tests for Tile, Quadkey and Hash
+    describe('tile', function() {
+        it("should store tile query", function (done) {
+            let q = Query.intersects('fleet').tile(10,20,30);
+            let cmd = q.commandArr();
+            expect(cmd[2]).to.equal('TILE');
+            expect(cmd[3]).to.equal(10);
+            expect(cmd[4]).to.equal(20);
+            expect(cmd[5]).to.equal(30);
+            done();
+        });
+    });
+    describe('quadkey', function() {
+        it("should store quadkey query", function (done) {
+            let q = Query.intersects('fleet').quadKey(3242421);
+            let cmd = q.commandArr();
+            expect(cmd[2]).to.equal('QUADKEY');
+            expect(cmd[3]).to.equal(3242421);
+            done();
+        });
+    });
+    describe('hash', function() {
+        it("should store hash query", function (done) {
+            let q = Query.intersects('fleet').hash('382ad23e');
+            let cmd = q.commandArr();
+            expect(cmd[2]).to.equal('HASH');
+            expect(cmd[3]).to.equal('382ad23e');
+            done();
+        });
+    });
 
 });
