@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "preversion": "node_modules/babel-cli/bin/babel.js src --out-dir lib"
+    "compile": "node_modules/babel-cli/bin/babel.js src --out-dir lib"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",

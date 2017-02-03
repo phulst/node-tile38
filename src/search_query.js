@@ -1,10 +1,13 @@
 
-// represents a GeoFence in Tile38
-class Geofence {
+// represents a search query (that can be used to create a geofence) in Tile38
+class SearchQuery {
     
     /**
      * The following properties may be passed:
      *
+     * offset:   result to start at (default 0)
+     * limit:    number of results to return
+     * 
      * command: (del,drop,set) (array, or string with single or comma separated values)
      * detect: (inside,outside,enter,exit,cross) (array, or string with single or comma separated values)
      * output: (count|ids|objects|points|bounds|hashes N) specify one of these values (hashes should be followed by precision)
@@ -23,8 +26,18 @@ class Geofence {
     
     // returns an array of commands and options to be sent as part of the command string. 
     commands() {
-
         let cmd = [];
+        let o = this.options;
+
+        if (o.offset) {
+            cmd.push('CURSOR');
+            cmd.push(o.offset);
+        }
+        if (o.limit) {
+            cmd.push('LIMIT');
+            cmd.push(o.limit);
+        }
+
         if (this.options.detect) {
             let values = this.assertValues(this.options.detect, 'options.detect',
                 ['inside','outside','enter','exit','cross'], true);
@@ -117,4 +130,4 @@ class Geofence {
 
 }
 
-module.exports = Geofence;
+module.exports = SearchQuery;

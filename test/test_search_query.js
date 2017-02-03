@@ -1,16 +1,15 @@
 "use strict";
 const expect = require('chai').expect;
 
-const Geofence = require('../src/geofence');
+const Query = require('../src/search_query');
 
-describe('geofence', function() {
-    let geofence;
+describe('search query', function() {
 
 
     describe('constructor', function() {
         it("should throw error if no options are passed in", function(done) {
             try {
-                new Geofence();
+                new Query();
             } catch (err) {
                 expect(err.message).to.match(/requires an options object/);
                 done();
@@ -18,11 +17,31 @@ describe('geofence', function() {
         })
     });
 
+    describe('offset and limit', function() {
+        it("should parse offset option", function(done) {
+            let geofence = new Query({ offset: 10 });
+            let cmd = geofence.commands().join(' ');
+            expect(cmd).to.equal('CURSOR 10');
+            done();
+        });
+        it("should parse limit option", function(done) {
+            let geofence = new Query({ limit: 20 });
+            let cmd = geofence.commands().join(' ');
+            expect(cmd).to.equal('LIMIT 20');
+            done();
+        });
+        it("should parse offset and limit", function(done) {
+            let geofence = new Query({ offset: 200, limit: 50 });
+            let cmd = geofence.commands().join(' ');
+            expect(cmd).to.equal('CURSOR 200 LIMIT 50');
+            done();
+        });
+    });
 
     describe('detect', function() {
         it("should parse DETECT option correctly when passed as array", function(done) {
             let opts = { detect: ['inside', 'outside'] };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd[0]).to.equal('DETECT');
             expect(cmd[1]).to.equal('inside,outside');
@@ -30,7 +49,7 @@ describe('geofence', function() {
         });
         it("should parse DETECT option correctly when passed as csv", function(done) {
             let opts = { detect: 'inside,enter' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd[0]).to.equal('DETECT');
             expect(cmd[1]).to.equal('inside,enter');
@@ -38,7 +57,7 @@ describe('geofence', function() {
         });
         it("should parse DETECT option correctly when passed as single value", function(done) {
             let opts = { detect: 'cross' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd[0]).to.equal('DETECT');
             expect(cmd[1]).to.equal('cross');
@@ -49,7 +68,7 @@ describe('geofence', function() {
     describe('commands', function() {
         it("should parse COMMANDS option correctly when passed as array", function(done) {
             let opts = { commands: ['set','del'] };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd[0]).to.equal('COMMANDS');
             expect(cmd[1]).to.equal('set,del');
@@ -57,7 +76,7 @@ describe('geofence', function() {
         });
         it("should parse COMMANDS option correctly when passed as csv", function(done) {
             let opts = { commands: 'del,drop' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd[0]).to.equal('COMMANDS');
             expect(cmd[1]).to.equal('del,drop');
@@ -65,7 +84,7 @@ describe('geofence', function() {
         });
         it("should parse COMMANDS option correctly when passed as single value", function(done) {
             let opts = { commands: 'del' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd[0]).to.equal('COMMANDS');
             expect(cmd[1]).to.equal('del');
@@ -76,7 +95,7 @@ describe('geofence', function() {
     describe('output', function() {
         it("should set the COUNTS output", function(done) {
             let opts = { output: 'counts' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(1);
             expect(cmd[0]).to.equal('COUNTS');
@@ -84,7 +103,7 @@ describe('geofence', function() {
         });
         it("should set the IDS output", function(done) {
             let opts = { output: 'ids' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(1);
             expect(cmd[0]).to.equal('IDS');
@@ -92,7 +111,7 @@ describe('geofence', function() {
         });
         it("should set the OBJECTS output", function(done) {
             let opts = { output: 'objects' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(1);
             expect(cmd[0]).to.equal('OBJECTS');
@@ -100,7 +119,7 @@ describe('geofence', function() {
         });
         it("should set the POINTS output", function(done) {
             let opts = { output: 'points' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(1);
             expect(cmd[0]).to.equal('POINTS');
@@ -108,7 +127,7 @@ describe('geofence', function() {
         });
         it("should set the BOUNDS output", function(done) {
             let opts = { output: 'bounds' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(1);
             expect(cmd[0]).to.equal('BOUNDS');
@@ -116,7 +135,7 @@ describe('geofence', function() {
         });
         it("should set the HASHES output", function(done) {
             let opts = { output: 'hashes 10' };
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(1);
             expect(cmd[0]).to.equal('HASHES 10');
@@ -127,7 +146,7 @@ describe('geofence', function() {
     describe('area formats', function() {
         it("should set the GET format", function (done) {
             let opts = {getObject: ['someObject', 'someKey']};
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(3);
             expect(cmd[0]).to.equal('GET');
@@ -138,7 +157,7 @@ describe('geofence', function() {
         it("should set the BOUNDS format", function (done) {
             let b = [33.462, -112.268, 33.491, -112.245];
             let opts = {bounds: b};
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(5);
             expect(cmd[0]).to.equal('BOUNDS');
@@ -152,7 +171,7 @@ describe('geofence', function() {
             let polygon = {"type":"Polygon","coordinates":
                 [[[-111.9787,33.4411],[-111.8902,33.4377],[-111.8950,33.2892],[-111.9739,33.2932],[-111.9787,33.4411]]]};
             let opts = {object: polygon};
-            let geofence = new Geofence(opts);
+            let geofence = new Query(opts);
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(2);
             expect(cmd[0]).to.equal('OBJECT');
@@ -162,7 +181,7 @@ describe('geofence', function() {
         });
         it("should set the TILE format", function (done) {
             let tile = [ 10.0, 10.1, 10.2];
-            let geofence = new Geofence({ tile });
+            let geofence = new Query({ tile });
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(4);
             expect(cmd[0]).to.equal('TILE');
@@ -172,7 +191,7 @@ describe('geofence', function() {
             done();
         });
         it("should set the QUADKEY format", function (done) {
-            let geofence = new Geofence({ quadkey: '32112321' });
+            let geofence = new Query({ quadkey: '32112321' });
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(2);
             expect(cmd[0]).to.equal('QUADKEY');
@@ -180,7 +199,7 @@ describe('geofence', function() {
             done();
         });
         it("should set the HASH format", function (done) {
-            let geofence = new Geofence({ hash: 'ab42e6' });
+            let geofence = new Query({ hash: 'ab42e6' });
             let cmd = geofence.commands();
             expect(cmd.length).to.equal(2);
             expect(cmd[0]).to.equal('HASH');
