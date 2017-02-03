@@ -1,6 +1,7 @@
 // const Redis = require('ioredis');
 const redis = require('redis');
 const Promise = require('bluebird');
+const Query = require('./tile38_query');
 
 // const Command = Redis.Command;
 
@@ -317,14 +318,31 @@ class Tile38 {
         return this.sendCommand('JDEL', 'ok', [key, id, jKey]);
     }
 
-    // searches a collection for objects that intersect a specified bounding area.
-    // TODO: handle FENCE and streaming response
-    intersects(key, opts) {
-        let cmd = _processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
-            'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
-        cmd.unshift(key);
-        return this.sendCommand('INTERSECTS', 1, cmd);
+    // returns a Tile38Query object that can be used to further construct an INTERSECTS query
+    intersectsQuery(key) {
+        return new Query('INTERSECTS', key, this);
     }
+
+    // returns a Tile38Query object that can be used to further construct an SEARCH query
+    searchQuery(key) {
+        return new Query('SEARCH', key, this);
+    }
+
+    // returns a Tile38Query object that can be used to further construct an NEARBY query
+    nearbyQuery(key) {
+        return new Query('NEARBY', key, this);
+    }
+
+    // returns a Tile38Query object that can be used to further construct an SCAN query
+    scanQuery(key) {
+        return new Query('SCAN', key, this);
+    }
+
+    // returns a Tile38Query object that can be used to further construct an WITHIN query
+    withinQuery(key) {
+        return new Query('WITHIN', key, this);
+    }
+    
 
     // WITHIN searches a collection for objects that are fully contained inside of a specified bounding area.
     // TODO: handle FENCE and streaming response

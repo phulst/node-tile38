@@ -3,9 +3,10 @@
 class Tile38Query {
 
 
-    constructor(type, key) {
+    constructor(type, key, client) {
         this.type = type;
         this.key = key;
+        this.client = client;
         this.options = {};
     }
 
@@ -34,6 +35,28 @@ class Tile38Query {
             this.options.matches = [];
         }
         this.options.matches.push(value);
+        return this;
+    }
+
+    // sort order for SCAN query, must be 'asc' or 'desc'
+    order(val) {
+        // TODO throw error if type != 'SCAN'
+        this.options.order = val;
+        return this;
+    }
+    // equivalent of order('asc')
+    asc() {
+        return this.order('asc');
+    }
+    // equivalent of order('desc');
+    desc() {
+        return this.order('desc');
+    }
+
+    // adds DISTANCE argument for nearby query. 
+    distance() {
+        // TODO throw error if type != 'NEARBY'
+        this.options.distance = true;
         return this;
     }
 
@@ -147,9 +170,30 @@ class Tile38Query {
         return this;
     }
 
+    // adds POINT arguments to NEARBY query
+    point(lat, lon, meters) {
+        // TODO throw error if type != 'NEARBY'
+        this.options.point = {lat, lon, meters};
+        return this;
+    }
 
+    // adds ROAM arguments to NEARBY query
+    roam(key, pattern, meters) {
+        // TODO throw error if type != 'NEARBY'
+        this.options.roam = {key, pattern, meters};
+        return this;
+    }
+
+    // return all the commands of the query chain, as a string, the way it will
+    // be sent to Tile38
+    commandStr() {
+        return this.type + " " + this.commandArr().join(' ');
+    }
+
+    // constructs an array of all arguments of the query. This does not
+    // include the query type itself.
     commandArr() {
-        let cmd = [this.type, this.key];
+        let cmd = [this.key];
         let o = this.options;
         if (o.cursor) {
             cmd.push('CURSOR');
@@ -169,6 +213,13 @@ class Tile38Query {
                 cmd.push('MATCH');
                 cmd.push(k);
             }
+        }
+        if (o.order) { // add ASC or DESC to SCAN query
+            cmd.push(o.order.toUpperCase());
+        }
+
+        if (o.distance) {
+            cmd.push('DISTANCE');
         }
         if (o.where) {
             // add one or more where clauses
@@ -220,6 +271,18 @@ class Tile38Query {
             cmd.push('HASH');
             cmd.push(o.hash);
         }
+        if (o.point) {
+            cmd.push('POINT');
+            cmd.push(o.point.lat);
+            cmd.push(o.point.lon);
+            cmd.push(o.point.meters);
+        }
+        if (o.roam) {
+            cmd.push('ROAM');
+            cmd.push(o.roam.key);
+            cmd.push(o.roam.pattern);
+            cmd.push(o.roam.meters);
+        }
 
         return cmd;
     }
@@ -229,40 +292,45 @@ class Tile38Query {
      * To use the live fence with streaming results, use fence() instead.
      */
     execute() {
-        let command = this.commandArr().join(' ');
-        return new Promise((resolve, reject) => {
-            // TODO: don't just return the command string, call Tile38 and return response
-            resolve(command);
-        });
+        return this.client.sendCommand(this.type, 1, this.commandArr());
     }
 
     /**
      * returns streaming results for a live geofence. This function does not return a promise,
-     * but repeatedly calls the specified callback method whenever new results are received. 
+     * but repeatedly calls the specified callback method when results are received.
      */
     executeFence(callback) {
         //TODO
+        throw new Error("coming soon... not implemented yet");
     }
 
     /*
-     * factory method to create a new Tile38Query object for an INTERSECTS search
+     * factory method to create a new Tile38Query object for an INTERSECTS search.
+     * These factory methods are used in the test suite, but since these don't have
+     * access to a Tile38 client object, they cannot be used to actually execute
+     * a query on the server.
+     * Use the Tile38.intersectsQuery() method instead.
      */
     static intersects(key) {
         return new Tile38Query('INTERSECTS', key);
     }
 
+    // Use Tile38.searchQuery() method instead
     static search(key) {
         return new Tile38Query('SEARCH', key);
     }
 
+    // Use Tile38.nearbyQuery() method instead
     static nearby(key) {
         return new Tile38Query('NEARBY', key);
     }
-    
+
+    // Use Tile38.scanQuery() method instead
     static scan(key) {
         return new Tile38Query('SCAN', key);
     }
 
+    // Use Tile38.withinQuery() method instead
     static within(key) {
         return new Tile38Query('WITHIN', key);
     }

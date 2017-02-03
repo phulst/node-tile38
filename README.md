@@ -22,7 +22,7 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 
 ## Revision history: 
 
-
+0.5.0 Implemented method chaining for search methods. Improved test coverage and improved README with search query examples. 
 
 
 ## Connection 
@@ -133,6 +133,105 @@ client.get('fleet', 'truck1', { withfields: true });
 
 TODO
 
+### search commands
+
+The search commands use method chaining to deal with its many available options. See the query examples below, or look at 
+tile38_query.js to see all available methods.
+  
+
+#### One time results vs live geofence 
+
+To execute the query and get the search results, use the execute() function, which will return a promise to the results. 
+  
+```  
+let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245);
+query.execute(function(results).then(results => {
+  console.dir(results);  // results is an object.
+}).catch(err => {
+  console.error("something went wrong! " + err);
+)};
+```
+
+To set up a live geofence that will use a websocket to continuously send updates, you construct your query the exact same way. 
+However, instead of execute(), use the executeFence() function with a callback. 
+ 
+```  
+let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245);
+query.executeFence(results => {
+    // this callback will be called multiple times  
+    console.dir(results);
+});
+```
+
+TODO: executeFence is still under development... this will be done by mid February.
+
+Note that many of the chaining functions below can be used for all search commands. See the [Tile38 documentation](http://tile38.com/commands/#search)
+for more info on what query criteria use supported by what commands.
+
+Do not forget to call the execute() or executeFence() function after constructing your query chain. I've left this out in the
+examples below for brevity. 
+
+#### INTERSECTS
+
+```
+// basic query that uses bounds
+client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245)
+// using cursor and limit for pagination
+client.intersectsQuery('fleet').cursor(100).limit(50).bounds(33.462, -112.268, 33.491 -112.245)
+// create a fence that triggeres when entering a polygon
+let polygon = {"type":"Polygon","coordinates": [[[-111.9787,33.4411],[-111.8902,33.4377],[-111.8950,33.2892],[-111.9739,33.2932],[-111.9787,33.4411]]]};
+client.intersectsQuery('fleet').detect('enter','exit').object(polygon)
+```
+
+#### SEARCH
+
+``` 
+// basic search query
+client.searchQuery('names')
+// use matching patter and return results in descending order, without fields
+client.searchQuery('names').match('J*').nofields().desc()
+// return only IDs
+client.searchQuery('names').ids()
+// return only count
+client.searchQuery('names').count()
+// use the where option
+client.searchQuery('names').where('age', '40', '+inf')
+```
+
+#### NEARBY
+
+```
+// basic nearby query, including distance for each returned object
+client.nearbyQuery('fleet').distance().point(33.462 -112.268 6000)
+// return results as geohashes with precision 8
+client.nearbyQuery('fleet').point(33.462 -112.268 6000).hashes(8)
+// use the roam option
+client.nearbyQuery('fleet').roam('truck', 'ptn', 3000)
+```
+
+#### SCAN
+
+```
+// basic scan query, returning all results in geojson
+client.scanQuery('fleet').objects()
+// return simple coordinates, and do not include fields
+client.scanQuery('fleet').nofields().points()
+```
+
+#### WITHIN
+
+The withinQuery has the same query options as intersects.
+
+```
+// basic within query, returning all results in geojson
+client.withinQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245)
+// check within an area that's already defined in the database
+client.withinQuery('fleet').get('cities', 'tempe')
+// return objects within a given tile x, y, z
+client.withinQuery('fleet').tile(x, y, z); 
+```
+
+
 # Running tests
 
 WARNING: THIS WILL WIPE OUT YOUR DATA!
@@ -150,19 +249,21 @@ npm test
 
 # Project roadmap
 
-Below is a complete list of the commands that have not been implemented yet, and that are currently still in 
-development. 
+The following commands/features are still on the roadmap: 
 
-- The search commands (INTERSECTS, NEARBY, SCAN, SEARCH and WITHIN) have been implemented but the FENCE option 
-(which is supposed to keep open a continuous stream) has not been implemented yet. This is in progress, and will 
-also need to add some more code examples for these commands in the readme. 
+- The executeFence method has not been implemented yet, so live geofences do not yet work. This will hopefully be resolved 
+in the next 2 weeks.
+- The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite 
+  it so it can be used in a similar way to the other search functions. 
 - the AUTH command, connection to password protected servers
 - Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
+- There's virtually no validation of options passed into functions, or of the query chaining for search commands. For example,
+  this library does not prevent you from using the roam() function on an intersects query, even though it's only supported 
+  on the nearby search. It may be fine to leave validation of the search query up to the Tile38 server itself. Happy to accept
+  a pull request for better query validation though. 
 
 Testing TODO:
-- search commands need test coverage
 - webhooks needs test coverage
-
 
 # Missing something? Did it break?
 
