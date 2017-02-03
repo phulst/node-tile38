@@ -144,7 +144,7 @@ tile38_query.js to see all available methods.
 To execute the query and get the search results, use the execute() function, which will return a promise to the results. 
   
 ```  
-let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245);
+let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245);
 query.execute(function(results).then(results => {
   console.dir(results);  // results is an object.
 }).catch(err => {
@@ -156,7 +156,7 @@ To set up a live geofence that will use a websocket to continuously send updates
 However, instead of execute(), use the executeFence() function with a callback. 
  
 ```  
-let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245);
+let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491 -112.245);
 query.executeFence(results => {
     // this callback will be called multiple times  
     console.dir(results);
@@ -195,16 +195,16 @@ client.searchQuery('names').ids()
 // return only count
 client.searchQuery('names').count()
 // use the where option
-client.searchQuery('names').where('age', '40', '+inf')
+client.searchQuery('names').where('age', 40, '+inf')
 ```
 
 #### NEARBY
 
 ```
 // basic nearby query, including distance for each returned object
-client.nearbyQuery('fleet').distance().point(33.462 -112.268 6000)
+client.nearbyQuery('fleet').distance().point(33.462, -112.268, 6000)
 // return results as geohashes with precision 8
-client.nearbyQuery('fleet').point(33.462 -112.268 6000).hashes(8)
+client.nearbyQuery('fleet').point(33.462, -112.268, 6000).hashes(8)
 // use the roam option
 client.nearbyQuery('fleet').roam('truck', 'ptn', 3000)
 ```
