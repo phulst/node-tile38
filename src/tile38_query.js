@@ -233,6 +233,9 @@ class Tile38Query {
         if (o.nofields) {
             cmd.push('NOFIELDS');
         }
+        if (o.fence) {
+            cmd.push('FENCE');
+        }
         if (o.detect) {
             cmd.push('DETECT');
             cmd.push(o.detect);
@@ -300,6 +303,7 @@ class Tile38Query {
      * but repeatedly calls the specified callback method when results are received.
      */
     executeFence(callback) {
+        this.options.fence = true;
         this.client.openLiveFence(this.commandStr(), callback);
     }
 
