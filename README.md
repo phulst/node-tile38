@@ -178,8 +178,6 @@ fence.onClose = function() {
 fence.close();
 ```
 
-NOTE: executeFence is still being tested and only works in the master branch!
-
 Many of the chaining functions below can be used for all search commands. See the [Tile38 documentation](http://tile38.com/commands/#search)
 for more info on what query criteria are supported by what commands.
 
@@ -264,10 +262,9 @@ npm test
 
 # Project roadmap
 
-The following commands/features are still on the roadmap, in order of priority, high to low:  
+The following work or features are up next, in order of priority, high to low:  
 
-- The executeFence method is still being tested and is not included in version 0.5.0 yet. To try it, 
-  please use the master branch of this project. 
+- The executeFence method / live geofences has had limited testing. Please submit bugs if you run into issues. 
 - The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite 
   it so it can be used in a similar way to the other search functions. 
 - the AUTH command, connection to password protected servers
@@ -279,6 +276,7 @@ The following commands/features are still on the roadmap, in order of priority, 
 
 Testing TODO:
 - webhooks needs test coverage
+- test coverage for live geofences
 
 # Missing something? Did it break?
 
