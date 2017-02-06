@@ -3,6 +3,8 @@ const redis = require('redis');
 const Promise = require('bluebird');
 const Query = require('./tile38_query');
 
+const openFence = require('./fence');
+
 // const Command = Redis.Command;
 
 const DEFAULT_HASH_PRECISION = 6;
@@ -11,6 +13,8 @@ class Tile38 {
 
     constructor({port = 9851, host = 'localhost', debug = false} = {}) {
         this.client = redis.createClient({port, host});
+        this.port = port;
+        this.host = host;
         // put the OUTPUT in json mode
         this.sendCommand('OUTPUT', null, 'json');
         this.debug = debug;
@@ -252,7 +256,7 @@ class Tile38 {
      *   get('fleet', 'truck1', {type: 'BOUNDS'})  // return bounds
      *   get('fleet', 'truck1', {type: 'HASH 6'}) // return geohash with precision 6
      */
-    get(key, id, {withfields = false, type= null} = {}) {
+    get(key, id, {withfields = false, type = null} = {}) {
 
         let params = [key, id];
         if (withfields) params.push('WITHFIELDS');
@@ -342,7 +346,7 @@ class Tile38 {
     withinQuery(key) {
         return new Query('WITHIN', key, this);
     }
-    
+
 
     // WITHIN searches a collection for objects that are fully contained inside of a specified bounding area.
     // TODO: handle FENCE and streaming response
@@ -414,7 +418,7 @@ class Tile38 {
         cmd.push(searchType.toUpperCase());
         cmd.push(key);
         cmd.push('FENCE');
-        cmd = cmd.concat(processOpts(opts,['detect', 'commands', 'get', 'point', 'bounds', 'object',
+        cmd = cmd.concat(processOpts(opts, ['detect', 'commands', 'get', 'point', 'bounds', 'object',
             'tile', 'quadkey', 'hash', 'radius']));
         return this.sendCommand('SETHOOK', 'ok', cmd);
     }
@@ -432,6 +436,17 @@ class Tile38 {
     // Removes all hooks that match the specified pattern
     pdelhook(pattern) {
         return this.sendCommand('PDELHOOK', 'ok', pattern);
+    }
+
+    openLiveFence(command, callback) {
+        openFence(this.host, this.port, command, (err, data) => {
+            if (err) {
+                console.log("ERROR: " + err);
+            } else {
+                console.log("received data");
+                console.log(JSON.stringify(data));
+            }
+        });
     }
 }
 
@@ -556,5 +571,6 @@ let areaOpts = function(opts, names) {
     }
     return cmd;
 }
+
 
 module.exports = Tile38;

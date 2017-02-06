@@ -300,8 +300,7 @@ class Tile38Query {
      * but repeatedly calls the specified callback method when results are received.
      */
     executeFence(callback) {
-        //TODO
-        throw new Error("coming soon... not implemented yet");
+        this.client.openLiveFence(this.commandStr(), callback);
     }
 
     /*
