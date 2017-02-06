@@ -156,7 +156,7 @@ To set up a live geofence that will use a websocket to continuously send updates
 However, instead of execute(), use the executeFence() function with a callback. 
  
 ```  
-let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491 -112.245);
+let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491, -112.245);
 query.executeFence((err, results) => {
     // this callback will be called multiple times
     if (err) {
