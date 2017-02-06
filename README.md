@@ -45,7 +45,7 @@ var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
 
 ## Promises
 
-Any values are returned through promises. 
+All of the implemented methods return promises (with the exception of executeFence(), see more info on that below). 
 
 ```
 client.get('fleet', 'truck1').then( (data) => {
@@ -157,7 +157,7 @@ However, instead of execute(), use the executeFence() function with a callback.
  
 ```  
 let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491, -112.245);
-query.executeFence((err, results) => {
+let fence = query.executeFence((err, results) => {
     // this callback will be called multiple times
     if (err) {
         console.log("error: " + err);
@@ -165,11 +165,19 @@ query.executeFence((err, results) => {
         console.dir(results);
     }
 });
+
+// if you want to be notified when the connection gets closed
+fence.onClose = function() {
+  console.log("geofence was closed");
+}
+
+// later on, when you want to close the live geofence: 
+fence.close();
 ```
 
 NOTE: executeFence is still being tested and only works in the master branch!
 
-Note that many of the chaining functions below can be used for all search commands. See the [Tile38 documentation](http://tile38.com/commands/#search)
+Many of the chaining functions below can be used for all search commands. See the [Tile38 documentation](http://tile38.com/commands/#search)
 for more info on what query criteria are supported by what commands.
 
 Do not forget to call the execute() or executeFence() function after constructing your query chain. I've left this out in the
@@ -253,7 +261,7 @@ npm test
 
 # Project roadmap
 
-The following commands/features are still on the roadmap: 
+The following commands/features are still on the roadmap, in order of priority, high to low:  
 
 - The executeFence method is still being tested and is not included in version 0.5.0 yet. To try it, 
   please use the master branch of this project. 

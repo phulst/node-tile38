@@ -299,12 +299,14 @@ class Tile38Query {
     }
 
     /**
-     * returns streaming results for a live geofence. This function does not return a promise,
-     * but repeatedly calls the specified callback method when results are received.
+     * returns streaming results for a live geofence. This function will repeatedly call the specified callback
+     * method when results are received.
+     * This method returns an instance of LiveGeofence, which can be used to close the fence if necessary by calling
+     * its close() method.
      */
     executeFence(callback) {
         this.options.fence = true;
-        this.client.openLiveFence(this.commandStr(), callback);
+        return this.client.openLiveFence(this.commandStr(), callback);
     }
 
     /*

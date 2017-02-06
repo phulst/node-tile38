@@ -2,10 +2,7 @@
 const redis = require('redis');
 const Promise = require('bluebird');
 const Query = require('./tile38_query');
-
-const openFence = require('./fence');
-
-// const Command = Redis.Command;
+const LiveGeofence = require('./live_geofence');
 
 const DEFAULT_HASH_PRECISION = 6;
 
@@ -438,8 +435,9 @@ class Tile38 {
         return this.sendCommand('PDELHOOK', 'ok', pattern);
     }
 
+    // opens a live geofence and returns an instance of LiveGeofence (that can be used to later on close it).
     openLiveFence(command, callback) {
-        openFence(this.host, this.port, command, callback);
+        return (new LiveGeofence()).open(this.host, this.port, command, callback);
     }
 }
 
