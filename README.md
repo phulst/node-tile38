@@ -27,6 +27,8 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 
 0.6.0 - Added support for live geofences
 
+0.6.1 - Module packaging fix
+
 
 ## Connection 
  
