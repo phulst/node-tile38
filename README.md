@@ -25,7 +25,7 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 
 0.5.0 - Implemented method chaining for search methods. Improved test coverage and improved README with search query examples
 
-0.5.1 - Added support for live geofences
+0.6.0 - Added support for live geofences
 
 
 ## Connection 
