@@ -2,10 +2,10 @@
   "name": "tile38",
   "version": "0.6.0",
   "description": "Node library for accessing Tile38 service",
-  "main": "index.js",
+  "main": "./dist/tile38.js",
   "scripts": {
     "test": "mocha",
-    "compile": "node_modules/babel-cli/bin/babel.js src --out-dir lib",
+    "compile": "node_modules/babel-cli/bin/babel.js src --out-dir dist",
     "prepublish": "npm run compile"
   },
   "author": "Peter Hulst <peter@hollice.com>",
