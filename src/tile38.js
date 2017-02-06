@@ -439,14 +439,7 @@ class Tile38 {
     }
 
     openLiveFence(command, callback) {
-        openFence(this.host, this.port, command, (err, data) => {
-            if (err) {
-                console.log("ERROR: " + err);
-            } else {
-                console.log("received data");
-                console.log(JSON.stringify(data));
-            }
-        });
+        openFence(this.host, this.port, command, callback);
     }
 }
 
