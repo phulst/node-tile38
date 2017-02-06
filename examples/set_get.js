@@ -21,14 +21,14 @@ client.get('fleet', 'truck1').then(obj => {
 
 // retrieve it as a simple point
 client.getPoint('fleet', 'truck2').then(obj => {
-    // will print:  { point: { lat: 33.5123, lon: -112.2693 } }
+    // will print:  { point: { lat: 33.5211, lon: -112.271 } }
     console.dir(obj);
 });
 
 
 // same as above but adds error handling:
 client.getPoint('fleet', 'truck2').then(obj => {
-    // will print:  { point: { lat: 33.5123, lon: -112.2693 } }
+    // will print:  { point: { lat: 33.5211, lon: -112.271 } }
     console.dir(obj);
 }).catch(err => {
     console.error(err);
