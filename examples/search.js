@@ -36,8 +36,8 @@ nearPiedmont.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
-        //console.log("nearby eastbay");
-        //console.dir(results);
+        console.log("nearby eastbay");
+        console.dir(results);
     }
 });
 
