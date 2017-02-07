@@ -36,7 +36,7 @@ nearPiedmont.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
-        console.log("nearby eastbay");
+        console.log("nearby Piedmont");
         console.dir(results);
     }
 });
@@ -73,7 +73,7 @@ withinPolygon.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
-        console.log("within polygon");
+        console.log("within Alameda polygon");
         console.dir(results);
     }
 });
