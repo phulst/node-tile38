@@ -16,8 +16,7 @@ function randomPointInBounds(swLat, swLon, neLat, neLon) {
 }
 let user = 1;
 function sendCoords() {
-    let coords = randomPointInBounds(...map_bounds);
-    client.set('eastbay', "user" + user, coords);
+    client.set('eastbay', "user" + user, randomPointInBounds(...map_bounds));
     user = user + 1;
     if (user == 11) user = 1;
 }
@@ -68,8 +67,8 @@ let polygon = { type: "Polygon", coordinates: [[
     [-122.3308765320844,37.79628967707779],
     [-122.3300231682738,37.78158260714663]
     ]]};
-withinPolygon = client.withinQuery('eastbay').detect('enter','exit').object(polygon);
-withinPolygon.executeFence((err, results) => {
+withinAlameda = client.withinQuery('eastbay').detect('enter','exit').object(polygon);
+withinAlameda.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
