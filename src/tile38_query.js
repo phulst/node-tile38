@@ -306,7 +306,9 @@ class Tile38Query {
      */
     executeFence(callback) {
         this.options.fence = true;
-        return this.client.openLiveFence(this.commandStr(), callback);
+        let cmd = this.commandStr();
+        console.log(cmd)
+        return this.client.openLiveFence(cmd, callback);
     }
 
     /*
