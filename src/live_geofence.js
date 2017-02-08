@@ -8,6 +8,10 @@ const Parser = require("redis-parser");
  */
 class LiveGeofence {
 
+    constructor(debug = false) {
+        this.debug = debug;
+    }
+
     /**
      * opens a socket to the server, submits a command, then continuously processes data that is returned
      * from the Tile38 server
@@ -31,6 +35,7 @@ class LiveGeofence {
 
         const parser = new Parser({
             returnReply: function(reply) {
+                if (self.debug) console.log(reply);
                 if (reply == 'OK') return; // we're not invoking a callback for the 'OK' response that comes first
 
                 let response = reply;
@@ -47,6 +52,7 @@ class LiveGeofence {
                 callback(null, response);
             },
             returnError: function(err) {
+                console.error('live socket error: ' + err);
                 callback(err, null);
             },
             returnFatalError: function(err) {

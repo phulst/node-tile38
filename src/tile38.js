@@ -405,7 +405,7 @@ class Tile38 {
             console.log(`sending live fence command "${command} ${commandArr.join(' ')}"`);
         }
         let cmd = this.redisEncodeCommand(command, commandArr);
-        return (new LiveGeofence()).open(this.host, this.port, cmd, callback);
+        return (new LiveGeofence(this.debug)).open(this.host, this.port, cmd, callback);
     }
 
     // encodes the tile38_query.commandArr() output to be sent to Redis. This is only necessary for the live geofence,

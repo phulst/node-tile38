@@ -35,8 +35,8 @@ nearPiedmont.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
-        console.log("nearby Piedmont");
-        console.dir(results);
+        console.log(results.id + ": " + results.detect + " Piedmond 2k radius");
+        // console.dir(results);
     }
 });
 
@@ -49,8 +49,8 @@ withinSomeBounds.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
-        console.log("within inner bounds");
-        console.dir(results);
+        console.log(results.id + ": " + results.detect + " inner bounds area");
+        // console.dir(results);
     }
 });
 
@@ -72,8 +72,8 @@ withinAlameda.executeFence((err, results) => {
     if (err) {
         console.error(err);
     } else {
-        console.log("within Alameda polygon");
-        console.dir(results);
+        console.log(results.id + ": " + results.detect + " Alameda polygon area");
+        // console.dir(results);
     }
 });
 
