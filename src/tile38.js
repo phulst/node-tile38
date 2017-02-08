@@ -35,14 +35,10 @@ class Tile38 {
             }
             this.client.send_command(cmd, args, (err, result) => {
                 if (err) {
-                    if (this.debug) {
-                        console.log(err);
-                    }
+                    if (this.debug) console.log(err);
                     reject(err);
                 } else {
-                    if (this.debug) {
-                        console.log(result);
-                    }
+                    if (this.debug) console.log(result);
                     try {
                         if (!returnProp) {
                             // return the raw response
@@ -436,8 +432,29 @@ class Tile38 {
     }
 
     // opens a live geofence and returns an instance of LiveGeofence (that can be used to later on close it).
-    openLiveFence(command, callback) {
-        return (new LiveGeofence()).open(this.host, this.port, command, callback);
+    openLiveFence(command, commandArr, callback) {
+        if (this.debug) {
+            console.log(`sending live fence command "${command} ${commandArr.join(' ')}"`);
+        }
+        let cmd = this.redisEncodeCommand(command, commandArr);
+        return (new LiveGeofence()).open(this.host, this.port, cmd, callback);
+    }
+
+    // encodes the tile38_query.commandArr() output to be sent to Redis. This is only necessary for the live geofence,
+    // since the sendCommand() function uses the node_redis library, which handles this for us.
+    redisEncodeCommand(command, arr) {
+        // this is a greatly simplified version of the internal_send_command() functionality in
+        // https://github.com/NodeRedis/node_redis/blob/master/index.js
+        let cmdStr = '*' + (arr.length + 1) + '\r\n$' + command.length + '\r\n' + command + '\r\n';
+        let str;
+        for (let c of arr) {
+            if (typeof c === 'string')
+                str = c;
+            else
+                str = c.toString();
+            cmdStr += '$' + Buffer.byteLength(c) + '\r\n' + c + '\r\n';
+        }
+        return cmdStr;
     }
 }
 
