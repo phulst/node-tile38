@@ -147,8 +147,8 @@ class Tile38 {
      * fields should be a simple object with key value pairs
      * opts can be used to set additional options, such as:
      *   - expire: 3600          // to set expiration date of object
-     *   - onlyIfExists: true    // only set field if key already exists
-     *   - onlyIfNotExists: true // only set if id does not exist yet
+     *   - onlyIfExists: true    // only set object if the id already exists
+     *   - onlyIfNotExists: true // only set object if id does not exist yet
      *   - type: 'string'        // to set string values (otherwise interpreted as geohash)
      * Examples:
      *
