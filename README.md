@@ -177,9 +177,9 @@ To execute the query and get the search results, use the execute() function, whi
 ```  
 let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245);
 query.execute(function(results).then(results => {
-  console.dir(results);  // results is an object.
+    console.dir(results);  // results is an object.
 }).catch(err => {
-  console.error("something went wrong! " + err);
+    console.error("something went wrong! " + err);
 )};
 ```
 
@@ -191,7 +191,7 @@ let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462
 let fence = query.executeFence((err, results) => {
     // this callback will be called multiple times
     if (err) {
-        console.log("error: " + err);
+        console.error("something went wrong! " + err);
     } else {
         console.dir(results);
     }
@@ -199,10 +199,10 @@ let fence = query.executeFence((err, results) => {
 
 // if you want to be notified when the connection gets closed
 fence.onClose = function() {
-  console.log("geofence was closed");
+    console.log("geofence was closed");
 }
 
-// later on, when you want to close the live geofence: 
+// later on, when you want to close the socket and kill the live geofence: 
 fence.close();
 ```
 
