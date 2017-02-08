@@ -17,11 +17,16 @@ npm install tile38
 
 # Overview
 
-This library is functional, but not all commands have been implemented yet. 
-In most cases, commands follow the [command documentation](http://tile38.com/commands/) on the Tile38 website.
+While you can use your preferred Redis library to communicate with the Tile38 geolocation database, this node library 
+offers a much more pleasant query interface for all Tile38 commands. It also supports live geofencing using 
+persistent sockets to the server. 
+ 
+In most cases, commands follow the [command documentation](http://tile38.com/commands/) on the Tile38 website, 
+though the search/scan commands use method chaining. You can find some examples below as well as in the 
+examples folder. 
+
 
 ## Revision history: 
-
 
 0.5.0 - Implemented method chaining for search methods. Improved test coverage and improved README with search query examples
 
@@ -30,6 +35,7 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 0.6.1 - Module packaging fix
 
 0.6.2 - Fixed issue with Redis command encoding for live fence queries
+
 
 ## Connection 
  
@@ -137,7 +143,26 @@ client.get('fleet', 'truck1', { withfields: true });
 
 ### set command
 
-TODO
+The set command has various forms. 
+
+set(key, id, locationObject, fields, options)
+
+```
+// set a simple lat/lng coordinate
+client.set('fleet', 'truck1', [33.5123, -112.2693])
+// set with additional fields
+client.set('fleet', 'truck1', [33.5123, -112.2693], { field1: 10, field2: 20});
+// set lat/lon/alt coordinates, and expire in 120 secs
+client.set('fleet', 'truck1', [33.5123, -112.2693, 120.0], {}, {expire: 120})
+// set bounds
+set('props', 'house1', [33.7840, -112.1520, 33.7848, -112.1512])
+// set an ID by geohash
+set('props', 'area1', '9tbnwg')   // assumes HASH by default if only one extra parameter
+// set a String value
+set('props', 'area2', 'my string value', {}, {type: 'string'}) # or force to String type
+// set with geoJson object
+set('cities', 'tempe', geoJsonObject)
+```
 
 ### search commands
 
