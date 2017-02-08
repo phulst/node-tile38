@@ -1,6 +1,6 @@
 {
   "name": "tile38",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Node library for accessing Tile38 service",
   "main": "./dist/tile38.js",
   "scripts": {
