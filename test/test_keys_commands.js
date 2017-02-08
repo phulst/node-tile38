@@ -69,7 +69,7 @@ describe('key commands', function() {
             tile38.set('somekey', 'truck1', [33.5123, -112.2693]).then(() => {
                 tile38.set('somekey', 'truck2', [34.5011, -113.2710]).then(() => {
                     tile38.drop('somekey').then((res) => {
-                        tile38.scan('somekey').then((obj) => {
+                        tile38.scanQuery('somekey').execute().then((obj) => {
                             obj.objects.length.should.equal(0);
                             done();
                         })

@@ -340,40 +340,6 @@ class Tile38 {
         return new Query('WITHIN', key, this);
     }
 
-
-    // WITHIN searches a collection for objects that are fully contained inside of a specified bounding area.
-    // TODO: handle FENCE and streaming response
-    within(key, opts) {
-        let cmd = processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
-            'fence', 'detect', 'commands', 'select', 'get', 'bounds', 'object', 'tile', 'quadkey', 'hash']);
-        cmd.unshift(key);
-        return this.sendCommand('WITHIN', 1, cmd);
-    }
-
-    // The NEARBY command searches a collection for objects that intersect a specified radius.
-    // TODO: add support for DISTANCE
-    // TODO: handle FENCE and streaming response
-    nearby(key, opts) {
-        let cmd = processOpts(opts, ['cursor', 'limit', 'sparse', 'match', 'where', 'nofields',
-            'fence', 'detect', 'commands', 'select', 'point', 'roam']);
-        cmd.unshift(key);
-        return this.sendCommand('NEARBY', 1, cmd);
-    }
-
-    // SCAN incrementally iterates though a key.
-    scan(key, opts) {
-        let cmd = processOpts(opts, ['cursor', 'limit', 'match', 'order', 'where', 'nofields', 'select']);
-        cmd.unshift(key);
-        return this.sendCommand('SCAN', 1, cmd);
-    }
-
-    // SEARCH iterates though a key’s string values.
-    search(key, opts) {
-        let cmd = processOpts(opts, ['cursor', 'limit', 'match', 'order', 'where', 'nofields', 'select']);
-        cmd.unshift(key);
-        return this.sendCommand('SEARCH', 1, cmd);
-    }
-
     // Returns all hooks matching pattern.
     hooks(pattern) {
         return this.sendCommand('HOOKS', null, pattern);
@@ -398,6 +364,8 @@ class Tile38 {
      *
      * command and detect may both exist but only one of the following get/bounds/object/tile/quadkey/hash
      * may be specified at a time.
+     *
+     * TODO: This command should be rewritting to use the same chaining form that the search commands use.
      */
     setHook(name, endpoint, meta, searchType, key, opts) {
         let cmd = [name, endpoint];
