@@ -25,6 +25,12 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 though the search/scan commands use method chaining. You can find some examples below as well as in the 
 examples folder. 
 
+Most examples below are in ES6, and the library has been written in ES6, but the library uses Babel to transpile, so
+even if you're still running Node 4 or earlier you should be able to use this library.
+
+This library has not been tested in the browser. You generally would not want to expose your database directly to the 
+internet, so even if it does work from the browser, it's not a good idea. 
+ 
 
 ## Revision history: 
 
@@ -60,15 +66,15 @@ var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
 All of the implemented methods return promises (with the exception of executeFence(), see more info on that below). 
 
 ```
-client.get('fleet', 'truck1').then( (data) => {
+client.get('fleet', 'truck1').then(data => {
   console.log(data); // prints coordinates in geoJSON format 
 
-}).catch( (err) =>
+}).catch(err =>
   console.log(err); // id not found  
 });
 
 // return the data as type POINT, and include FIELDS as well.  
-client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then((data) => {
+client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then(data => {
   console.log(`truck2 is at ${data.point.lat},${data.point.lon}`);
   console.dir(data.fields);
 });
