@@ -29,6 +29,7 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 
 0.6.1 - Module packaging fix
 
+0.6.2 - Fixed issue with Redis command encoding for live fence queries
 
 ## Connection 
  
