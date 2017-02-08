@@ -1,6 +1,8 @@
 "use strict"
 const Tile38 = require('../src/tile38');
+const Query = require('../src/tile38_query');
 require('chai').should();
+const expect = require('chai').expect;
 
 
 var assert = require('assert');
@@ -107,6 +109,16 @@ describe('tile38', function() {
                 res.should.be.true;
                 done();
             });
+        });
+    });
+
+
+    describe('redisEncodeCmd', function() {
+        it("should encode roam query", function (done) {
+            let q = Query.nearby('fleet').roam('key', 'ptn', 3000);
+            let cmd = tile38.redisEncodeCommand(q.type, q.commandArr());
+            expect(cmd).to.equal("*6\r\n$6\r\nNEARBY\r\n$5\r\nfleet\r\n$4\r\nROAM\r\n$3\r\nkey\r\n$3\r\nptn\r\n$4\r\n3000\r\n");
+            done();
         });
     });
 });
