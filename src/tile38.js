@@ -380,7 +380,7 @@ class Tile38 {
         cmd.push(key);
         cmd.push('FENCE');
         cmd = cmd.concat(processOpts(opts, ['detect', 'commands', 'get', 'point', 'bounds', 'object',
-            'tile', 'quadkey', 'hash', 'radius']));
+            'tile', 'quadkey', 'hash', 'radius', 'roam']));
         return this.sendCommand('SETHOOK', 'ok', cmd);
     }
 

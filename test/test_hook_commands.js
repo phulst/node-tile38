@@ -24,7 +24,20 @@ describe('hook commands', function() {
                 point:      [33.637276, -84.434006],
                 radius:     500
             };
-            tile38.setHook('testhook', 'http://httpbin.org/post', meta, 'nearby', 'fleet', opts).then(res => {
+            tile38.setHook('testhook0', 'http://httpbin.org/post', meta, 'nearby', 'fleet', opts).then(res => {
+                res.should.be.true;
+                done();
+            });
+        });
+    });
+
+    describe('sethook', function() {
+        it("should do a nearby search with point", done => {
+            let meta = { field: 'val1', field2: 'val2'};
+            let opts = {
+            	roam: ['fleet', '*', 500]
+            };
+            tile38.setHook('testhook1', 'http://httpbin.org/post', meta, 'nearby', 'fleet', opts).then(res => {
                 res.should.be.true;
                 done();
             });
@@ -39,9 +52,10 @@ describe('hook commands', function() {
             });
         });
         it("should return all testhook", done => {
-            tile38.hooks('testhook').then(res => {
-                expect(res.length).to.equal(1);
-                expect(res[0].name).to.equal('testhook');
+            tile38.hooks('testhook*').then(res => {
+                expect(res.length).to.equal(2);
+                expect(res[0].name).to.equal('testhook0');
+                expect(res[1].name).to.equal('testhook1');
                 done();
             });
         });
