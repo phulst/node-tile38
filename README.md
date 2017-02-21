@@ -42,6 +42,8 @@ internet, so even if it does work from the browser, it's not a good idea.
 
 0.6.2 - Fixed issue with Redis command encoding for live fence queries
 
+0.6.3 - Adding capability to create webhooks with roaming geofenced search 
+
 
 ## Connection 
  
