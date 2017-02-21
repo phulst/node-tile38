@@ -207,10 +207,10 @@ let fence = query.executeFence((err, results) => {
     }
 });
 
-// if you want to be notified when the connection gets closed
-fence.onClose = function() {
+// if you want to be notified when the connection gets closed, register a callback function with onClose()
+fence.onClose(() => {
     console.log("geofence was closed");
-}
+});
 
 // later on, when you want to close the socket and kill the live geofence: 
 fence.close();

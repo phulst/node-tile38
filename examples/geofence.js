@@ -16,9 +16,9 @@ let fence = query.executeFence((err, results) => {
 });
 
 // if you want to be notified when the connection gets closed
-fence.onClose = function() {
+fence.onClose(() => {
     console.log("geofence was closed");
-}
+});
 
 // after 20 seconds, close the geofence again.
 setTimeout(() => {

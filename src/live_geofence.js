@@ -30,7 +30,7 @@ class LiveGeofence {
         let self = this;
         socket.on('close', () => {
             //console.log("Socket is being closed!");
-            if (this.onClose) this.onClose();
+            if (this.onCloseCb) this.onCloseCb();
         });
 
         const parser = new Parser({
@@ -71,13 +71,12 @@ class LiveGeofence {
 
     // allows clients to register an 'on closed' handler to be notified if the socket unexpectedly gets closed
     onClose(callback) {
-        this.onClose = callback;
+        this.onCloseCb = callback;
     }
 
     // Forces the geofence to be closed
     close() {
         if (this.socket) this.socket.destroy();
-        // not invoking the onClosed callback here.
     }
 }
 
