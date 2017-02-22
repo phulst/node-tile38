@@ -138,6 +138,10 @@ class Tile38 {
         return this.sendCommand('KEYS', 'keys', pattern);
     }
 
+    // authenticate with server
+    auth(password) {
+        return this.sendCommand('AUTH', 'ok')
+    }
 
     /* obj can be one of the following:
      *   - an array with lat, lng and optional z coordinate, representing a point.
@@ -365,7 +369,7 @@ class Tile38 {
      * command and detect may both exist but only one of the following get/bounds/object/tile/quadkey/hash
      * may be specified at a time.
      *
-     * TODO: This command should be rewritting to use the same chaining form that the search commands use.
+     * TODO: This command should be rewritten to use the same chaining form that the search commands use.
      */
     setHook(name, endpoint, meta, searchType, key, opts) {
         let cmd = [name, endpoint];
@@ -488,8 +492,6 @@ let processOpts = function (opts, names) {
             case 'order':
                 cmd.push(opts.order.toUpperCase());
                 break;
-            default:
-                console.log("unsupported property: " + name);
         }
     }
     return cmd.concat(areaOpts(opts, names));
