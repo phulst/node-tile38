@@ -183,10 +183,28 @@ describe('tile38 search query', function() {
             expect(cmd[1]).to.equal('COUNT');
             done();
         });
+        it("should set COUNT output format using convenience method", function (done) {
+            let q = Query.intersects('fleet').count();
+            let cmd = q.commandArr();
+            expect(cmd[1]).to.equal('COUNT');
+            done();
+        });
         it("should set POINTS output format", function (done) {
             let q = Query.intersects('fleet').output('points');
             let cmd = q.commandArr();
             expect(cmd[1]).to.equal('POINTS');
+            done();
+        });
+        it("should set POINTS output format using convenience method", function (done) {
+            let q = Query.intersects('fleet').points();
+            let cmd = q.commandArr();
+            expect(cmd[1]).to.equal('POINTS');
+            done();
+        });
+        it("should set IDS output format using convenience method", function (done) {
+            let q = Query.intersects('fleet').ids();
+            let cmd = q.commandArr();
+            expect(cmd[1]).to.equal('IDS');
             done();
         });
         it("should set HASHES output format, with precision", function (done) {

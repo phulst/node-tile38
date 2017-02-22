@@ -120,6 +120,12 @@ class Tile38Query {
      * If 'hashes' is used a second parameter should specify the precision, ie
      *   query.output('hashes', 6);
      *
+     * Note that all of these types, except for 'bounds' can be called using convenience methods as well,
+     * so
+     *   objects() instead of output('objects')
+     * and
+     *   hashes(6) instead of output('hashes', 6)
+     *
      */
     output(type, precision) {
         type = type.toUpperCase();
@@ -130,6 +136,28 @@ class Tile38Query {
         }
         return this;
     }
+
+    // shortcut for .output('ids')
+    ids() {
+        return this.output('ids');
+    }
+    // shortcut for .output('count')
+    count() {
+        return this.output('count');
+    }
+    // shortcut for .output('objects')
+    objects() {
+        return this.output('objects');
+    }
+    // shortcut for .output('points')
+    points() {
+        return this.output('points');
+    }
+    // shortcut for .output('points')
+    hashes(precision) {
+        return this.output('hashes', precision);
+    }
+
 
     /**
      * conducts search with an object that's already in the database
