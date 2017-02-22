@@ -34,6 +34,7 @@ internet, so even if it does work from the browser, it's not a good idea.
 
 ## Revision history: 
 
+```
 0.5.0 - Implemented method chaining for search methods. Improved test coverage and improved README with search query examples
 
 0.6.0 - Added support for live geofences
@@ -44,6 +45,11 @@ internet, so even if it does work from the browser, it's not a good idea.
 
 0.6.3 - Adding capability to create webhooks with roaming geofenced search 
 
+0.6.4 - added convenience methods such as ids(), count() that can be used instead of output('ids'), output('count'), etc.
+      - added support for AUTH command
+      - onClose() for live fence now accepts callback method
+      - fixed incorrect warning message
+```
 
 ## Connection 
  
@@ -242,6 +248,8 @@ client.searchQuery('names')
 // use matching patter and return results in descending order, without fields
 client.searchQuery('names').match('J*').nofields().desc()
 // return only IDs
+client.searchQuery('names').output('ids')
+// this does the same: 
 client.searchQuery('names').ids()
 // return only count
 client.searchQuery('names').count()
@@ -264,6 +272,8 @@ client.nearbyQuery('fleet').roam('truck', 'ptn', 3000)
 
 ```
 // basic scan query, returning all results in geojson
+client.scanQuery('fleet').output('objects');
+// this does the same
 client.scanQuery('fleet').objects()
 // return simple coordinates, and do not include fields
 client.scanQuery('fleet').nofields().points()
@@ -305,7 +315,6 @@ The following work or features are up next, in order of priority, high to low:
 - The executeFence method / live geofences has had limited testing. Please submit bugs if you run into issues. 
 - The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite 
   it so it can be used in a similar way to the other search functions. 
-- the AUTH command, connection to password protected servers
 - Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
 - There's virtually no validation of options passed into functions, or of the query chaining for search commands. For example,
   this library does not prevent you from using the roam() function on an intersects query, even though it's only supported 
