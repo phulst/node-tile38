@@ -192,7 +192,7 @@ To execute the query and get the search results, use the execute() function, whi
   
 ```  
 let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245);
-query.execute(function(results).then(results => {
+query.execute().then(results => {
     console.dir(results);  // results is an object.
 }).catch(err => {
     console.error("something went wrong! " + err);
@@ -200,7 +200,7 @@ query.execute(function(results).then(results => {
 ```
 
 To set up a live geofence that will use a websocket to continuously send updates, you construct your query the exact same way. 
-However, instead of execute(), use the executeFence() function with a callback. 
+However, instead of execute() (which returns a Promise), use the executeFence() function while passing in a callback function. 
  
 ```  
 let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491, -112.245);
