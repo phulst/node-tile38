@@ -8,10 +8,13 @@ const DEFAULT_HASH_PRECISION = 6;
 
 class Tile38 {
 
-    constructor({port = 9851, host = 'localhost', debug = false} = {}) {
+    constructor({port = 9851, host = 'localhost', debug = false, password = null} = {}) {
         this.client = redis.createClient({port, host});
         this.port = port;
         this.host = host;
+        if (password) {
+            this.auth(password);
+        }
         // put the OUTPUT in json mode
         this.sendCommand('OUTPUT', null, 'json');
         this.debug = debug;
@@ -140,7 +143,7 @@ class Tile38 {
 
     // authenticate with server
     auth(password) {
-        return this.sendCommand('AUTH', 'ok')
+        return this.sendCommand('AUTH', 'ok', password);
     }
 
     /* obj can be one of the following:
@@ -525,7 +528,7 @@ let areaOpts = function(opts, names) {
                 break;
             case 'object': // geojson object
                 cmd.push('OBJECT');
-                cmd.push(JSON.serialize(opts.object));
+                cmd.push(JSON.stringify(opts.object));
                 break;
             case 'tile':
                 cmd.push('TILE');
