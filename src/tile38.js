@@ -427,7 +427,7 @@ class Tile38 {
                 str = c;
             else
                 str = c.toString();
-            cmdStr += '$' + Buffer.byteLength(c) + '\r\n' + c + '\r\n';
+            cmdStr += '$' + Buffer.byteLength(str) + '\r\n' + str + '\r\n';
         }
         return cmdStr;
     }
