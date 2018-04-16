@@ -14,12 +14,22 @@ class Tile38 {
         });
         this.port = port;
         this.host = host;
-        if (password) {
-            this.auth(password);
-        }
-        // put the OUTPUT in json mode
-        this.sendCommand('OUTPUT', null, 'json');
         this.debug = debug;
+        // send password if activated
+        if (password) {
+            this.sendCommand('AUTH', null, password)
+            .then(this.sendCommand('OUTPUT', null, 'json'))
+            .catch((err) => {
+                if (debug) console.error(err);
+            });
+        } else {
+            // put the OUTPUT in json mode
+            this.sendCommand('OUTPUT', null, 'json')
+            .catch((err) => {
+                if (debug) console.error(err);
+            });
+        
+        }
     }
 
     /*
