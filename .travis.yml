@@ -19,5 +19,4 @@ before_install:
   - docker ps -a
 
 script:
-  - export TILE38_PORT=9851 
-  - npm run test 
+  - npm run test

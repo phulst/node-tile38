@@ -10,7 +10,7 @@ describe('tile38', function() {
     let tile38;
 
     beforeEach(function() {
-        tile38 = new Tile38({port: process.env.TILE38_PORT || 9850});
+        tile38 = new Tile38({port: process.env.TILE38_PORT || 9851});
     });
 
     describe('ping', function() {
