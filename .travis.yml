@@ -10,13 +10,12 @@ node_js:
   - '8'
   - '9'
 
-before_script:
-  - env
-
 before_install:
   - docker pull tile38/tile38:1.11.1
   - docker run -d --net=host tile38/tile38:1.11.1
   - docker ps -a
 
 script:
+  - export TILE38_PORT=9851
+  - env
   - npm run test
