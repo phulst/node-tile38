@@ -1,4 +1,3 @@
-// const Redis = require('ioredis');
 const redis = require('redis');
 const Promise = require('bluebird');
 const Query = require('./tile38_query');
@@ -10,6 +9,9 @@ class Tile38 {
 
     constructor({port = 9851, host = 'localhost', debug = false, password = null} = {}) {
         this.client = redis.createClient({port, host});
+        this.client.on('error', function (err) {
+            console.error('Redis connection error: ' + err);
+        });
         this.port = port;
         this.host = host;
         if (password) {
