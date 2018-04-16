@@ -8,28 +8,27 @@ const DEFAULT_HASH_PRECISION = 6;
 class Tile38 {
 
     constructor({port = 9851, host = 'localhost', debug = false, password = null} = {}) {
-        this.client = redis.createClient({port, host});
-        this.client.on('error', function (err) {
-            console.error('Redis connection error: ' + err);
-        });
-        this.port = port;
-        this.host = host;
-        this.debug = debug;
-        // send password if activated
+        let connectionObj = {
+            host: host,
+            port: port
+        };
+        // set password if param is present
         if (password) {
-            this.sendCommand('AUTH', null, password)
-            .then(this.sendCommand('OUTPUT', null, 'json'))
-            .catch((err) => {
-                if (debug) console.error(err);
-            });
-        } else {
-            // put the OUTPUT in json mode
-            this.sendCommand('OUTPUT', null, 'json')
-            .catch((err) => {
-                if (debug) console.error(err);
-            });
-        
+            connectionObj.password = password;
         }
+        // connect to Tile38
+        this.client = redis.createClient(connectionObj);
+        // register error handler
+        this.client.on('error', function (err) {
+            console.error('Tile38 connection error: ' + err);
+        });
+        // set debug flag
+        this.debug = debug;
+        // put the OUTPUT in json mode
+        this.sendCommand('OUTPUT', null, 'json')
+            .catch((err) => {
+                if (debug) console.error(err);
+            });
     }
 
     /*
