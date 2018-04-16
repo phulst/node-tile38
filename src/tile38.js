@@ -1,5 +1,4 @@
 const redis = require('redis');
-const Promise = require('bluebird');
 const Query = require('./tile38_query');
 const LiveGeofence = require('./live_geofence');
 
