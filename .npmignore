@@ -1,1 +1,6 @@
-/src/
+/.idea/
+
+.gitignore
+.travis.yml
+
+npm-debug.log

@@ -1,5 +1,4 @@
 const redis = require('redis');
-const Promise = require('bluebird');
 const Query = require('./tile38_query');
 const LiveGeofence = require('./live_geofence');
 
@@ -8,18 +7,27 @@ const DEFAULT_HASH_PRECISION = 6;
 class Tile38 {
 
     constructor({port = 9851, host = 'localhost', debug = false, password = null} = {}) {
-        this.client = redis.createClient({port, host});
-        this.client.on('error', function (err) {
-            console.error('Redis connection error: ' + err);
-        });
-        this.port = port;
-        this.host = host;
+        let connectionObj = {
+            host: host,
+            port: port
+        };
+        // set password if param is present
         if (password) {
-            this.auth(password);
+            connectionObj.password = password;
         }
-        // put the OUTPUT in json mode
-        this.sendCommand('OUTPUT', null, 'json');
+        // connect to Tile38
+        this.client = redis.createClient(connectionObj);
+        // register error handler
+        this.client.on('error', function (err) {
+            console.error('Tile38 connection error: ' + err);
+        });
+        // set debug flag
         this.debug = debug;
+        // put the OUTPUT in json mode
+        this.sendCommand('OUTPUT', null, 'json')
+            .catch((err) => {
+                if (debug) console.error(err);
+            });
     }
 
     /*
