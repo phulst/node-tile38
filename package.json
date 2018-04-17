@@ -1,5 +1,5 @@
 {
-  "name": "tile38",
+  "name": "tile38-client",
   "version": "0.6.5",
   "description": "Node library for accessing Tile38 service",
   "main": "./src/tile38.js",
@@ -7,10 +7,21 @@
     "test": "mocha"
   },
   "author": "Peter Hulst <peter@hollice.com>",
+  "contributors": [
+    "TobiLG <tobilg@gamil.com>"
+  ],
   "license": "ISC",
   "engines" : { 
     "node" : ">=6.0"
   },
+  "bugs": {
+    "url": "https://github.com/tobilg/tile38-client/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tobilg/tile38-client.git"
+  },
+  "homepage": "https://github.com/tobilg/tile38-client",
   "dependencies": {
     "redis": "^2.6.3",
     "redis-parser": "^2.4.0"
