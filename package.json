@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nyc mocha",
     "coverage": "nyc report --reporter=html",
-    "cvrg": "bash -c 'nyc report --reporter=text-lcov | bash <(curl -s -o- -L https://cvrg.report/bash) || exit 0"
+    "cvrg": "bash -c 'nyc report --reporter=text-lcov | bash <(curl -s -o- -L https://cvrg.report/bash) || exit 0'"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "contributors": [
