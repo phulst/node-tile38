@@ -1,6 +1,6 @@
 
-const Tile38 = require('tile38');
-const client = new Tile38();
+const Tile38Client = require('tile38-client');
+const client = new Tile38Client();
 
 
 // construct the geofence query

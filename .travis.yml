@@ -19,3 +19,6 @@ script:
   - export TILE38_PORT=9851
   - env
   - npm run test
+
+after_script:
+  - npm run cvrg

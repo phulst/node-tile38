@@ -1,18 +1,20 @@
 {
   "name": "tile38-client",
-  "version": "0.6.5",
+  "version": "0.1.0",
   "description": "Node library for accessing Tile38 service",
   "main": "./src/tile38.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc mocha",
+    "coverage": "nyc report --reporter=html",
+    "cvrg": "bash -c 'nyc report --reporter=text-lcov | bash <(curl -s -o- -L https://cvrg.report/bash) || exit 0"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "contributors": [
     "TobiLG <tobilg@gamil.com>"
   ],
   "license": "ISC",
-  "engines" : { 
-    "node" : ">=6.0"
+  "engines": {
+    "node": ">=6.0"
   },
   "bugs": {
     "url": "https://github.com/tobilg/tile38-client/issues"
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "nyc": "^11.6.0"
   }
 }

@@ -1,18 +1,23 @@
+[![Build Status](https://travis-ci.org/tobilg/tile38-client.svg?branch=master)](https://travis-ci.org/tobilg/til38-client)
+[![GitHub forks](https://img.shields.io/github/forks/tobilg/tile38-client.svg)](https://github.com/tobilg/tile38-client/network)
+[![GitHub stars](https://img.shields.io/github/stars/tobilg/tile38-client.svg)](https://github.com/tobilg/tile38-client/stargazers)
+[![GitHub license](https://img.shields.io/badge/license-ISC-blue.svg)](https://raw.githubusercontent.com/tobilg/tile38-client/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/tile38-client.svg)]()
+[![npm](https://img.shields.io/npm/dt/tile38-client.svg)]()
 
-# Tile38 Node driver
+# tile38-client: Node.js client for Tile38
 
-This library can be used to access the Tile38 server from Node.js apps. 
-
+This library is a fork of [node-tile38](https://github.com/phulst/node-tile38) with bugfixes and improvements, and can be used to access a Tile38 server from Node.js apps. 
 
 # Links
-* [Project git repo](https://github.com/phulst/node-tile38)
+* [Project git repo](https://github.com/tobilg/tile38-client)
 * [Tile38 website](http://tile38.com/)
 * [Tile38 Github](https://github.com/tidwall/tile38)
 
 # Installation
 
 ```
-npm install tile38
+npm install tile38-client
 ```
 
 # Overview
@@ -30,43 +35,22 @@ even if you're still running Node 4 or earlier you should be able to use this.
 
 This library has not been tested in the browser. You generally would not want to expose your database directly to the 
 internet, so even if it does work from the browser, it's not a good idea. 
- 
-
-## Revision history: 
-
-```
-0.5.0 - Implemented method chaining for search methods. Improved test coverage and improved README with search query examples
-
-0.6.0 - Added support for live geofences
-
-0.6.1 - Module packaging fix
-
-0.6.2 - Fixed issue with Redis command encoding for live fence queries
-
-0.6.3 - Adding capability to create webhooks with roaming geofenced search 
-
-0.6.4 - added convenience methods such as ids(), count() that can be used instead of output('ids'), output('count'), etc.
-      - added support for AUTH command
-      - onClose() for live fence now accepts callback method
-      - fixed incorrect warning message
-```
 
 ## Connection 
  
 ```
-var Tile38 = require('tile38'); 
-var client = new Tile38();
+var Tile38Client = require('tile38-client'); 
+var client = new Tile38Client();
 // save a location
 client.set('fleet', 'truck1', [33.5123, -112.2693]);
 // save a location with additional fields
 client.set('fleet', 'truck2', [33.5123, -112.2693], { value: 10, othervalue: 20});
 ```
 
-You can pass any non-default connection settings into the Tile38 constructor, and you can also turn on 
-optional debug logging as illustrated below. 
+You can pass any non-default connection settings into the Tile38 constructor, such as when you enabled authentication in Tile38, or if you want to turn on optional debug logging (as illustrated below).
 
 ```
-var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
+var client = new Tile38Client({ host: 'host.server.com', port: 9850, debug: true, password: 'abcdefg' });
 ```
 
 ## Promises
@@ -292,10 +276,9 @@ client.withinQuery('fleet').get('cities', 'tempe')
 client.withinQuery('fleet').tile(x, y, z); 
 ```
 
-
 # Running tests
 
-WARNING: THIS WILL WIPE OUT YOUR DATA!
+*WARNING: THIS WILL WIPE OUT YOUR DATA!*
 The test suite currently depends on having a local instance of Tile38 running on port 9850 (instead of the default 9851).
 It tests all supported commands, including FLUSHDB, so you'll LOSE ALL EXISTING DATA in your local db.
 
@@ -307,23 +290,6 @@ If you have nothing critical in your local db, you can run the tests with:
 ```
 npm test
 ```
-
-# Project roadmap
-
-The following work or features are up next, in order of priority, high to low:  
-
-- The executeFence method / live geofences has had limited testing. Please submit bugs if you run into issues. 
-- The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite 
-  it so it can be used in a similar way to the other search functions. 
-- Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
-- There's virtually no validation of options passed into functions, or of the query chaining for search commands. For example,
-  this library does not prevent you from using the roam() function on an intersects query, even though it's only supported 
-  on the nearby search. It may be fine to leave validation of the search query up to the Tile38 server itself. Happy to accept
-  a pull request for better query validation though. 
-
-Testing TODO:
-- webhooks needs test coverage
-- test coverage for live geofences
 
 # Missing something? Did it break?
 
