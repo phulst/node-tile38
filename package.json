@@ -6,7 +6,9 @@
   "scripts": {
     "test": "nyc mocha",
     "coverage": "nyc report --reporter=html",
-    "cvrg": "bash -c 'nyc report --reporter=text-lcov | bash <(curl -s -o- -L https://cvrg.report/bash) || exit 0'"
+    "cvrg": "bash -c 'nyc report --reporter=text-lcov | bash <(curl -s -o- -L https://cvrg.report/bash) || exit 0'",
+    "publish-please": "publish-please",
+    "prepublish": "publish-please guard"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "contributors": [
@@ -31,6 +33,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
-    "nyc": "^11.6.0"
+    "nyc": "^11.6.0",
+    "publish-please": "^2.4.1"
   }
 }
