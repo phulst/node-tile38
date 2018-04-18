@@ -278,6 +278,14 @@ client.withinQuery('fleet').tile(x, y, z);
 
 # Running tests
 
+If you don't want to install Tile38 locally for running the tests, you can also use the provided Docker Compose file:
+
+```bash
+$ docker-compose up -d
+```
+
+This will start a Tile38 Docker container with the Tile38 server exposed on port `9850`, ready to run the tests.
+
 *WARNING: THIS WILL WIPE OUT YOUR DATA!*
 The test suite currently depends on having a local instance of Tile38 running on port 9850 (instead of the default 9851).
 It tests all supported commands, including FLUSHDB, so you'll LOSE ALL EXISTING DATA in your local db.
