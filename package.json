@@ -8,7 +8,7 @@
     "coverage": "nyc report --reporter=html",
     "cvrg": "bash -c 'nyc report --reporter=text-lcov | bash <(curl -s -o- -L https://cvrg.report/bash) || exit 0'",
     "publish-please": "publish-please",
-    "prepublish": "publish-please guard"
+    "prepublishOnly": "publish-please guard"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "contributors": [
