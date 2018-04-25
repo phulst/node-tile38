@@ -1,6 +1,6 @@
 
-const Tile38 = require('../src/tile38');
-const client = new Tile38({debug: true});
+const Tile38Client = require('../src/tile38');
+const client = new Tile38Client({debug: true});
 
 
 /*

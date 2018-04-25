@@ -1,1 +1,8 @@
-/src/
+/.idea/
+
+.gitignore
+.travis.yml
+
+.nyc_output
+
+npm-debug.log

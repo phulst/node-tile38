@@ -1,6 +1,4 @@
-// const Redis = require('ioredis');
 const redis = require('redis');
-const Promise = require('bluebird');
 const Query = require('./tile38_query');
 const LiveGeofence = require('./live_geofence');
 
@@ -8,13 +6,28 @@ const DEFAULT_HASH_PRECISION = 6;
 
 class Tile38 {
 
-    constructor({port = 9851, host = 'localhost', debug = false} = {}) {
-        this.client = redis.createClient({port, host});
-        this.port = port;
-        this.host = host;
-        // put the OUTPUT in json mode
-        this.sendCommand('OUTPUT', null, 'json');
+    constructor({port = 9851, host = 'localhost', debug = false, password = null} = {}) {
+        let connectionObj = {
+            host: host,
+            port: port
+        };
+        // set password if param is present
+        if (password) {
+            connectionObj.password = password;
+        }
+        // connect to Tile38
+        this.client = redis.createClient(connectionObj);
+        // register error handler
+        this.client.on('error', function (err) {
+            console.error('Tile38 connection error: ' + err);
+        });
+        // set debug flag
         this.debug = debug;
+        // put the OUTPUT in json mode
+        this.sendCommand('OUTPUT', null, 'json')
+            .catch((err) => {
+                if (debug) console.error(err);
+            });
     }
 
     /*
@@ -140,7 +153,7 @@ class Tile38 {
 
     // authenticate with server
     auth(password) {
-        return this.sendCommand('AUTH', 'ok')
+        return this.sendCommand('AUTH', 'ok', password);
     }
 
     /* obj can be one of the following:
@@ -424,7 +437,7 @@ class Tile38 {
                 str = c;
             else
                 str = c.toString();
-            cmdStr += '$' + Buffer.byteLength(c) + '\r\n' + c + '\r\n';
+            cmdStr += '$' + Buffer.byteLength(str) + '\r\n' + str + '\r\n';
         }
         return cmdStr;
     }
@@ -525,7 +538,7 @@ let areaOpts = function(opts, names) {
                 break;
             case 'object': // geojson object
                 cmd.push('OBJECT');
-                cmd.push(JSON.serialize(opts.object));
+                cmd.push(JSON.stringify(opts.object));
                 break;
             case 'tile':
                 cmd.push('TILE');
