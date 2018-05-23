@@ -288,6 +288,16 @@ describe('tile38 search query', function() {
             expect(cmd[4]).to.equal(6000);
             done();
         });
+        it("should allow nearby point query without radius", function (done) {
+            let q = Query.nearby('fleet').point(33.462, -112.268);
+            let cmd = q.commandArr();
+            expect(cmd[1]).to.equal('POINT');
+            expect(cmd[2]).to.equal(33.462);
+            expect(cmd[3]).to.equal(-112.268);
+            expect(cmd.length).to.equal(4);
+            done();
+        });
+
     });
     describe('roam', function() {
         it("should store roam query", function (done) {
