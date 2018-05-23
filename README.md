@@ -49,6 +49,16 @@ internet, so even if it does work from the browser, it's not a good idea.
       - added support for AUTH command
       - onClose() for live fence now accepts callback method
       - fixed incorrect warning message
+      
+0.6.5 - fixed bugs in redis communication
+      - added support for Tile38 server authentication
+      - added option to use TILE38_PASSWD env variable for authentication
+      - added option to use TILE38_PORT env variable for port config
+      - added option to use TILE38_HOST env variable for host config
+      - tests now run on default port 9851 unless TILE38_PORT is set
+      - fixed auth() function (though there should be no need to call this directly)
+      - added logging 
+      
 ```
 
 ## Connection 
@@ -68,6 +78,10 @@ optional debug logging as illustrated below.
 ```
 var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
 ```
+
+You can also set the hostname, port and password using the environment vars TILE38_HOST, TILE38_PORT and TILE38_PASSWD.
+These environment variables will only be used if values are not passed into the constructor explicitly
+
 
 ## Promises
 
