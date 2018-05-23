@@ -57,7 +57,11 @@ internet, so even if it does work from the browser, it's not a good idea.
       - added option to use TILE38_HOST env variable for host config
       - tests now run on default port 9851 unless TILE38_PORT is set
       - fixed auth() function (though there should be no need to call this directly)
-      - added logging 
+      - added error handler with logging for redis client  
+      
+0.6.6 - updated test & babel dependencies to fix security vulnerability
+      - fix for issue #5 (nearby query without radius)
+            
       
 ```
 
