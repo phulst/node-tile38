@@ -11,11 +11,11 @@ class Tile38 {
     constructor({port, host, password, debug = false} = {}) {
         this.port = port ? port : (process.env.TILE38_PORT || 9851);
         this.host = host ? host : (process.env.TILE38_HOST || 'localhost');
-        password = password ? password : process.env.TILE38_PASSWD;
+        this.password = password ? password : process.env.TILE38_PASSWD;
 
         let conn = { port: this.port, host: this.host};
-        if (password) {
-            conn.password = password;
+        if (this.password) {
+            conn.password = this.password;
         }
         this.client = redis.createClient(conn);
         this.client.on('error', (err) => {
@@ -418,7 +418,7 @@ class Tile38 {
             console.log(`sending live fence command "${command} ${commandArr.join(' ')}"`);
         }
         let cmd = this.redisEncodeCommand(command, commandArr);
-        return (new LiveGeofence(this.debug)).open(this.host, this.port, cmd, callback);
+        return (new LiveGeofence(this.debug)).open(this.host, this.port, this.password, cmd, callback);
     }
 
     // encodes the tile38_query.commandArr() output to be sent to Redis. This is only necessary for the live geofence,

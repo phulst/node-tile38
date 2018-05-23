@@ -17,13 +17,18 @@ class LiveGeofence {
      * from the Tile38 server
      * @param host
      * @param port
+     * @param password
      * @param command Command string to send to Tile38
      * @param callback callback method with parameters (err, results)
      */
-    open(host, port, command, callback) {
+    open(host, port, password, command, callback) {
         const socket = new net.Socket();
         this.socket = socket;
         socket.connect(port, host, () => {
+            if (password) {
+                // authenticate if necessary
+                socket.write(`AUTH ${password}\r\n`);
+            }
             socket.write(command + "\r\n");
         });
 
