@@ -8,10 +8,19 @@ const DEFAULT_HASH_PRECISION = 6;
 
 class Tile38 {
 
-    constructor({port = 9851, host = 'localhost', debug = false} = {}) {
-        this.client = redis.createClient({port, host});
-        this.port = port;
-        this.host = host;
+    constructor({port, host, password, debug = false} = {}) {
+        this.port = port ? port : (process.env.TILE38_PORT || 9851);
+        this.host = host ? host : (process.env.TILE38_HOST || 'localhost');
+        password = password ? password : process.env.TILE38_PASSWD;
+
+        let conn = { port: this.port, host: this.host};
+        if (password) {
+            conn.password = password;
+        }
+        this.client = redis.createClient(conn);
+        this.client.on('error', (err) => {
+            console.error('Tile38 connection error: ' + err);
+        });
         // put the OUTPUT in json mode
         this.sendCommand('OUTPUT', null, 'json');
         this.debug = debug;
@@ -140,7 +149,7 @@ class Tile38 {
 
     // authenticate with server
     auth(password) {
-        return this.sendCommand('AUTH', 'ok')
+        return this.sendCommand('AUTH', 'ok', password)
     }
 
     /* obj can be one of the following:
@@ -424,7 +433,7 @@ class Tile38 {
                 str = c;
             else
                 str = c.toString();
-            cmdStr += '$' + Buffer.byteLength(c) + '\r\n' + c + '\r\n';
+            cmdStr += '$' + Buffer.byteLength(str) + '\r\n' + str + '\r\n';
         }
         return cmdStr;
     }
@@ -525,7 +534,7 @@ let areaOpts = function(opts, names) {
                 break;
             case 'object': // geojson object
                 cmd.push('OBJECT');
-                cmd.push(JSON.serialize(opts.object));
+                cmd.push(JSON.stringify(opts.object));
                 break;
             case 'tile':
                 cmd.push('TILE');
