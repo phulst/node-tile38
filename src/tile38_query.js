@@ -306,7 +306,9 @@ class Tile38Query {
             cmd.push('POINT');
             cmd.push(o.point.lat);
             cmd.push(o.point.lon);
-            cmd.push(o.point.meters);
+            if (o.point.meters) {
+                cmd.push(o.point.meters);
+            }
         }
         if (o.roam) {
             cmd.push('ROAM');
