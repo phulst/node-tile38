@@ -38,7 +38,7 @@ See the [CHANGELOG](./CHANGELOG.md)
 
 ## Connection 
  
-```
+```javascript
 var Tile38 = require('tile38'); 
 var client = new Tile38();
 // save a location
@@ -62,7 +62,7 @@ These environment variables will only be used if values are not passed into the 
 
 All of the implemented methods return promises (with the exception of executeFence(), see more info on that below). 
 
-```
+```javascript
 client.get('fleet', 'truck1').then(data => {
   console.log(data); // prints coordinates in geoJSON format 
 
@@ -82,7 +82,7 @@ client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then(data => {
 Many commands may not return values, but they still return promises, allowing you to wait until 
 your changes have been persisted. 
 
-```
+```javascript
 client.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
   console.log('your changes have been persisted');
 });
@@ -103,7 +103,7 @@ JGET key id path
 
 is called as follows: 
 
-```
+```javascript
 client.jget(key, id, path)
 ```
 
@@ -111,7 +111,7 @@ client.jget(key, id, path)
 
 Some examples of keys commands: 
 
-```
+```javascript
 client.bounds('fleet');
 client.del('feet', 'truck2');
 client.drop('fleet');
@@ -125,7 +125,7 @@ client.stats('fleet1', 'fleet2');
 The get command accepts an optional object that can be use to set the response data type: 
 
 
-```
+```javascript
 // return truck1 location as a geoJSON object
 client.get('fleet', 'truck1');
 client.get('fleet', 'truck1', { type: 'OBJECT' });   // equivalent
@@ -150,7 +150,7 @@ The set command has various forms.
 
 set(key, id, locationObject, fields, options)
 
-```
+```javascript
 // set a simple lat/lng coordinate
 client.set('fleet', 'truck1', [33.5123, -112.2693])
 // set with additional fields
@@ -179,7 +179,7 @@ tile38_query.js to see all available methods.
 
 To execute the query and get the search results, use the execute() function, which will return a promise to the results. 
   
-```  
+```javascript
 let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245);
 query.execute().then(results => {
     console.dir(results);  // results is an object.
@@ -191,7 +191,7 @@ query.execute().then(results => {
 To set up a live geofence that will use a websocket to continuously send updates, you construct your query the exact same way. 
 However, instead of execute() (which returns a Promise), use the executeFence() function while passing in a callback function. 
  
-```  
+```javascript
 let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491, -112.245);
 let fence = query.executeFence((err, results) => {
     // this callback will be called multiple times
@@ -219,7 +219,7 @@ examples below for brevity.
 
 #### INTERSECTS
 
-```
+```javascript
 // basic query that uses bounds
 client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245)
 // using cursor and limit for pagination
@@ -231,7 +231,7 @@ client.intersectsQuery('fleet').detect('enter','exit').object(polygon)
 
 #### SEARCH
 
-``` 
+```javascript
 // basic search query
 client.searchQuery('names')
 // use matching patter and return results in descending order, without fields
@@ -248,7 +248,7 @@ client.searchQuery('names').where('age', 40, '+inf')
 
 #### NEARBY
 
-```
+```javascript
 // basic nearby query, including distance for each returned object
 client.nearbyQuery('fleet').distance().point(33.462, -112.268, 6000)
 // return results as geohashes with precision 8
@@ -259,7 +259,7 @@ client.nearbyQuery('fleet').roam('truck', 'ptn', 3000)
 
 #### SCAN
 
-```
+```javascript
 // basic scan query, returning all results in geojson
 client.scanQuery('fleet').output('objects');
 // this does the same
@@ -272,7 +272,7 @@ client.scanQuery('fleet').nofields().points()
 
 The withinQuery has the same query options as intersects.
 
-```
+```javascript
 // basic within query, returning all results in geojson
 client.withinQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245)
 // check within an area that's already defined in the database
@@ -305,6 +305,7 @@ The following work or features are up next, in order of priority, high to low:
 - The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite 
   it so it can be used in a similar way to the other search functions. 
 - Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
+- Oher newer commands such as the Scripting / EVAL commands 
 - There's virtually no validation of options passed into functions, or of the query chaining for search commands. For example,
   this library does not prevent you from using the roam() function on an intersects query, even though it's only supported 
   on the nearby search. It may be fine to leave validation of the search query up to the Tile38 server itself. Happy to accept
