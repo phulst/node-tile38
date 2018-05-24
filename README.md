@@ -285,12 +285,12 @@ client.withinQuery('fleet').tile(x, y, z);
 # Running tests
 
 WARNING: THIS WILL WIPE OUT YOUR DATA!
-The test suite currently depends on having a local instance of Tile38 running on port 9850 (instead of the default 9851).
-It tests all supported commands, including FLUSHDB, so you'll LOSE ALL EXISTING DATA in your local db.
+The test suite currently depends on having a local instance of Tile38 running on the default port 9851. 
+It tests all supported commands, including FLUSHDB, so you'll LOSE ALL EXISTING DATA in your Tile38 instance.
 
-(I changed the default port for the test suite to make it less likely that someone accidentally runs the test suite
-on a local database containing critical data.) 
- 
+To change the Tile38 host name, port number, or configure authentication password, set the 
+TILE38_HOST, TILE38_PORT and/or TILE38_PASSWD environment variables before running the tests. 
+
 If you have nothing critical in your local db, you can run the tests with: 
 
 ```
