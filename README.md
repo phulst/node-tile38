@@ -32,38 +32,9 @@ This library has not been tested in the browser. You generally would not want to
 internet, so even if it does work from the browser, it's not a good idea. 
  
 
-## Revision history: 
+## Revision history
 
-```
-0.5.0 - Implemented method chaining for search methods. Improved test coverage and improved README with search query examples
-
-0.6.0 - Added support for live geofences
-
-0.6.1 - Module packaging fix
-
-0.6.2 - Fixed issue with Redis command encoding for live fence queries
-
-0.6.3 - Adding capability to create webhooks with roaming geofenced search 
-
-0.6.4 - added convenience methods such as ids(), count() that can be used instead of output('ids'), output('count'), etc.
-      - added support for AUTH command
-      - onClose() for live fence now accepts callback method
-      - fixed incorrect warning message
-      
-0.6.5 - fixed bugs in redis communication
-      - added support for Tile38 server authentication
-      - added option to use TILE38_PASSWD env variable for authentication
-      - added option to use TILE38_PORT env variable for port config
-      - added option to use TILE38_HOST env variable for host config
-      - tests now run on default port 9851 unless TILE38_PORT is set
-      - fixed auth() function (though there should be no need to call this directly)
-      - added error handler with logging for redis client  
-      
-0.6.6 - updated test & babel dependencies to fix security vulnerability
-      - fix for issue #5 (nearby query without radius)
-            
-      
-```
+See the [CHANGELOG](./CHANGELOG.md) 
 
 ## Connection 
  
