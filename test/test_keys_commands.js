@@ -21,10 +21,8 @@ describe('key commands', function() {
     describe('bounds', function() {
         it("should return bounds for a key", (done) => {
             tile38.bounds('fleet').then((bounds) => {
-                bounds.sw.lat.should.exist;
-                bounds.sw.lon.should.exist;
-                bounds.ne.lat.should.exist;
-                bounds.ne.lon.should.exist;
+                bounds.type.should.equal('Polygon');
+                bounds.coordinates.should.be.an('array');
                 done();
             })
         });
