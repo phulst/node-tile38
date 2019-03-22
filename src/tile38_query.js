@@ -53,7 +53,7 @@ class Tile38Query {
         return this.order('desc');
     }
 
-    // adds DISTANCE argument for nearby query. 
+    // adds DISTANCE argument for nearby query.
     distance() {
         // TODO throw error if type != 'NEARBY'
         this.options.distance = true;
@@ -72,6 +72,32 @@ class Tile38Query {
         let arr = [field].concat(criteria);
         this.options.where.push(arr);
         return this;
+    }
+
+    /*
+     * set a wherein search pattern. Like match, this method may be chained multiple times
+     * as well. For example:
+     *   query.wherein('doors', 2, 5).wherein('wheels', 14, 18, 22)
+     * Would generate the command:
+     *   WHEREIN doors 2 2 5 WHEREIN wheels 3 14 18 22
+     * (note that the command to the server includes the argument count, while the
+     * js api doesn't need this)
+     */
+    wherein(field, ...values) {
+        if (this.options.wherein == undefined) {
+            this.options.wherein = [];
+        }
+        let arr = [field,values.length].concat(values);
+        this.options.wherein.push(arr);
+        return this;
+    }
+
+    /*
+     * clip intersecting objects
+     */
+    clip() {
+      this.clip = true;
+      return this;
     }
 
     /*
@@ -198,7 +224,13 @@ class Tile38Query {
         return this;
     }
 
-    // adds POINT arguments to NEARBY query
+    // adds CIRCLE arguments to WITHIN / INTERSECTS queries
+    circle(lat, lon, meters) {
+        this.options.circle = {lat, lon, meters};
+        return this;
+    }
+
+    // adds POINT arguments to NEARBY query.
     point(lat, lon, meters) {
         // TODO throw error if type != 'NEARBY'
         this.options.point = {lat, lon, meters};
@@ -258,6 +290,18 @@ class Tile38Query {
                 }
             }
         }
+        if (o.wherein) {
+            // add one or more where clauses
+            for (let k of o.wherein) {
+                cmd.push('WHEREIN');
+                for (let l of k) {
+                    cmd.push(l);
+                }
+            }
+        }
+        if (o.clip) {
+            cmd.push('CLIP');
+        }
         if (o.nofields) {
             cmd.push('NOFIELDS');
         }
@@ -306,9 +350,15 @@ class Tile38Query {
             cmd.push('POINT');
             cmd.push(o.point.lat);
             cmd.push(o.point.lon);
-            if (o.point.meters) {
+            if (o.point.meters) { // radius is optional for Point
                 cmd.push(o.point.meters);
             }
+        }
+        if (o.circle) {
+            cmd.push('CIRCLE');
+            cmd.push(o.circle.lat);
+            cmd.push(o.circle.lon);
+            cmd.push(o.circle.meters);
         }
         if (o.roam) {
             cmd.push('ROAM');

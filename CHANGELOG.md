@@ -1,5 +1,9 @@
-## Revision history: 
+## Revision history:
 ======
+
+### 0.7.0 / March, 2019
+  * Fixed broken test due to changed response on BOUNDS query
+  * Added support for WHEREIN, CLIP, CIRCLE 
 
 
 #### 0.6.6 / May 23, 2018
@@ -23,7 +27,7 @@
   * fixed incorrect warning message
 
 #### 0.6.3 / Feb 21, 2017
-  * Adding capability to create webhooks with roaming geofenced search 
+  * Adding capability to create webhooks with roaming geofenced search
 
 #### 0.6.2 / Feb 7, 2017
   * Fixed issue with Redis command encoding for live fence queries

@@ -120,6 +120,21 @@ describe('tile38 search query', function() {
         });
     });
 
+    describe('wherein', function() {
+        it("should set a wherein search", function (done) {
+            let q = Query.intersects('fleet').wherein('wheels', 8, 14, 18, 22);
+            let cmd = q.commandArr();
+            expect(cmd[1]).to.equal('WHEREIN');
+            expect(cmd[2]).to.equal('wheels');
+            expect(cmd[3]).to.equal(4);
+            expect(cmd[4]).to.equal(8);
+            expect(cmd[5]).to.equal(14);
+            expect(cmd[6]).to.equal(18);
+            expect(cmd[7]).to.equal(22);
+            done();
+        });
+    });
+
     describe('nofields', function() {
         it("should set nofields property", function (done) {
             let q = Query.intersects('fleet').nofields();
@@ -252,61 +267,56 @@ describe('tile38 search query', function() {
     describe('tile', function() {
         it("should store tile query", function (done) {
             let q = Query.intersects('fleet').tile(10,20,30);
-            let cmd = q.commandArr();
-            expect(cmd[1]).to.equal('TILE');
-            expect(cmd[2]).to.equal(10);
-            expect(cmd[3]).to.equal(20);
-            expect(cmd[4]).to.equal(30);
+            let cmd = q.commandStr();
+            expect(cmd).to.equal('INTERSECTS fleet TILE 10 20 30');
             done();
         });
     });
     describe('quadkey', function() {
         it("should store quadkey query", function (done) {
             let q = Query.intersects('fleet').quadKey(3242421);
-            let cmd = q.commandArr();
-            expect(cmd[1]).to.equal('QUADKEY');
-            expect(cmd[2]).to.equal(3242421);
+            let cmd = q.commandStr();
+            expect(cmd).to.equal('INTERSECTS fleet QUADKEY 3242421');
             done();
         });
     });
     describe('hash', function() {
         it("should store hash query", function (done) {
             let q = Query.intersects('fleet').hash('382ad23e');
-            let cmd = q.commandArr();
-            expect(cmd[1]).to.equal('HASH');
-            expect(cmd[2]).to.equal('382ad23e');
+            let cmd = q.commandStr();
+            expect(cmd).to.equal('INTERSECTS fleet HASH 382ad23e');
             done();
         });
     });
     describe('point', function() {
         it("should store point query", function (done) {
             let q = Query.nearby('fleet').point(33.462, -112.268, 6000);
-            let cmd = q.commandArr();
-            expect(cmd[1]).to.equal('POINT');
-            expect(cmd[2]).to.equal(33.462);
-            expect(cmd[3]).to.equal(-112.268);
-            expect(cmd[4]).to.equal(6000);
+            let cmd = q.commandStr();
+            expect(cmd).to.equal('NEARBY fleet POINT 33.462 -112.268 6000');
             done();
         });
         it("should allow nearby point query without radius", function (done) {
             let q = Query.nearby('fleet').point(33.462, -112.268);
-            let cmd = q.commandArr();
-            expect(cmd[1]).to.equal('POINT');
-            expect(cmd[2]).to.equal(33.462);
-            expect(cmd[3]).to.equal(-112.268);
-            expect(cmd.length).to.equal(4);
+            expect(q.commandArr().length).to.equal(4);
+            let cmd = q.commandStr();
+            expect(cmd).to.equal('NEARBY fleet POINT 33.462 -112.268');
             done();
         });
 
     });
+    describe('circle', function() {
+        it("should store circle query", function (done) {
+            let q = Query.intersects('fleet').circle(33.462, -112.268, 200)
+            let c = q.commandStr();
+            expect(c).to.equal('INTERSECTS fleet CIRCLE 33.462 -112.268 200');
+            done();
+        });
+    });
     describe('roam', function() {
         it("should store roam query", function (done) {
             let q = Query.nearby('fleet').roam('key', 'ptn', 3000);
-            let cmd = q.commandArr();
-            expect(cmd[1]).to.equal('ROAM');
-            expect(cmd[2]).to.equal('key');
-            expect(cmd[3]).to.equal('ptn');
-            expect(cmd[4]).to.equal(3000);
+            let cmd = q.commandStr();
+            expect(cmd).to.equal('NEARBY fleet ROAM key ptn 3000');
             done();
         });
     });
