@@ -11,7 +11,6 @@
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.5.1",
     "mocha": "^5.2.0",
     "redis": "^2.8.0",
     "redis-parser": "^2.6.0"
