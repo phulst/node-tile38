@@ -3,7 +3,7 @@
 
 ### 0.7.0 / March, 2019
   * Fixed broken test due to changed response on BOUNDS query
-  * Added support for WHEREIN, CLIP, CIRCLE 
+  * Added support for WHEREIN, WHEREEVAL, WHEREEVALSHA, CLIP, CIRCLE 
 
 
 #### 0.6.6 / May 23, 2018
