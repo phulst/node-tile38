@@ -1,7 +1,7 @@
 
 # Tile38 Node driver
 
-This library can be used to access the Tile38 server from Node.js apps. 
+This library can be used to access the Tile38 server from Node.js apps.
 
 
 # Links
@@ -17,29 +17,29 @@ npm install tile38
 
 # Overview
 
-While you can use your preferred Redis library to communicate with the Tile38 geolocation database, this node library 
-offers a much more pleasant query interface for all Tile38 commands. It also supports live geofencing using 
-persistent sockets to the server. 
- 
-In most cases, commands follow the [command documentation](http://tile38.com/commands/) on the Tile38 website, 
-though the search/scan commands use method chaining. You can find some examples below as well as in the 
-examples folder. 
+While you can use your preferred Redis library to communicate with the Tile38 geolocation database, this node library
+offers a much more pleasant query interface for all Tile38 commands. It also supports live geofencing using
+persistent sockets to the server.
+
+In most cases, commands follow the [command documentation](http://tile38.com/commands/) on the Tile38 website,
+though the search/scan commands use method chaining. You can find some examples below as well as in the
+examples folder.
 
 Most examples below are in ES6, and the library has been written in ES6, but it uses Babel to transpile, so
 even if you're still running Node 4 or earlier you should be able to use this.
 
-This library has not been tested in the browser. You generally would not want to expose your database directly to the 
-internet, so even if it does work from the browser, it's not a good idea. 
- 
+This library has not been tested in the browser. You generally would not want to expose your database directly to the
+internet, so even if it does work from the browser, it's not a good idea.
+
 
 ## Revision history
 
-See the [CHANGELOG](./CHANGELOG.md) 
+See the [CHANGELOG](./CHANGELOG.md)
 
-## Connection 
- 
+## Connection
+
 ```javascript
-var Tile38 = require('tile38'); 
+var Tile38 = require('tile38');
 var client = new Tile38();
 // save a location
 client.set('fleet', 'truck1', [33.5123, -112.2693]);
@@ -47,8 +47,8 @@ client.set('fleet', 'truck1', [33.5123, -112.2693]);
 client.set('fleet', 'truck2', [33.5123, -112.2693], { value: 10, othervalue: 20});
 ```
 
-You can pass any non-default connection settings into the Tile38 constructor, and you can also turn on 
-optional debug logging as illustrated below. 
+You can pass any non-default connection settings into the Tile38 constructor, and you can also turn on
+optional debug logging as illustrated below.
 
 ```
 var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
@@ -60,11 +60,11 @@ These environment variables will only be used if values are not passed into the 
 
 ## Promises
 
-All of the implemented methods return promises (with the exception of executeFence(), see more info on that below). 
+All of the implemented methods return promises (with the exception of executeFence(), see more info on that below).
 
 ```javascript
 client.get('fleet', 'truck1').then(data => {
-  console.log(data); // prints coordinates in geoJSON format 
+  console.log(data); // prints coordinates in geoJSON format
 
 }).catch(err =>
   console.log(err); // id not found  
@@ -76,11 +76,11 @@ client.get('fleet', 'truck2', {type: 'POINT', withfields: true}).then(data => {
   console.dir(data.fields);
 });
 // There's also a getPoint(id,key) method that can be used as a shortcut instead of get(id,key,{type:'POINT'})
-// as well as similar getBounds and getHash methods. 
+// as well as similar getBounds and getHash methods.
 ```
 
-Many commands may not return values, but they still return promises, allowing you to wait until 
-your changes have been persisted. 
+Many commands may not return values, but they still return promises, allowing you to wait until
+your changes have been persisted.
 
 ```javascript
 client.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
@@ -91,17 +91,17 @@ client.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
 
 # Command examples
 
-The command documentation for Tile38 server is followed as closely as possible. Command names become function names, 
-mandatory properties become arguments, and optional properties become either optional arguments or are passed in 
-through an options object argument. 
+The command documentation for Tile38 server is followed as closely as possible. Command names become function names,
+mandatory properties become arguments, and optional properties become either optional arguments or are passed in
+through an options object argument.
 
-For example, the command 
+For example, the command
 
 ```
 JGET key id path
 ```
 
-is called as follows: 
+is called as follows:
 
 ```javascript
 client.jget(key, id, path)
@@ -109,7 +109,7 @@ client.jget(key, id, path)
 
 ## keys commands
 
-Some examples of keys commands: 
+Some examples of keys commands:
 
 ```javascript
 client.bounds('fleet');
@@ -122,7 +122,7 @@ client.stats('fleet1', 'fleet2');
 ```
 
 ### get command
-The get command accepts an optional object that can be use to set the response data type: 
+The get command accepts an optional object that can be use to set the response data type:
 
 
 ```javascript
@@ -141,12 +141,12 @@ client.getHash('fleet', 'truck1');   // equivalent of above
 client.getHash('fleet', 'truck1', { precision: 8});   // if you need different precision from default (6)
 
 // if you want the 'get' function to return fields as well, use the 'withfields' property
-client.get('fleet', 'truck1', { withfields: true }); 
+client.get('fleet', 'truck1', { withfields: true });
 ```
 
 ### set command
 
-The set command has various forms. 
+The set command has various forms.
 
 set(key, id, locationObject, fields, options)
 
@@ -171,14 +171,14 @@ client.set('fleet', 'truck1', [33.5123, -112.2693], null, {onlyIfNotExists: true
 
 ### search commands
 
-The search commands use method chaining to deal with its many available options. See the query examples below, or look at 
+The search commands use method chaining to deal with its many available options. See the query examples below, or look at
 tile38_query.js to see all available methods.
-  
 
-#### One time results vs live geofence 
 
-To execute the query and get the search results, use the execute() function, which will return a promise to the results. 
-  
+#### One time results vs live geofence
+
+To execute the query and get the search results, use the execute() function, which will return a promise to the results.
+
 ```javascript
 let query = client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245);
 query.execute().then(results => {
@@ -188,9 +188,9 @@ query.execute().then(results => {
 )};
 ```
 
-To set up a live geofence that will use a websocket to continuously send updates, you construct your query the exact same way. 
-However, instead of execute() (which returns a Promise), use the executeFence() function while passing in a callback function. 
- 
+To set up a live geofence that will use a websocket to continuously send updates, you construct your query the exact same way.
+However, instead of execute() (which returns a Promise), use the executeFence() function while passing in a callback function.
+
 ```javascript
 let query = client.intersectsQuery('fleet').detect('enter','exit').bounds(33.462, -112.268, 33.491, -112.245);
 let fence = query.executeFence((err, results) => {
@@ -207,7 +207,7 @@ fence.onClose(() => {
     console.log("geofence was closed");
 });
 
-// later on, when you want to close the socket and kill the live geofence: 
+// later on, when you want to close the socket and kill the live geofence:
 fence.close();
 ```
 
@@ -215,18 +215,21 @@ Many of the chaining functions below can be used for all search commands. See th
 for more info on what query criteria are supported by what commands.
 
 Do not forget to call the execute() or executeFence() function after constructing your query chain. I've left this out in the
-examples below for brevity. 
+examples below for brevity.
 
 #### INTERSECTS
 
 ```javascript
 // basic query that uses bounds
 client.intersectsQuery('fleet').bounds(33.462, -112.268, 33.491 -112.245)
+// intersect with a circle of 1000 meter radius
+client.intersectsQuery('fleet').circle(33.462, -112.268, 1000)
 // using cursor and limit for pagination
 client.intersectsQuery('fleet').cursor(100).limit(50).bounds(33.462, -112.268, 33.491 -112.245)
 // create a fence that triggeres when entering a polygon
 let polygon = {"type":"Polygon","coordinates": [[[-111.9787,33.4411],[-111.8902,33.4377],[-111.8950,33.2892],[-111.9739,33.2932],[-111.9787,33.4411]]]};
 client.intersectsQuery('fleet').detect('enter','exit').object(polygon)
+
 ```
 
 #### SEARCH
@@ -238,7 +241,7 @@ client.searchQuery('names')
 client.searchQuery('names').match('J*').nofields().desc()
 // return only IDs
 client.searchQuery('names').output('ids')
-// this does the same: 
+// this does the same:
 client.searchQuery('names').ids()
 // return only count
 client.searchQuery('names').count()
@@ -278,20 +281,22 @@ client.withinQuery('fleet').bounds(33.462, -112.268, 33.491, -112.245)
 // check within an area that's already defined in the database
 client.withinQuery('fleet').get('cities', 'tempe')
 // return objects within a given tile x, y, z
-client.withinQuery('fleet').tile(x, y, z); 
+client.withinQuery('fleet').tile(x, y, z);
+// return objects within a given circle of 1000 meter radius
+client.withinQuery('fleet').circle(33.462, -112.268, 1000)
 ```
 
 
 # Running tests
 
 WARNING: THIS WILL WIPE OUT YOUR DATA!
-The test suite currently depends on having a local instance of Tile38 running on the default port 9851. 
+The test suite currently depends on having a local instance of Tile38 running on the default port 9851.
 It tests all supported commands, including FLUSHDB, so you'll LOSE ALL EXISTING DATA in your Tile38 instance.
 
-To change the Tile38 host name, port number, or configure authentication password, set the 
-TILE38_HOST, TILE38_PORT and/or TILE38_PASSWD environment variables before running the tests. 
+To change the Tile38 host name, port number, or configure authentication password, set the
+TILE38_HOST, TILE38_PORT and/or TILE38_PASSWD environment variables before running the tests.
 
-If you have nothing critical in your local db, you can run the tests with: 
+If you have nothing critical in your local db, you can run the tests with:
 
 ```
 npm test
@@ -301,15 +306,15 @@ npm test
 
 The following work or features are up next, in order of priority, high to low:  
 
-- The executeFence method / live geofences has had limited testing. Please submit bugs if you run into issues. 
-- The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite 
-  it so it can be used in a similar way to the other search functions. 
+- The executeFence method / live geofences has had limited testing. Please submit bugs if you run into issues.
+- The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite
+  it so it can be used in a similar way to the other search functions.
 - Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
-- Oher newer commands such as the Scripting / EVAL commands 
+- Oher newer commands such as the Scripting / EVAL commands
 - There's virtually no validation of options passed into functions, or of the query chaining for search commands. For example,
-  this library does not prevent you from using the roam() function on an intersects query, even though it's only supported 
+  this library does not prevent you from using the roam() function on an intersects query, even though it's only supported
   on the nearby search. It may be fine to leave validation of the search query up to the Tile38 server itself. Happy to accept
-  a pull request for better query validation though. 
+  a pull request for better query validation though.
 
 Testing TODO:
 - webhooks needs test coverage
