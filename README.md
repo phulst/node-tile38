@@ -258,6 +258,9 @@ client.nearbyQuery('fleet').distance().point(33.462, -112.268, 6000)
 client.nearbyQuery('fleet').point(33.462, -112.268, 6000).hashes(8)
 // use the roam option
 client.nearbyQuery('fleet').roam('truck', 'ptn', 3000)
+// use the whereeval option. (unlike the Tile38 CLI no need to specify the number of arguments).
+// You may also call whereEval (or whereEvalSha) multiple times in your command chain.
+client.nearbyQuery('fleet').whereEval("return FIELDS.wheels > ARGV[1] or (FIELDS.length * FIELDS.width) > ARGV[2]", 8, 120);
 ```
 
 #### SCAN
