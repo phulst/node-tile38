@@ -5,20 +5,19 @@
   "main": "./dist/tile38.js",
   "scripts": {
     "test": "mocha",
-    "compile": "babel $INIT_CWD/src --out-dir $INIT_CWD/dist",
+    "compile": "npx babel-cli $INIT_CWD/src --out-dir $INIT_CWD/dist",
     "prepare": "npm run compile",
     "postinstall": "npm run compile"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "chai": "^3.5.0",
     "mocha": "^5.2.0",
     "redis": "^2.8.0",
-    "redis-parser": "^2.6.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "chai": "^3.5.0"
+    "redis-parser": "^2.6.0"
   },
   "devDependencies": {}
 }
