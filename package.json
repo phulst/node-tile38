@@ -5,7 +5,7 @@
   "main": "./dist/tile38.js",
   "scripts": {
     "test": "mocha",
-    "compile": "npx babel-cli $INIT_CWD/src --out-dir $INIT_CWD/dist",
+    "compile": "npx babel $INIT_CWD/src --out-dir $INIT_CWD/dist",
     "prepare": "npm run compile",
     "postinstall": "npm run compile"
   },
