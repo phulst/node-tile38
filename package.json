@@ -7,6 +7,7 @@
     "test": "mocha",
     "compile": "babel $INIT_CWD/src --out-dir $INIT_CWD/dist",
     "prepare": "npm run compile"
+    "postinstall": "npm run compile"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
