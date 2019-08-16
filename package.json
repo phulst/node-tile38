@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "compile": "node_modules/babel-cli/bin/babel.js src --out-dir dist",
-    "prepublish": "npm run compile"
+    "prepare": "npm run compile"
   },
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
