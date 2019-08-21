@@ -63,12 +63,12 @@ You may pass a custom log implementation into the constructor as well. The defau
 Your custom logger must implement the 'log', 'warn' and 'error' functions, all accepting strings.
 
 ```
-const logger = {
+const customLogger = {
   log:   function(msg) { ... },
   warn:  function(msg) { ... },
   error: function(msg) { ... }
 }
-const client = new Tile38({debug: true, logger: yourLogger });
+const client = new Tile38({debug: true, logger: customLogger });
 ```
 
 ## Promises
