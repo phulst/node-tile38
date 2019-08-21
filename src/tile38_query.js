@@ -273,7 +273,7 @@ class Tile38Query {
         let commands = ['cursor', 'limit', 'sparse', 'matches', 'order', 'distance', 'where',
           'whereIn', 'whereEval', 'whereEvalSha', 'clip', 'nofields', 'fence', 'detect',
           'commands', 'output', 'getObject', 'bounds', 'geojson', 'tile', 'quadKey', 'hash',
-          'point', 'circle', 'roam', 'fence' ];
+          'point', 'circle', 'roam' ];
         for (let c of commands) {
           let opt = o[c];
           if (opt !== undefined) {
