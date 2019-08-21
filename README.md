@@ -57,6 +57,14 @@ var client = new Tile38({host: 'host.server.com', port: 9850, debug: true });
 You can also set the hostname, port and password using the environment vars TILE38_HOST, TILE38_PORT and TILE38_PASSWD.
 These environment variables will only be used if values are not passed into the constructor explicitly
 
+## Custom logger
+
+You may pass a custom log implementation into the constructor as well. The default logger is the console logger.
+Your customer logger must implement the 'log', 'warn' and 'error' functions, all accepting strings.
+
+```
+var client = new Tile38({debug: true, logger: yourLogger });
+```
 
 ## Promises
 
