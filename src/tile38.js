@@ -20,8 +20,8 @@ class Tile38 {
         this.client.on('error', (err) => {
             console.error('Tile38 connection error: ' + err);
         });
-        // put the OUTPUT in json mode
-        this.sendCommand('OUTPUT', null, 'json');
+        // put the OUTPUT in json mode, whenever connection is (re)established
+        this.client.on('connect', () => this.sendCommand('OUTPUT', null, 'json'));
         this.debug = debug;
     }
 
