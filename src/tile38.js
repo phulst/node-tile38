@@ -7,10 +7,11 @@ const DEFAULT_HASH_PRECISION = 6;
 
 class Tile38 {
 
-    constructor({port, host, password, debug = false} = {}) {
+    constructor({port, host, password, debug = false, logger = console} = {}) {
         this.port = port ? port : (process.env.TILE38_PORT || 9851);
         this.host = host ? host : (process.env.TILE38_HOST || 'localhost');
         this.password = password ? password : process.env.TILE38_PASSWD;
+        this.logger = logger;
 
         let conn = { port: this.port, host: this.host};
         if (this.password) {
@@ -18,10 +19,17 @@ class Tile38 {
         }
         this.client = redis.createClient(conn);
         this.client.on('error', (err) => {
-            console.error('Tile38 connection error: ' + err);
+            this.logger.error('Tile38 connection error: ' + err);
         });
         // put the OUTPUT in json mode, whenever connection is (re)established
-        this.client.on('connect', () => this.sendCommand('OUTPUT', null, 'json'));
+        this.sendCommand('OUTPUT', null, 'json');
+        // after a reconnect, ensure that the OUTPUT mode is still json
+        this.client.on('connect', () => {
+          this.sendCommand('OUTPUT', null, 'json').catch((err) => {
+            // unable to set output mode to json. Is the connection already closed?
+            this.logger.warn(`unable to set output mode to json: ${err.message}`);
+          });
+        });
         this.debug = debug;
     }
 
@@ -39,14 +47,14 @@ class Tile38 {
         }
         return new Promise((resolve, reject) => {
             if (this.debug) {
-                console.log(`sending command "${cmd} ${args.join(' ')}"`);
+                this.logger.log(`sending command "${cmd} ${args.join(' ')}"`);
             }
             this.client.send_command(cmd, args, (err, result) => {
                 if (err) {
-                    if (this.debug) console.log(err);
+                    if (this.debug) this.logger.log(err);
                     reject(err);
                 } else {
-                    if (this.debug) console.log(result);
+                    if (this.debug) this.logger.log(result);
                     try {
                         if (!returnProp) {
                             // return the raw response
@@ -414,10 +422,10 @@ class Tile38 {
     // opens a live geofence and returns an instance of LiveGeofence (that can be used to later on close it).
     openLiveFence(command, commandArr, callback) {
         if (this.debug) {
-            console.log(`sending live fence command "${command} ${commandArr.join(' ')}"`);
+            this.logger.log(`sending live fence command "${command} ${commandArr.join(' ')}"`);
         }
         let cmd = this.redisEncodeCommand(command, commandArr);
-        return (new LiveGeofence(this.debug)).open(this.host, this.port, this.password, cmd, callback);
+        return (new LiveGeofence(this.debug, this.logger)).open(this.host, this.port, this.password, cmd, callback);
     }
 
     // encodes the tile38_query.commandArr() output to be sent to Redis. This is only necessary for the live geofence,

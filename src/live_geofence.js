@@ -8,8 +8,9 @@ const Parser = require("redis-parser");
  */
 class LiveGeofence {
 
-    constructor(debug = false) {
+    constructor(debug = false, logger = console) {
         this.debug = debug;
+        this.logger = logger;
     }
 
     /**
@@ -34,13 +35,13 @@ class LiveGeofence {
 
         let self = this;
         socket.on('close', () => {
-            //console.log("Socket is being closed!");
+            //this.logger.log("Socket is being closed!");
             if (this.onCloseCb) this.onCloseCb();
         });
 
         const parser = new Parser({
             returnReply: function(reply) {
-                if (self.debug) console.log(reply);
+                if (self.debug) self.logger.log(reply);
                 if (reply == 'OK') return; // we're not invoking a callback for the 'OK' response that comes first
 
                 let response = reply;
@@ -50,25 +51,25 @@ class LiveGeofence {
                     try {
                         response = JSON.parse(reply);
                     } catch (err) {
-                        console.warn("Unable to parse server response: " + reply);
+                        self.logger.warn("Unable to parse server response: " + reply);
                         // we'll return the reply as-is.
                     }
                 }
                 callback(null, response);
             },
             returnError: function(err) {
-                console.error('live socket error: ' + err);
+                self.logger.error('live socket error: ' + err);
                 callback(err, null);
             },
             returnFatalError: function(err) {
-                console.error('fatal live socket error: ' + err);
+                self.logger.error('fatal live socket error: ' + err);
                 self.socket.destroy();
                 callback(err, null);
             }
         });
 
         socket.on('data', buffer => {
-            //console.log(JSON.stringify(buffer.toString()));
+            //self.logger.log(JSON.stringify(buffer.toString()));
             parser.execute(buffer);
         });
        return this;

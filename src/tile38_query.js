@@ -168,7 +168,6 @@ class Tile38Query {
     output(type, precision) {
         type = type.toUpperCase();
         if (type == 'HASHES' && precision != undefined) {
-            console.log('setting precision');
             this.options.output = [type, precision];
         } else {
             this.options.output = [type];
