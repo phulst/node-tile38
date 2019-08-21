@@ -60,10 +60,15 @@ These environment variables will only be used if values are not passed into the 
 ## Custom logger
 
 You may pass a custom log implementation into the constructor as well. The default logger is the console logger.
-Your customer logger must implement the 'log', 'warn' and 'error' functions, all accepting strings.
+Your custom logger must implement the 'log', 'warn' and 'error' functions, all accepting strings.
 
 ```
-var client = new Tile38({debug: true, logger: yourLogger });
+const logger = {
+  log:   function(msg) { ... },
+  warn:  function(msg) { ... },
+  error: function(msg) { ... }
+}
+const client = new Tile38({debug: true, logger: yourLogger });
 ```
 
 ## Promises
