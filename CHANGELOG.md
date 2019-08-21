@@ -1,5 +1,9 @@
 ## Revision history:
 ======
+### 0.7.0 / August, 2019
+  * Fixed #20, FENCE duplicate in query to server
+  * Fixed #21, added support for custom logger
+  * Fixed #22, failure parsing responses after server reconnect
 
 ### 0.6.7 / March, 2019
   * Fixed broken test due to changed response on BOUNDS query
