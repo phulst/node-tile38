@@ -59,7 +59,8 @@ These environment variables will only be used if values are not passed into the 
 
 ## Custom logger
 
-You may pass a custom log implementation into the constructor as well. The default logger is the console logger.
+This driver does not use a logging library, and logs messages to the console by default.
+However, you may pass a custom log implementation into the constructor.
 Your custom logger must implement the 'log', 'warn' and 'error' functions, all accepting strings.
 
 ```
