@@ -27,10 +27,12 @@ describe('tile38', function() {
     describe('quit', function() {
 
         it ("should close the connection", (done) => {
+          setTimeout(() => {
             tile38.quit().then((resp) => {
                 resp.should.equal('OK');
                 done();
             });
+          }, 300); // avoid warning message in on connect handler that connection is already closed
         });
     });
 
