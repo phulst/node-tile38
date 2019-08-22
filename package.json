@@ -13,7 +13,8 @@
   "dependencies": {
     "mocha": "^6.2.0",
     "redis": "^2.8.0",
-    "redis-parser": "^3.0.0"
+    "redis-parser": "^3.0.0",
+    "lodash": ">=4.17.13"
   },
   "babel": {
     "presets": [
@@ -25,5 +26,9 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phulst/node-tile38.git"
   }
 }
