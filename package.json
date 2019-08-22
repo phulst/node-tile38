@@ -11,9 +11,9 @@
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
   "dependencies": {
-    "mocha": "^5.2.0",
+    "mocha": "^6.2.0",
     "redis": "^2.8.0",
-    "redis-parser": "^2.6.0"
+    "redis-parser": "^3.0.0"
   },
   "babel": {
     "presets": [
@@ -24,6 +24,6 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
-    "chai": "^3.5.0"
+    "chai": "^4.2.0"
   }
 }
