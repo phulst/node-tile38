@@ -100,7 +100,13 @@ your changes have been persisted.
 client.set('fleet', 'truck1', [33.5123, -112.2693]).then(() => {
   console.log('your changes have been persisted');
 });
+```
 
+You may, of course, prefer to use async/await instead of Promises, like so:
+
+```javascript
+let data = await client.getPoint('fleet', 'truck2');
+console.log(`truck2 is at ${data.point.lat},${data.point.lon}`);
 ```
 
 # Command examples
