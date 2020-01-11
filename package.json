@@ -1,0 +1,33 @@
+{
+  "name": "tile38",
+  "version": "0.8.0",
+  "description": "Node library for accessing Tile38 service. Typescript rewrite.",
+  "main": "dist/index.js",
+  "scripts": {
+    "lint": "tsc --noEmit && eslint 'src/**/*.{ts,tsx}' --quiet --fix",
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giespaepen/node-tile38.git"
+  },
+  "author": "Gie Spaepen <giespaepen@outlook.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/giespaepen/node-tile38/issues"
+  },
+  "homepage": "https://github.com/giespaepen/node-tile38#readme",
+  "dependencies": {
+    "typescript": "^3.7.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.25",
+    "@typescript-eslint/eslint-plugin": "^2.15.0",
+    "@typescript-eslint/parser": "^2.15.0",
+    "eslint": "^6.8.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.3.0"
+  }
+}
