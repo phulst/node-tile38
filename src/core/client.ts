@@ -1,20 +1,20 @@
 import { RedisClient } from "redis";
 
 import { mergeConfig, Tile38Config } from "../config";
-import { AnyRedisResponse, Tile38Command, Tile38Response } from "../types";
+import { Tile38Command, Tile38Response } from "./types";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Core Tile38 class to abstract common tasks from the configuration.
  */
-export class CoreTile38 {
+export class CoreClient {
 
     protected config: Tile38Config;
     protected client: RedisClient;
 
-    constructor(config?: Partial<Tile38Config>) {
+    constructor(config?: Partial<Tile38Config>, client?: RedisClient) {
         this.config = mergeConfig(config);
-        this.client = new RedisClient(this.config);
+        this.client = client || new RedisClient(this.config);
 
         // Configure the client
         this.client.on("error", this.onClientError);

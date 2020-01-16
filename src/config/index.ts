@@ -1,4 +1,4 @@
-import { defaultLoggin, ITile38Logging } from "../logging";
+import { defaultLoggin, ITile38Logging } from "../util/logging";
 import { DEFAULT_TILE38_HOST, DEFAULT_TILE38_PORT } from "./constants";
 
 export type Tile38Config = {

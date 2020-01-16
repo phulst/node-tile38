@@ -1,5 +1,5 @@
-import { CoreTile38 } from "./client";
 import { Tile38Config } from "./config";
+import { CoreClient } from "./core";
 import {
     AnyRedisResponse,
     Tile38Command,
@@ -9,13 +9,17 @@ import {
     Tile38Id,
     Tile38Key,
     Tile38SetOptions,
-} from "./types";
+} from "./core";
+import { QueryFactory } from "./core/queryFactory";
 
 
-export class Tile38 extends CoreTile38 {
+export class Tile38 extends CoreClient {
+
+    public factory: QueryFactory;
 
     constructor(config?: Partial<Tile38Config>) {
         super(config);
+        this.factory = new QueryFactory(this.config, this.client);
     }
 
     public async ping(): Promise<string> {
@@ -201,5 +205,15 @@ export class Tile38 extends CoreTile38 {
     // Set a value in a JSON document
     public async jset(key: Tile38Key, id: Tile38Id, jKey: string, jVal: any) {
         return await this.executeForOK("JSET", [key, id, jKey, jVal]);
+    }
+
+    // Get a value from a json document
+    public async jget(key: Tile38Key, id: Tile38Id, ...args: (string | number)[]) {
+        return await this.executeForSingleField("JGET", "value", ...[key, id, ...args]);
+    }
+
+    // Delete a json value
+    public async jdel(key: Tile38Key, id: Tile38Id, jKey: string) {
+        return this.executeForOK("JDEL", key, id, jKey);
     }
 }
