@@ -40,6 +40,8 @@ export type Tile38QueryOptions = {
     [key: string]: any | [];
 };
 
+export type Tile38DetectEvents = "inside" | "outside" | "enter" | "exit" | "cross";
+
 export class Tile38Query {
 
     public constructor(
@@ -164,7 +166,7 @@ export class Tile38Query {
      *
      * whichever you prefer
      */
-    withDetect(...values: string[]) {
+    withDetect(...values: Tile38DetectEvents[]) {
         this.options.detect = ["DETECT", values.join(",")];
         return this;
     }
@@ -314,55 +316,5 @@ export class Tile38Query {
             "whereIn", "whereEval", "whereEvalSha", "clip", "nofields", "fence", "detect",
             "commands", "output", "getObject", "bounds", "geojson", "tile", "quadKey", "hash",
             "point", "circle", "roam"];
-    }
-
-    /**
-     * will execute the query and return a Promise to the result.
-     * To use the live fence with streaming results, use fence() instead.
-     */
-    public async execute() {
-        return this.client.sendCommand(this.type, 1, this.commandArr());
-    }
-
-    /**
-     * returns streaming results for a live geofence. This function will repeatedly call the specified callback
-     * method when results are received.
-     * This method returns an instance of LiveGeofence, which can be used to close the fence if necessary by calling
-     * its close() method.
-     */
-    executeFence(callback) {
-        this.options.fence = "FENCE";
-        return this.client.openLiveFence(this.type, this.commandArr(), callback);
-    }
-
-    /*
-     * factory method to create a new Tile38Query object for an INTERSECTS search.
-     * These factory methods are used in the test suite, but since these don't have
-     * access to a Tile38 client object, they cannot be used to actually execute
-     * a query on the server.
-     * Use the Tile38.intersectsQuery() method instead.
-     */
-    static intersects(key) {
-        return new Tile38Query("INTERSECTS", key);
-    }
-
-    // Use Tile38.searchQuery() method instead
-    static search(key) {
-        return new Tile38Query("SEARCH", key);
-    }
-
-    // Use Tile38.nearbyQuery() method instead
-    static nearby(key) {
-        return new Tile38Query("NEARBY", key);
-    }
-
-    // Use Tile38.scanQuery() method instead
-    static scan(key) {
-        return new Tile38Query("SCAN", key);
-    }
-
-    // Use Tile38.withinQuery() method instead
-    static within(key) {
-        return new Tile38Query("WITHIN", key);
     }
 }
