@@ -21,7 +21,8 @@
   "homepage": "https://github.com/giespaepen/node-tile38#readme",
   "dependencies": {
     "redis": "^2.8.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.4",
+    "redis-parser": "^3.0.0"
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.7",
