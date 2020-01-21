@@ -31,7 +31,7 @@ export class QueryExecutor extends CoreClient {
      * @param callback to process the results
      * @returns LiveGeofence
      */
-    public executeFence<T>(callback: (result: T) => void): LiveGeofence {
+    public executeFence<T>(callback: (result: T | string | undefined) => void): LiveGeofence {
         this.query.withFence();
         return new LiveGeofence(this.config)
             .open(queryToEncodedCommand(this.query), callback);

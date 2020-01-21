@@ -29,7 +29,7 @@ export class LiveGeofence {
      * @param redisCommmand Command string to send to Tile38
      * @param callback callback method with parameters (err, results)
      */
-    public open(redisCommmand: string, callback: (result: any, error?: Error) => void) {
+    public open<T>(redisCommmand: string, callback: (result: T | string | undefined, error?: Error) => void): LiveGeofence {
         // Get the data
         const { port, host, password, debug, logging } = this.config;
 
@@ -51,8 +51,10 @@ export class LiveGeofence {
 
         const parser = new Parser({
             returnReply: (reply: string) => {
-                if (debug) logging.log(reply);
-                if (reply == "OK") return; // we're not invoking a callback for the 'OK' response that comes first
+                if (debug) {
+                    logging.log(reply);
+                }
+                if (reply === "OK") return; // we're not invoking a callback for the 'OK' response that comes first
 
                 let response = reply;
                 const firstCharOfReply = reply.charAt(0);
@@ -61,27 +63,27 @@ export class LiveGeofence {
                     try {
                         response = JSON.parse(reply);
                     } catch (err) {
-                        logging.warn("Unable to parse server response: " + reply);
                         // we'll return the reply as-is.
+                        logging.warn("Unable to parse server response: " + reply);
                     }
                 }
                 callback(response);
             },
             returnError: (error: Error) => {
                 logging.error(`Live socket error ${error}`);
-                callback(null, error);
+                callback(undefined, error);
             },
             returnFatalError: (error: Error) => {
                 logging.error(`Live socket fatal error ${error}`);
                 socket.destroy();
-                callback(null, error);
+                callback(undefined, error);
             }
         });
 
         socket.on("data", buffer => {
-            //self.logger.log(JSON.stringify(buffer.toString()));
             parser.execute(buffer);
         });
+
         return this;
     }
 

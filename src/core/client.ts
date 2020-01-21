@@ -1,9 +1,8 @@
 import { RedisClient } from "redis";
 
 import { mergeConfig, Tile38Config } from "../config";
-import { Tile38Command, Tile38Response } from "./types";
+import { Tile38Command, Tile38Response } from "../types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Core Tile38 class to abstract common tasks from the configuration.
  */
@@ -29,9 +28,9 @@ export class CoreClient {
      * @param command command
      * @param args optional command arguments
      */
-    protected async execute<T>(command: Tile38Command, ...args: any[]): Promise<Tile38Response<T>> {
+    protected async execute<T>(command: Tile38Command, ...args: unknown[]): Promise<Tile38Response<T>> {
         const { logging } = this.config;
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<Tile38Response<T>>((resolve, reject) => {
             logging.debug(`Executing command ${command} ${args.join(" ")}`);
             this.client.sendCommand(command, args, (error, rawResult: string) => {
                 const result: Tile38Response<T> = JSON.parse(rawResult);
@@ -44,6 +43,7 @@ export class CoreClient {
                 }
 
                 if (result.ok) {
+                    logging.debug(`Elapsed ${result.elapsed}`);
                     resolve(result);
                 } else {
                     if (result.err) {
@@ -63,7 +63,7 @@ export class CoreClient {
      * @param key 
      * @param args 
      */
-    protected async executeForSingleField<T>(command: Tile38Command, key: keyof T, ...args: any[]): Promise<any> {
+    protected async executeForSingleField<T>(command: Tile38Command, key: keyof T, ...args: unknown[]): Promise<Tile38Response<T>[keyof T]> {
         return await this
             .execute<T>(command, args)
             .then((result) => this.getResultField(result, key));
@@ -75,7 +75,7 @@ export class CoreClient {
      * @param command 
      * @param args 
      */
-    protected async executeForObject<T>(command: Tile38Command, ...args: any[]): Promise<T> {
+    protected async executeForObject<T>(command: Tile38Command, ...args: unknown[]): Promise<T> {
         return await this
             .execute<T>(command, args)
             .then((result) => this.getResultObject(result));
@@ -87,7 +87,7 @@ export class CoreClient {
      * @param command 
      * @param args 
      */
-    protected async executeForOK(command: Tile38Command, ...args: any[]): Promise<boolean> {
+    protected async executeForOK(command: Tile38Command, ...args: unknown[]): Promise<boolean> {
         return await this.executeForSingleField(command, "ok", args);
     }
 
@@ -97,7 +97,7 @@ export class CoreClient {
      * @param result 
      * @param key 
      */
-    protected getResultField<T>(result: Tile38Response<T>, key: keyof T): any {
+    protected getResultField<T>(result: Tile38Response<T>, key: keyof T): Tile38Response<T>[keyof T] {
         return result[key];
     }
 
@@ -116,7 +116,7 @@ export class CoreClient {
      * Handle client errors
      * @param error connection error
      */
-    protected onClientError(error: any) {
+    protected onClientError(error: unknown) {
         this.config.logging.error(`Tile38 client error: ${error}`);
     }
 }

@@ -1,9 +1,9 @@
 import { RedisClient } from "redis";
 
+import { Tile38OptionType, Tile38Query } from ".";
 import { Tile38Config } from "../config";
-import { Tile38OptionType, Tile38Query, Tile38QueryType } from "./query";
+import { Tile38Key } from "../types/commands";
 import { QueryExecutor } from "./queryExecutor";
-import { Tile38Key } from "./types";
 
 /**
  * Use this class to create query executors.

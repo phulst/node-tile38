@@ -2,18 +2,17 @@
 // adds elements from arr2 to arr1. If arr1 doesn't exist, it will
 // simply return arr2
 function addToArray(arr1, arr2) {
-  if (arr1) {
-    for (a of arr2) {
-      arr1.push(a);
+    if (arr1) {
+        for (a of arr2) {
+            arr1.push(a);
+        }
+        return arr1;
+    } else {
+        return arr2;
     }
-    return arr1;
-  } else {
-    return arr2;
-  }
 }
 
 class Tile38Query {
-
 
     constructor(type, key, client) {
         this.type = type;
@@ -23,17 +22,17 @@ class Tile38Query {
     }
 
     cursor(start) {
-        this.options.cursor = ['CURSOR', start];
+        this.options.cursor = ["CURSOR", start];
         return this;
     }
 
     limit(count) {
-        this.options.limit = ['LIMIT', count];
+        this.options.limit = ["LIMIT", count];
         return this;
     }
 
     sparse(spread) {
-        this.options.sparse = ['SPARSE', spread];
+        this.options.sparse = ["SPARSE", spread];
         return this;
     }
 
@@ -42,7 +41,7 @@ class Tile38Query {
      * Unlike other query methods in this class, match() may be called multiple times
      */
     match(value) {
-        let m = ['MATCH', value];
+        const m = ["MATCH", value];
         this.options.matches = addToArray(this.options.matches, m);
         return this;
     }
@@ -55,16 +54,16 @@ class Tile38Query {
 
     // equivalent of order('asc')
     asc() {
-        return this.order('asc');
+        return this.order("asc");
     }
     // equivalent of order('desc');
     desc() {
-        return this.order('desc');
+        return this.order("desc");
     }
 
     // adds DISTANCE argument for nearby query.
     distance() {
-        this.options.distance = 'DISTANCE';
+        this.options.distance = "DISTANCE";
         return this;
     }
 
@@ -74,7 +73,7 @@ class Tile38Query {
      * query.where('speed', 70, '+inf').where('age', '-inf', 24)
      */
     where(field, ...criteria) {
-        let arr = ['WHERE', field].concat(criteria);
+        const arr = ["WHERE", field].concat(criteria);
         this.options.where = addToArray(this.options.where, arr);
         return this;
     }
@@ -89,17 +88,17 @@ class Tile38Query {
      * js api doesn't need this)
      */
     whereIn(field, ...values) {
-        let arr = ['WHEREIN', field, values.length].concat(values);
+        const arr = ["WHEREIN", field, values.length].concat(values);
         this.options.whereIn = addToArray(this.options.whereIn, arr);
         return this;
     }
     whereEval(script, ...args) {
-        let arr = ['WHEREEVAL', `"${script}"`, args.length].concat(args);
+        const arr = ["WHEREEVAL", `"${script}"`, args.length].concat(args);
         this.options.whereEval = addToArray(this.options.whereEval, arr);
         return this;
     }
     whereEvalSha(sha, ...args) {
-        let arr = ['WHEREEVALSHA', sha, args.length].concat(args);
+        const arr = ["WHEREEVALSHA", sha, args.length].concat(args);
         this.options.whereEvalSha = addToArray(this.options.whereEvalSha, arr);
         return this;
     }
@@ -108,7 +107,7 @@ class Tile38Query {
      * clip intersecting objects
      */
     clip() {
-        this.options.clip = 'CLIP';
+        this.options.clip = "CLIP";
         return this;
     }
 
@@ -116,7 +115,7 @@ class Tile38Query {
      * call nofields to exclude field values from search results
      */
     nofields() {
-        this.options.nofields = 'NOFIELDS';
+        this.options.nofields = "NOFIELDS";
         return this;
     }
 
@@ -129,7 +128,7 @@ class Tile38Query {
      * whichever you prefer
      */
     detect(...values) {
-        this.options.detect = ['DETECT'].concat(values.join(','));
+        this.options.detect = ["DETECT"].concat(values.join(","));
         return this;
     }
 
@@ -142,7 +141,7 @@ class Tile38Query {
      *   query.commands('del,drop,set');
      */
     commands(...values) {
-        this.options.commands = ['COMMANDS'].concat(values.join(','));
+        this.options.commands = ["COMMANDS"].concat(values.join(","));
         return this;
     }
 
@@ -167,7 +166,7 @@ class Tile38Query {
      */
     output(type, precision) {
         type = type.toUpperCase();
-        if (type == 'HASHES' && precision != undefined) {
+        if (type == "HASHES" && precision != undefined) {
             this.options.output = [type, precision];
         } else {
             this.options.output = [type];
@@ -177,30 +176,30 @@ class Tile38Query {
 
     // shortcut for .output('ids')
     ids() {
-        return this.output('ids');
+        return this.output("ids");
     }
     // shortcut for .output('count')
     count() {
-        return this.output('count');
+        return this.output("count");
     }
     // shortcut for .output('objects')
     objects() {
-        return this.output('objects');
+        return this.output("objects");
     }
     // shortcut for .output('points')
     points() {
-        return this.output('points');
+        return this.output("points");
     }
     // shortcut for .output('points')
     hashes(precision) {
-        return this.output('hashes', precision);
+        return this.output("hashes", precision);
     }
 
     /**
      * conducts search with an object that's already in the database
      */
     getObject(key, id) {
-        this.options.getObject = ['GET', key, id];
+        this.options.getObject = ["GET", key, id];
         return this;
     }
 
@@ -208,7 +207,7 @@ class Tile38Query {
      * conducts search with bounds coordinates
      */
     bounds(minlat, minlon, maxlat, maxlon) {
-        this.options.bounds = ['BOUNDS', minlat, minlon, maxlat, maxlon];
+        this.options.bounds = ["BOUNDS", minlat, minlon, maxlat, maxlon];
         return this;
     }
 
@@ -216,36 +215,36 @@ class Tile38Query {
      * conducts search with geojson object
      */
     object(geojson) {
-        this.options.geojson = ['OBJECT', JSON.stringify(geojson)];
+        this.options.geojson = ["OBJECT", JSON.stringify(geojson)];
         return this;
     }
 
     tile(x, y, z) {
-        this.options.tile = ['TILE', x, y, z];
+        this.options.tile = ["TILE", x, y, z];
         return this;
     }
 
     quadKey(key) {
-        this.options.quadKey = ['QUADKEY', key];
+        this.options.quadKey = ["QUADKEY", key];
         return this;
     }
 
     hash(geohash) {
-        this.options.hash = ['HASH', geohash];
+        this.options.hash = ["HASH", geohash];
         return this;
     }
 
     // adds CIRCLE arguments to WITHIN / INTERSECTS queries
     circle(lat, lon, meters) {
-        this.options.circle = ['CIRCLE', lat, lon, meters];
+        this.options.circle = ["CIRCLE", lat, lon, meters];
         return this;
     }
 
     // adds POINT arguments to NEARBY query.
     point(lat, lon, meters) {
-        this.options.point = ['POINT', lat, lon];
+        this.options.point = ["POINT", lat, lon];
         if (meters !== undefined) {
-          this.options.point.push(meters);
+            this.options.point.push(meters);
         }
         return this;
     }
@@ -253,39 +252,39 @@ class Tile38Query {
     // adds ROAM arguments to NEARBY query
     roam(key, pattern, meters) {
         // TODO throw error if type != 'NEARBY'
-        this.options.roam = ['ROAM', key, pattern, meters];
+        this.options.roam = ["ROAM", key, pattern, meters];
         return this;
     }
 
     // return all the commands of the query chain, as a string, the way it will
     // be sent to Tile38
     commandStr() {
-        return this.type + " " + this.commandArr().join(' ');
+        return this.type + " " + this.commandArr().join(" ");
     }
 
     // constructs the full array for all arguments of the query.
     commandArr() {
-        let cmd = [this.key];
-        let o = this.options;
+        const cmd = [this.key];
+        const o = this.options;
 
         // construct an array of commands in this order
-        let commands = ['cursor', 'limit', 'sparse', 'matches', 'order', 'distance', 'where',
-          'whereIn', 'whereEval', 'whereEvalSha', 'clip', 'nofields', 'fence', 'detect',
-          'commands', 'output', 'getObject', 'bounds', 'geojson', 'tile', 'quadKey', 'hash',
-          'point', 'circle', 'roam' ];
-        for (let c of commands) {
-          let opt = o[c];
-          if (opt !== undefined) {
-            if (opt instanceof Array) {
-              // array of objects
-              for (let i of o[c]) {
-                cmd.push(i);
-              }
-            } else {
-              // simple string
-              cmd.push(opt);
+        const commands = ["cursor", "limit", "sparse", "matches", "order", "distance", "where",
+            "whereIn", "whereEval", "whereEvalSha", "clip", "nofields", "fence", "detect",
+            "commands", "output", "getObject", "bounds", "geojson", "tile", "quadKey", "hash",
+            "point", "circle", "roam"];
+        for (const c of commands) {
+            const opt = o[c];
+            if (opt !== undefined) {
+                if (opt instanceof Array) {
+                    // array of objects
+                    for (const i of o[c]) {
+                        cmd.push(i);
+                    }
+                } else {
+                    // simple string
+                    cmd.push(opt);
+                }
             }
-          }
         }
         return cmd;
     }
@@ -305,7 +304,7 @@ class Tile38Query {
      * its close() method.
      */
     executeFence(callback) {
-        this.options.fence = 'FENCE';
+        this.options.fence = "FENCE";
         return this.client.openLiveFence(this.type, this.commandArr(), callback);
     }
 
@@ -317,27 +316,27 @@ class Tile38Query {
      * Use the Tile38.intersectsQuery() method instead.
      */
     static intersects(key) {
-        return new Tile38Query('INTERSECTS', key);
+        return new Tile38Query("INTERSECTS", key);
     }
 
     // Use Tile38.searchQuery() method instead
     static search(key) {
-        return new Tile38Query('SEARCH', key);
+        return new Tile38Query("SEARCH", key);
     }
 
     // Use Tile38.nearbyQuery() method instead
     static nearby(key) {
-        return new Tile38Query('NEARBY', key);
+        return new Tile38Query("NEARBY", key);
     }
 
     // Use Tile38.scanQuery() method instead
     static scan(key) {
-        return new Tile38Query('SCAN', key);
+        return new Tile38Query("SCAN", key);
     }
 
     // Use Tile38.withinQuery() method instead
     static within(key) {
-        return new Tile38Query('WITHIN', key);
+        return new Tile38Query("WITHIN", key);
     }
 }
 
