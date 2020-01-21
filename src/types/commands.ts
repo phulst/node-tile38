@@ -39,17 +39,6 @@ export type Tile38Command =
     "PDELHOOK" | Tile38QueryType
     ;
 
-export type BaseTile38Response = {
-    ok: boolean;
-    elapsed: number;
-    err: string | any;
-}
-
-export type Tile38Response<T> = BaseTile38Response & T;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyRedisResponse = Tile38Response<any>;
-
 export type Tile38Key = string;
 
 export type Tile38Id = string;
