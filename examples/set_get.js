@@ -1,5 +1,5 @@
 
-const Tile38 = require('tile38');
+const Tile38 = require('../src/tile38');
 const client = new Tile38();
 
 // set a coordinate
