@@ -400,7 +400,7 @@ class Tile38 {
         cmd.push(key);
         cmd.push('FENCE');
         cmd = cmd.concat(processOpts(opts, ['detect', 'commands', 'get', 'point', 'bounds', 'object',
-            'tile', 'quadkey', 'hash', 'radius', 'roam']));
+            'tile', 'quadkey', 'hash', 'radius', 'roam', 'nodwellroam']));
         return this.sendCommand('SETHOOK', 'ok', cmd);
     }
 
@@ -504,6 +504,11 @@ let processOpts = function (opts, names) {
             case 'roam': // roam: [key, pattern, meters]
                 cmd.push('ROAM');
                 cmd = cmd.concat(opts.roam);
+                break;
+            case 'nodwellroam': // nodwellroam: [key, pattern, meters]
+                cmd.push('NODWELL');
+                cmd.push('ROAM');
+                cmd = cmd.concat(opts.nodwellroam);
                 break;
             case 'order':
                 cmd.push(opts.order.toUpperCase());
