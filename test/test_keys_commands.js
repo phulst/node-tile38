@@ -253,7 +253,7 @@ describe('key commands', function() {
 
         it("should get the entire json", (done) => {
             tile38.jget('user', '100').then((res) => {
-                expect(res).to.equal('{"attr":{"age":10,"name":"peter"}}');
+                expect(JSON.parse(res)).to.deep.equal({"attr":{"age":10,"name":"peter"}});
                 done();
             });
         });
@@ -270,7 +270,7 @@ describe('key commands', function() {
                 res.should.be.true;
                 // now, we should only have the name property left
                 tile38.jget('user', '100').then((res) => {
-                    expect(res).to.equal('{"attr":{"name":"peter"}}');
+                    expect(JSON.parse(res)).to.deep.equal({"attr":{"name":"peter"}});
                     done();
                 });
             });
