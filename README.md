@@ -309,6 +309,15 @@ client.withinQuery('fleet').tile(x, y, z);
 client.withinQuery('fleet').circle(33.462, -112.268, 1000)
 ```
 
+### using timeouts
+
+The scan/search commands above can be used with a timeout as well, so the command will be aborted
+if a given timeout is exceeded. The timeout() function can be called after the initial
+query is created (with searchQuery()/nearbyQuery() etc.) as follows:
+
+```
+client.scanQuery('mykey').where('foo', 1, 2).count().timeout(0.1);
+```
 
 # Running tests
 

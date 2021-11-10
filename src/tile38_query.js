@@ -199,6 +199,12 @@ class Tile38Query {
       return this.output('nodwell');
     }
 
+    // add a timeout to a query
+    timeout(secs) {
+      this.options.timeout = ['TIMEOUT', secs];
+      return this;
+    }
+
     /**
      * conducts search with an object that's already in the database
      */
@@ -263,7 +269,11 @@ class Tile38Query {
     // return all the commands of the query chain, as a string, the way it will
     // be sent to Tile38
     commandStr() {
-        return this.type + " " + this.commandArr().join(' ');
+        // if set, TIMEOUT goes before anything else in the command string
+        let t = this.options.timeout;
+        let commandStr = t ? `${t[0]} ${t[1]} ` : '';
+
+        return `${commandStr}${this.type} ${this.commandArr().join(' ')}`;
     }
 
     // constructs the full array for all arguments of the query.

@@ -77,6 +77,13 @@ describe('tile38 search query', function() {
         });
     });
 
+    describe('timeout', function() {
+        it("should set timeout on a scan query", function() {
+            let q = Query.scan('mykey').where('foo', 1, 2).count().timeout(0.1);
+            expect(q.commandStr()).to.equal("TIMEOUT 0.1 SCAN mykey WHERE foo 1 2 COUNT");
+        });
+    });
+
     describe('distance', function() {
         it("should set DISTANCE argument in nearby query", function () {
             let q = Query.nearby('fleet').distance();
