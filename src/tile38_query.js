@@ -195,6 +195,9 @@ class Tile38Query {
     hashes(precision) {
         return this.output('hashes', precision);
     }
+    nodwell() {
+      return this.output('nodwell');
+    }
 
     /**
      * conducts search with an object that's already in the database
@@ -272,7 +275,7 @@ class Tile38Query {
         let commands = ['cursor', 'limit', 'sparse', 'matches', 'order', 'distance', 'where',
           'whereIn', 'whereEval', 'whereEvalSha', 'clip', 'nofields', 'fence', 'detect',
           'commands', 'output', 'getObject', 'bounds', 'geojson', 'tile', 'quadKey', 'hash',
-          'point', 'circle', 'roam' ];
+          'point', 'circle', 'nodwell', 'roam' ];
         for (let c of commands) {
           let opt = o[c];
           if (opt !== undefined) {
