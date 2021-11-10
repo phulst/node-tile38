@@ -309,11 +309,11 @@ describe('tile38 search query', function() {
             expect(cmd).to.equal('NEARBY fleet ROAM key ptn 3000');
         });
         it("should pass nodwell property", function () {
-            let q = Query.nearby('fleet').nodwell().roam('friends', '*', 100);
+            let q = Query.nearby('people').nodwell().roam('friends', '*', 100);
             // this property is usually set when executeFence() is call.
             // Setting it manually here.
             q.options.fence = 'FENCE';
-            expect(q.commandStr()).to.equal('NEARBY fleet FENCE NODWELL ROAM friends * 100');
+            expect(q.commandStr()).to.equal('NEARBY people FENCE NODWELL ROAM friends * 100');
         });
     });
 
