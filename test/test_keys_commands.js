@@ -186,7 +186,18 @@ describe('key commands', function() {
                     res.fields.value.should.equal(30);
                     done();
                 });
-            })
+            });
+        });
+        it("should alllow multiple fields to be set", (done) => {
+            tile38.fset('fleet', 'truck2', 'name1', 88, 'name2', 99).then((res) => {
+                res.should.be.true;
+                // fetch it back to verify the field is set
+                tile38.get('fleet', 'truck2', {withfields: true}).then((res) => {
+                    res.fields.name1.should.equal(88);
+                    res.fields.name2.should.equal(99);
+                    done();
+                });
+            });
         });
     });
 
@@ -279,4 +290,28 @@ describe('key commands', function() {
             });
         });
     });
+
+/*
+    this is currently failing due to suspected bug in Tile38 server
+
+    describe('whereeval', function() {
+      // this tests a fix for issue #28
+      it("should execute nearby query using whereeval", (done) => {
+        // set area first
+        tile38.set('area', '9621a40b0f90f467', [13.3252703267768, 52.5029839702301], {areaId: 12345}).then((res) => {
+          // now execute nearby query using a script
+
+          tile38.nearbyQuery('area').distance().point([13.3252703267768, 52.5029839702301], 30)
+            .limit(1).whereEval("return FIELDS.areaId ~= ARGV[1]", 'hi').execute((res) => {
+                console.dir(res);
+                done();
+            }).catch((err) => {
+                console.log("something went wrong");
+                console.dir(err);
+                done();
+            });
+        })
+      });
+    });
+    */
 });

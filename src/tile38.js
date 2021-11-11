@@ -239,9 +239,10 @@ class Tile38 {
     }
 
 
-    // Set the value for a single field of an id.
-    fset(key, id, field, value) {
-        return this.sendCommand('FSET', 'ok', [key, id, field, value]);
+    // Set the value for a one or more fields
+    fset(key, id, field, value, ...other) {
+        let params = [key, id, field, value];
+        return this.sendCommand('FSET', 'ok', params.concat(other));
     }
 
     // Delete an id from a key
