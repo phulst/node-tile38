@@ -149,6 +149,17 @@ class Tile38 {
         return this.sendCommand('PERSIST', 'ok', [key, id]);
     }
 
+    rename(oldKey, newKey) {
+        return this.sendCommand('RENAME', 'ok', [oldKey, newKey]);
+    }
+
+    renamenx(oldKey, newKey) {
+        // note that the Tile38 documentation states that the response
+        // should be 0, 1 or ERR. However, in testing I found
+        // it returns the typical 'OK' json response. 
+        return this.sendCommand('RENAMENX', 'ok', [oldKey, newKey]);
+    }
+
     // Returns all keys matching pattern.
     keys(pattern) {
         return this.sendCommand('KEYS', 'keys', pattern);

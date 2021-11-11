@@ -201,6 +201,24 @@ describe('key commands', function() {
         });
     });
 
+    describe('rename', function() {
+        it("should succesfully rename a collection", (done) => {
+            tile38.set('oldname', 'truck', [33.5123, -112.2693]).then((res) => {
+                res.should.be.true;
+                tile38.rename('oldname', 'newname').then((res) => {
+                    res.should.be.true;
+                    done();
+                });
+            });
+        });
+        it("should succesfully rename a collection using renamenx", (done) => {
+            tile38.renamenx('newname', 'anothername').then((res) => {
+                res.should.be.true;
+                done();
+            });
+        });
+    });
+
     describe('set', function() {
         it("should set object with simple coordinates", (done) => {
             tile38.set('fleet', 'truck1', [33.5123, -112.2693]).then((res) => {
