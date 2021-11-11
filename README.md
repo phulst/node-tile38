@@ -312,12 +312,25 @@ client.withinQuery('fleet').circle(33.462, -112.268, 1000)
 ### using timeouts
 
 The scan/search commands above can be used with a timeout as well, so the command will be aborted
-if a given timeout is exceeded. The timeout() function can be called after the initial
-query is created (with searchQuery()/nearbyQuery() etc.) as follows:
+if a given timeout is exceeded. The timeout function can be called after the initial
+query is created (with searchQuery/nearbyQuery etc.) as follows:
 
 ```
 client.scanQuery('mykey').where('foo', 1, 2).count().timeout(0.1);
 ```
+
+### Unsupported commands
+
+It's hard to keep up with development and new features in Tile38. The following commands are not
+yet supported in this driver. Pull requests welcome:
+
+All channel commands (CHANS, DELCHAN, PDELCHAN, PSUBSCRIBE, SETCHAN, SUBSCRIBE)
+HEALTHZ
+JGET does not support the RAW option
+JSET does not support the RAW or STR options
+All replication commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
+All scripting commands (EVAL, EVALNA, EVALNASHA, EVALRO, EVALROSHA, EVALSHA, SCRIPT EXISTS, SCRIPT FLUSH, SCRIPT LOAD)
+#TODO need to review what else is incomplete. 
 
 # Running tests
 
@@ -336,17 +349,11 @@ npm test
 
 # Project roadmap
 
-The following work or features are up next, in order of priority, high to low:  
+Other potential shortcomings and/or future improvements beyond adding above mentioned commands:
 
 - The executeFence method / live geofences has had limited testing. Please submit bugs if you run into issues.
 - The SETHOOK command has some similarities to the search commands. It's not currently using method chaining but I may rewrite
   it so it can be used in a similar way to the other search functions.
-- Replication Commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
-- Oher newer commands such as the Scripting / EVAL commands
-- There's virtually no validation of options passed into functions, or of the query chaining for search commands. For example,
-  this library does not prevent you from using the roam() function on an intersects query, even though it's only supported
-  on the nearby search. It may be fine to leave validation of the search query up to the Tile38 server itself. Happy to accept
-  a pull request for better query validation though.
 
 Testing TODO:
 - webhooks needs test coverage
