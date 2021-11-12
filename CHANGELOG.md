@@ -1,5 +1,13 @@
 ## Revision history:
 ======
+### 0.8.0 / November, 2021
+  * added NODWELL support for ROAM command #31
+  * added support for TIMEOUT
+  * added support for setting multiple fields using FSET
+  * added support for RENAME and RENAMENX
+  * updated package.json and cleaned up dependencies
+  * fixed tests that broke against recent versions of Tile38
+
 ### 0.7.0 / August, 2019
   * Fixed #20, FENCE duplicate in query to server
   * Fixed #21, added support for custom logger
