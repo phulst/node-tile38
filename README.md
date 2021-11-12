@@ -316,7 +316,7 @@ The scan/search commands above can be used with a timeout as well, so the comman
 if a given timeout is exceeded. The timeout function can be called after the initial
 query is created (with searchQuery/nearbyQuery etc.) as follows:
 
-```
+```javascript
 client.scanQuery('mykey').where('foo', 1, 2).count().timeout(0.1);
 ```
 
@@ -325,13 +325,32 @@ client.scanQuery('mykey').where('foo', 1, 2).count().timeout(0.1);
 It's hard to keep up with development and new features in Tile38. The following commands are not
 yet supported in this driver. Pull requests welcome:
 
-All channel commands (CHANS, DELCHAN, PDELCHAN, PSUBSCRIBE, SETCHAN, SUBSCRIBE)
-HEALTHZ
-JGET does not support the RAW option
-JSET does not support the RAW or STR options
-All replication commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
-All scripting commands (EVAL, EVALNA, EVALNASHA, EVALRO, EVALROSHA, EVALSHA, SCRIPT EXISTS, SCRIPT FLUSH, SCRIPT LOAD)
+All channel commands (CHANS, DELCHAN, PDELCHAN, PSUBSCRIBE, SETCHAN, SUBSCRIBE) \
+HEALTHZ \
+JGET does not support the RAW option \
+JSET does not support the RAW or STR options \
+All replication commands (AOF, AOFMD5, AOFSHRINK, FOLLOW) \
+All scripting commands (EVAL, EVALNA, EVALNASHA, EVALRO, EVALROSHA, EVALSHA, SCRIPT EXISTS, SCRIPT FLUSH, SCRIPT LOAD) \
 #TODO need to review what else is incomplete.
+
+Note that even unsupported commands can be called through this library as follows:
+
+```javascript
+client.executeCommand('SCRIPT LOAD MYSCRIPT');
+```
+Using executeCommand you can send any command exactly as documented in the Tile38 command docs.
+Most Tile38 commands return a json response with an ok=true property. By default, executeCommand will parse and return the value of this 'ok' property and thus return a boolean true.
+
+To parse and return a different object from the Tile38 JSON response:
+```javascript
+client.executeCommand('KEYS *', { returnProp: 'keys'})
+```
+
+or to skip JSON parsing altogether and return the raw server response
+```javascript
+client.executeCommand('KEYS *', { parseJson: false })
+```
+
 
 # Running tests
 

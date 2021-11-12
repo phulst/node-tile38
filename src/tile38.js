@@ -33,6 +33,28 @@ class Tile38 {
         this.debug = debug;
     }
 
+
+    /**
+     * convenience user function for sending commands that are not yet supported by this library.
+     * Example use:
+     *   client.executeCommand('SCRIPT LOAD MYSCRIPT');
+     *
+     * Most Tile38 return a json response with an ok=true property. By default, executeCommand will
+     * return the value of this 'ok' property and thus return a boolean true.
+     * To only return a different object from the Tile38 response:
+     *   client.executeCommand('KEYS *', { returnProp: 'keys'})
+     *
+     * or to skip JSON parsing altogether and return the raw server response
+     *   client.executeCommand('KEYS *', { parseJson: false })
+     *
+    */
+    executeCommand(command, opts = {}) {
+        let returnProp = opts.returnProp || 'ok';
+        let parseJson = (opts.parseJson === undefined) ? true : opts.parseJson; // could be set as false
+        let cmd = opts.shift();
+        return this.sendCommand(cmd, returnProp, opts);
+    }
+
     /*
      * send a command with optional arguments to the Redis driver, and return the response in a Promise.
      * If returnProp is set, it will assume that the response is a JSON string, then parse and return
@@ -390,11 +412,6 @@ class Tile38 {
         return new Query('WITHIN', key, this);
     }
 
-    // Returns all hooks matching pattern.
-    hooks(pattern) {
-        return this.sendCommand('HOOKS', null, pattern);
-    }
-
     /*
      * name:       webhook name
      * endpoint:   endpoint url for http/grpc/redis etc
@@ -434,8 +451,8 @@ class Tile38 {
         return this.sendCommand('SETHOOK', 'ok', cmd);
     }
 
-    // Returns all hooks matching pattern
-    hooks(pattern) {
+    // Returns all hooks matching a given pattern (which defaults to '*')
+    hooks(pattern = "*") {
         return this.sendCommand('HOOKS', 'hooks', pattern);
     }
 

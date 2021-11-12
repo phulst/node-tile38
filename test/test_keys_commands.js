@@ -28,6 +28,15 @@ describe('key commands', function() {
         });
     });
 
+    describe('hooks', function() {
+        it("should return an array when calling hooks", (done) => {
+            tile38.hooks().then((hooks) => {
+                hooks.should.be.an('array');
+                done();
+            })
+        });
+    });
+
     describe('expiration', function() {
         let randExpiration = Math.floor(Math.random() * 100) + 10;
 
