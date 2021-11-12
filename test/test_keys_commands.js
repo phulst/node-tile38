@@ -169,7 +169,7 @@ describe('key commands', function() {
                     console.log(thing);
                 }).catch((err) => {
                     // since the key should no longer exist, we expect an error here
-                    err.should.equal('id not found');
+                    err.message.should.equal('id not found');
                     done();
                 });
             })

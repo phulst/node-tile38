@@ -73,7 +73,7 @@ class Tile38 {
             }
             this.client.send_command(cmd, args, (err, result) => {
                 if (err) {
-                    if (this.debug) this.logger.log(err);
+                    if (this.debug) this.logger.error(err);
                     reject(err);
                 } else {
                     if (this.debug) this.logger.log(result);
@@ -85,9 +85,9 @@ class Tile38 {
                             let res = JSON.parse(result);
                             if (!res.ok) {
                                 if (res.err) {
-                                    reject(res.err);
+                                    reject(new Error(res.err));
                                 } else {
-                                    reject(`unexpected response: ${result}`);
+                                    reject(new Error(`unexpected response: ${result}`));
                                 }
                             } else {
                                 if (returnProp == 1) {
@@ -102,7 +102,7 @@ class Tile38 {
                             }
                         }
                     } catch (error) {
-                        reject(`unable to parse response: ${result}`);
+                        reject(new Error(`response isn't valid JSON: ${result}`));
                     }
                 }
             });

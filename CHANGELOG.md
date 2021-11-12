@@ -1,6 +1,7 @@
 ## Revision history:
 ======
 ### 0.8.0 / November, 2021
+  * whenever a Promise is rejected, now passing back Error object instead of string #10
   * added NODWELL support for ROAM command #31
   * added support for TIMEOUT
   * added support for setting multiple fields using FSET
