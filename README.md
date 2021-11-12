@@ -336,20 +336,21 @@ All scripting commands (EVAL, EVALNA, EVALNASHA, EVALRO, EVALROSHA, EVALSHA, SCR
 Note that even unsupported commands can be called through this library as follows:
 
 ```javascript
-client.executeCommand('SCRIPT LOAD MYSCRIPT');
+let success = await client.executeCommand('SCRIPT LOAD MYSCRIPT');
 ```
 Using executeCommand you can send any command exactly as documented in the Tile38 command docs.
-Most Tile38 commands return a json response with an ok=true property. By default, executeCommand will parse and return the value of this 'ok' property and thus return a boolean true.
+Most Tile38 commands return a json response with an ok=true property. By default, executeCommand will parse and return (a promise to) the value of this 'ok' property and thus return a boolean true.
 
 To parse and return a different object from the Tile38 JSON response:
 ```javascript
-client.executeCommand('KEYS *', { returnProp: 'keys'})
+let keys = await client.executeCommand('KEYS *', { returnProp: 'keys'})
 ```
 
 or to skip JSON parsing altogether and return the raw server response
 ```javascript
-client.executeCommand('KEYS *', { parseJson: false })
+let rawResponse = client.executeCommand('KEYS *', { parseJson: false })
 ```
+Note that if the server returns ok=false in any response, this library will reject the Promise. The only exception to this is if you set the parseJson=false property as illustrated above, in which case it will not try to interpret the response in any way.
 
 
 # Running tests
