@@ -156,7 +156,7 @@ class Tile38 {
     renamenx(oldKey, newKey) {
         // note that the Tile38 documentation states that the response
         // should be 0, 1 or ERR. However, in testing I found
-        // it returns the typical 'OK' json response. 
+        // it returns the typical 'OK' json response.
         return this.sendCommand('RENAMENX', 'ok', [oldKey, newKey]);
     }
 
@@ -250,10 +250,28 @@ class Tile38 {
     }
 
 
-    // Set the value for a one or more fields
-    fset(key, id, field, value, ...other) {
-        let params = [key, id, field, value];
-        return this.sendCommand('FSET', 'ok', params.concat(other));
+    /**
+     * Set the value for a one or more fields. This can be called in one of two ways:
+     *     fset('fleet', 'truck1', 'speed', 16)
+     * or to set multiple values:
+     *     fset('fleet', 'truck1', { speed: 16, driver: 1224 })
+     */
+    fset(key, id, field, value) {
+        let params;
+        if (typeof field == 'string') {
+            params = [key, id, field, value];
+        } else {
+            // object passed in
+            let set = new Set();
+            set.add(key);
+            set.add(id);
+            for (let k in field) {
+                set.add(k);
+                set.add(field[k]);
+            }
+            params = Array.from(set);
+        }
+        return this.sendCommand('FSET', 'ok', params);
     }
 
     // Delete an id from a key

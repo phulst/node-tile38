@@ -189,7 +189,7 @@ describe('key commands', function() {
             });
         });
         it("should alllow multiple fields to be set", (done) => {
-            tile38.fset('fleet', 'truck2', 'name1', 88, 'name2', 99).then((res) => {
+            tile38.fset('fleet', 'truck2', {name1: 88, name2: 99}).then((res) => {
                 res.should.be.true;
                 // fetch it back to verify the field is set
                 tile38.get('fleet', 'truck2', {withfields: true}).then((res) => {

@@ -137,6 +137,7 @@ client.del('feet', 'truck2');
 client.drop('fleet');
 client.expire('fleet','truck', 10);
 client.fset('fleet', 'truck1', 'speed', 16);
+client.fset('fleet', 'truck1', {speed: 16, driver: 1224});
 client.stats('fleet1', 'fleet2');
 ...etc
 ```
@@ -330,7 +331,7 @@ JGET does not support the RAW option
 JSET does not support the RAW or STR options
 All replication commands (AOF, AOFMD5, AOFSHRINK, FOLLOW)
 All scripting commands (EVAL, EVALNA, EVALNASHA, EVALRO, EVALROSHA, EVALSHA, SCRIPT EXISTS, SCRIPT FLUSH, SCRIPT LOAD)
-#TODO need to review what else is incomplete. 
+#TODO need to review what else is incomplete.
 
 # Running tests
 
