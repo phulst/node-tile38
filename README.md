@@ -25,11 +25,8 @@ In most cases, commands follow the [command documentation](http://tile38.com/com
 though the search/scan commands use method chaining. You can find some examples below as well as in the
 examples folder.
 
-Most examples below are in ES6, and the library has been written in ES6, but it uses Babel to transpile, so
-even if you're still running Node 4 or earlier you should be able to use this.
-
 This library has not been tested in the browser. You generally would not want to expose your database directly to the
-internet, so even if it does work from the browser, it's not a good idea.
+internet, and you also don't want to share Tile38 access credentials to a web client, so using this in the browser is not a good idea.
 
 
 ## Revision history
