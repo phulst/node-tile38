@@ -51,8 +51,9 @@ class Tile38 {
     executeCommand(command, opts = {}) {
         let returnProp = opts.returnProp || 'ok';
         let parseJson = (opts.parseJson === undefined) ? true : opts.parseJson; // could be set as false
-        let cmd = opts.shift();
-        return this.sendCommand(cmd, returnProp, opts);
+        let opt = parseJson ? returnProp : false;
+        let commandArr = command.split(' ');
+        return this.sendCommand(commandArr.shift(), opt, commandArr);
     }
 
     /*
