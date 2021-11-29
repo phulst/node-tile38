@@ -3,7 +3,7 @@
 // simply return arr2
 function addToArray(arr1, arr2) {
   if (arr1) {
-    for (a of arr2) {
+    for (let a of arr2) {
       arr1.push(a);
     }
     return arr1;
