@@ -1,5 +1,6 @@
 /lib/
 /dist/
+/data/
 /node_modules/
 .idea/
 src/test.js
