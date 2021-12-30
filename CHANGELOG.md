@@ -1,5 +1,9 @@
 ## Revision history:
 ======
+### 0.9.0 / November 29, 2021
+  * fixed bug in chaining of options
+  * fixed issues with new executeCommand function
+
 ### 0.8.0 / November, 2021
   * whenever a Promise is rejected, now passing back Error object instead of string #10
   * added NODWELL support for ROAM command #31
