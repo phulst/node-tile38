@@ -3,6 +3,7 @@
   "version": "0.8.0",
   "description": "Node library for accessing Tile38 service",
   "main": "./dist/tile38.js",
+  "types": "./dist/tile38.d.ts",
   "directories": {
     "example": "examples",
     "test": "test"
