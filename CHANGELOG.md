@@ -1,5 +1,8 @@
 ## Revision history:
 ======
+### 0.9.1 / March 22, 2022
+  * fixed an issue that caused the 0.9.0 version to not be properly published to npm
+
 ### 0.9.0 / November 29, 2021
   * fixed bug in chaining of options
   * fixed issues with new executeCommand function
