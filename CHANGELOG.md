@@ -1,5 +1,9 @@
 ## Revision history:
 ======
+### 0.9.2 / October 4, 2022
+  * updated dependencies
+  * fixed issue with incorrect version number in package-lock.json
+
 ### 0.9.1 / March 22, 2022
   * fixed an issue that caused the 0.9.0 version to not be properly published to npm
 
