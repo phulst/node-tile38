@@ -318,9 +318,9 @@ describe('key commands', function() {
         });
     });
 
-/*
-    this is currently failing due to suspected bug in Tile38 server
-
+    /* this test is still failing due to the Tile38 not responding within the timeout period.
+     * I did fix as suggested here: https://github.com/tidwall/tile38/issues/627
+     * 
     describe('whereeval', function() {
       // this tests a fix for issue #28
       it("should execute nearby query using whereeval", (done) => {
@@ -328,16 +328,15 @@ describe('key commands', function() {
         tile38.set('area', '9621a40b0f90f467', [13.3252703267768, 52.5029839702301], {areaId: 12345}).then((res) => {
           // now execute nearby query using a script
 
-          tile38.nearbyQuery('area').distance().point([13.3252703267768, 52.5029839702301], 30)
-            .limit(1).whereEval("return FIELDS.areaId ~= ARGV[1]", 'hi').execute((res) => {
+          tile38.nearbyQuery('area').distance().point(13.3252703267768, 52.5029839702301, 3500)
+            .limit(1).whereEval("return FIELDS.areaId ~= ARGV[1]", 1, 111631).execute((res) => {
                 console.dir(res);
                 done();
             }).catch((err) => {
-                console.log("something went wrong");
                 console.dir(err);
-                done();
+                done(err);
             });
-        })
+        });
       });
     });
     */

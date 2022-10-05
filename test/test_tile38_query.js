@@ -135,14 +135,14 @@ describe('tile38 search query', function() {
 
             let cmd = q.commandArr();
             expect(cmd[1]).to.equal('WHEREEVAL');
-            expect(cmd[2]).to.equal(`"${luaStr}"`); // lua script should be quoted
+            expect(cmd[2]).to.equal(luaStr); // lua script should be quoted
             expect(cmd[3]).to.equal(2);
             expect(cmd[4]).to.equal(8);
             expect(cmd[5]).to.equal(120);
         });
         it("should set multiple whereeval searches", function () {
             let q = Query.intersects('fleet').whereEval('script1', 10, 20).whereEval('script2', 30, 40, 50);
-            expect(q.commandStr()).to.equal('INTERSECTS fleet WHEREEVAL "script1" 2 10 20 WHEREEVAL "script2" 3 30 40 50');
+            expect(q.commandStr()).to.equal('INTERSECTS fleet WHEREEVAL script1 2 10 20 WHEREEVAL script2 3 30 40 50');
         });
     });
 

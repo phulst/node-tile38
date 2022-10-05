@@ -94,7 +94,7 @@ class Tile38Query {
         return this;
     }
     whereEval(script, ...args) {
-        let arr = ['WHEREEVAL', `"${script}"`, args.length].concat(args);
+        let arr = ['WHEREEVAL', script, args.length].concat(args);
         this.options.whereEval = addToArray(this.options.whereEval, arr);
         return this;
     }

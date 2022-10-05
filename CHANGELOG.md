@@ -1,5 +1,8 @@
 ## Revision history:
 ======
+### 0.9.4 / October 4, 2022
+  * Fixed issue #28 with WHEREEVAL command
+
 ### 0.9.3 / October 4, 2022
   * resolved another issue with package.json
 
