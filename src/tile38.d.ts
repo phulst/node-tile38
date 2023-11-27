@@ -1,103 +1,110 @@
+/* eslint-disable unicorn/prevent-abbreviations */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+
 declare module "tile38" {
   import Tile38Query from "./tile38_query";
 
   type Fields = Record<string, number | string>;
-  type GeoJSON = {
+  interface GeoJSON {
+    coordinates: number[] | number[][] | number[][][];
+    features?: GeoJSON[];
+    geometry?: {
+      type:
+        | "GeometryCollection"
+        | "LineString"
+        | "MultiLineString"
+        | "MultiPoint"
+        | "MultiPolygon"
+        | "Point"
+        | "Polygon";
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    properties?: Record<string, any>;
     type:
       | "Feature"
       | "FeatureCollection"
-      | "Point"
-      | "MultiPoint"
+      | "GeometryCollection"
       | "LineString"
       | "MultiLineString"
-      | "Polygon"
+      | "MultiPoint"
       | "MultiPolygon"
-      | "GeometryCollection";
-    properties?: Record<string, any>;
-    geometry?: {
-      type:
-        | "Point"
-        | "MultiPoint"
-        | "LineString"
-        | "MultiLineString"
-        | "Polygon"
-        | "MultiPolygon"
-        | "GeometryCollection";
-      coordinates: number[] | number[][] | number[][][];
-    };
-    features?: GeoJSON[];
-  };
+      | "Point"
+      | "Polygon";
+  }
   type Bounds = [number, number, number, number];
-  type Point = [number, number] | [number, number, number];
+  type Point = [number, number, number] | [number, number];
   type Hash = string;
   type Tile = [number, number, number];
   type QuadKey = string;
-  type GeofenceOptions = {
-    detect: string;
-    commands: string;
-    get?: [string, string];
+  interface GeofenceOptions {
     bounds?: Bounds;
-    object?: GeoJSON;
-    tile?: Tile;
-    quadkey?: QuadKey;
+    commands: string;
+    detect: string;
+    get?: [string, string];
     hash?: Hash;
+    object?: GeoJSON;
+    quadkey?: QuadKey;
     radius?: number;
-  };
+    tile?: Tile;
+  }
 
-  type Tile38Response = {
+  interface Tile38Response {
     ok: boolean;
     elapsed: string;
     [key: string]: unknown;
-  };
+  }
 
-  type Tile38GETResponse<TObject = undefined> = {
-    ok: boolean;
+  type Tile38GetResponse<TObject = undefined> = {
     elapsed: string;
+    ok: boolean;
   } & (
-    | { object: TObject }
     | { bounds: Bounds }
-    | { point: Point }
     | { hash: string }
+    | { object: TObject }
+    | { point: Point }
   );
 
-  type Tile38HookResponse = {
-    ok: boolean;
+  interface Tile38HookResponse {
     hooks: Array<{
-      name: string;
-      endpoint: string;
-      meta: Record<string, unknown>;
       command: string;
+      endpoint: string;
       key: string;
+      meta: Record<string, unknown>;
+      name: string;
       pattern: string;
     }>;
-  };
-
-  type Tile38KeysResponse = {
     ok: boolean;
-    keys: string[];
-  };
+  }
 
-  type Tile38StatsResponse = {
+  interface Tile38KeysResponse {
+    keys: string[];
+    ok: boolean;
+  }
+
+  interface Tile38StatsResponse {
     ok: boolean;
     stats: Array<Record<string, unknown>>;
-  };
+  }
 
-  type Tile38BoundsResponse = {
-    ok: boolean;
+  interface Tile38BoundsResponse {
     bounds: Bounds | GeoJSON;
-  };
+    ok: boolean;
+  }
 
-  type Tile38TTLResponse = {
+  interface Tile38TTLResponse {
     ok: boolean;
     ttl: number;
-  };
+  }
 
   class Tile38 {
     constructor(options?: Tile38ConstructorOptions);
     set(
-      key: string,
       id: string,
-      obj: Point | Bounds | Hash | GeoJSON | string,
+      key: string,
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+      obj: Bounds | GeoJSON | Hash | Point | string,
       fields?: Fields,
       opts?: {
         expire?: number;
@@ -111,9 +118,9 @@ declare module "tile38" {
       id: string,
       opts?: {
         withfields?: boolean;
-        type?: "POINT" | "BOUNDS" | "HASH" | "OBJECT";
+        type?: "BOUNDS" | "HASH" | "OBJECT" | "POINT";
       }
-    ): Promise<Tile38GETResponse>;
+    ): Promise<Tile38GetResponse>;
     del(key: string, id: string): Promise<Tile38Response>;
     flushdb(): Promise<Tile38Response>;
     ping(): Promise<Tile38Response>;
@@ -144,7 +151,7 @@ declare module "tile38" {
       name: string,
       endpoint: string,
       meta: Record<string, unknown>,
-      searchType: "NEARBY" | "WITHIN" | "INTERSECTS",
+      searchType: "INTERSECTS" | "NEARBY" | "WITHIN",
       key: string,
       opts: GeofenceOptions
     ): Promise<Tile38Response>;
@@ -162,16 +169,16 @@ declare module "tile38" {
     fset(
       key: string,
       id: string,
-      field: string | Fields,
+      field: Fields | string,
       value?: number | string
     ): Promise<Tile38Response>;
     drop(key: string): Promise<Tile38Response>;
     stats(...keys: string[]): Promise<Tile38StatsResponse>;
-    jset<T = unknown>(
+    jset<TValue = unknown>(
       key: string,
       id: string,
       jKey: string,
-      jVal: T
+      jVal: TValue
     ): Promise<Tile38Response>;
     jget(key: string, id: string, ...other: string[]): Promise<string>;
     jdel(key: string, id: string, jKey: string): Promise<Tile38Response>;

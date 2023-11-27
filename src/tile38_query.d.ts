@@ -1,11 +1,18 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable unicorn/prevent-abbreviations */
+
+import Tile38 from "./tile38";
+
 declare class Tile38Query {
-  constructor(type: string, key: string, client: any);
+  constructor(type: string, key: string, client: Tile38);
 
   cursor(start: number): Tile38Query;
   limit(count: number): Tile38Query;
   sparse(spread: number): Tile38Query;
   match(value: string): Tile38Query;
-  order(val: "asc" | "desc"): Tile38Query;
+  order(value: "asc" | "desc"): Tile38Query;
   asc(): Tile38Query;
   desc(): Tile38Query;
   distance(): Tile38Query;
@@ -14,7 +21,7 @@ declare class Tile38Query {
     min: number | string,
     max?: number | string
   ): Tile38Query;
-  whereIn(field: string, ...values: (number | string)[]): Tile38Query;
+  whereIn(field: string, ...values: Array<number | string>): Tile38Query;
   whereEval(script: string, ...args: any[]): Tile38Query;
   whereEvalSha(sha: string, ...args: any[]): Tile38Query;
   clip(): Tile38Query;
@@ -22,7 +29,7 @@ declare class Tile38Query {
   detect(...values: string[]): Tile38Query;
   commands(...values: string[]): Tile38Query;
   output(
-    type: "count" | "ids" | "objects" | "points" | "bounds" | "hashes",
+    type: "bounds" | "count" | "hashes" | "ids" | "objects" | "points",
     precision?: number
   ): Tile38Query;
   ids(): Tile38Query;
