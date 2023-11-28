@@ -14,6 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/phulst/node-tile38.git"
   },
+  "types": "tile38.d.ts",
   "author": "Peter Hulst <peter@hollice.com>",
   "license": "ISC",
   "dependencies": {
